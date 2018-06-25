@@ -1,0 +1,118 @@
+$background: rgba(3, 4, 5, 0.85);
+$hover: rgba(59, 59, 58, 0.9);
+$taskbar-app-small: 26px;
+$footer-height: 30px;
+$gray: #696A6A;
+$start-menu-button-width-height: 48px;
+
+body {
+  background: url("background.jpg") no-repeat fixed center;
+  box-sizing: border-box;
+}
+
+.hover {
+  &:hover {
+    background-color: $hover!important;
+    transition: background-color 0.1s;
+  }
+}
+
+.start-menu-button {
+  width: $start-menu-button-width-height;
+  height: $start-menu-button-width-height;
+}
+
+.changeable-width {
+  transition: background-color 0.2s, width 0.2s!important;
+}
+
+footer {
+  width: 100%;
+  height: $footer-height;
+  background-color: $background;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  justify-content: space-between;
+  z-index: 10;
+
+  * {
+    height: 100%;
+  }
+
+  .start-button {
+    flex-basis: 38px;
+    background: url("start-button.png") no-repeat center;
+
+    &:hover {
+      background: url("start-button-hover.png") no-repeat center;
+    }
+  }
+
+  .taskbar-apps {
+    flex: 8 4;
+  }
+
+  .taskbar-buttons {
+    flex-basis: 165px;
+    display: flex;
+    justify-content: space-between;
+
+    .internet {
+      background: url("internet.png") no-repeat center;
+      flex-basis: $taskbar-app-small;
+    }
+
+    .volume {
+      background: url("volume.png") no-repeat center;
+      flex-basis: $taskbar-app-small;
+    }
+
+    .lang {
+      background: url("lang-eng.png") no-repeat center;
+      flex-basis: $taskbar-app-small + 12px;
+    }
+
+    .time {
+      background: url("time.png") no-repeat center;
+      flex-basis: $taskbar-app-small + 17px;
+    }
+
+    .notification-bar-open-button {
+      flex-basis: $taskbar-app-small + 18px;
+      background: url("notification.png") no-repeat center;
+    }
+  }
+
+  .roll-all-windows {
+    flex-basis: 4px;
+    border-left: 1px solid $gray;
+    margin-left: 8px;
+  }
+}
+
+#start-menu {
+  position: absolute;
+  width: 637px;
+  height: 0;
+  background-color: fade_out($background, 0.3);
+  border-top: 1px solid fade_out($gray, 0.5);
+  border-right: 1px solid fade_out($gray, 0.5);
+  left: 0;
+  bottom: $footer-height;
+  transition: height 0.2s, opacity 0.2s;
+  opacity: 0;
+  padding-top: 4px;
+  overflow: hidden;
+
+  #side-buttons-container {
+    width: $start-menu-button-width-height;
+    height: 100%;
+    z-index: 6;
+
+    .open-descriptions {
+      background: url("open-desc.png")no-repeat center;
+    }
+  }
+}
