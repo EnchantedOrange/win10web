@@ -1,17 +1,23 @@
 body {
-  background: url("background.jpg") no-repeat fixed center;
-  box-sizing: border-box; }
+  background: url("images/background.jpg") no-repeat fixed center;
+  color: #fff;
+  font-family: Roboto, sans-serif;
+  overflow: hidden; }
+
+ul {
+  padding: 0; }
 
 .hover:hover {
-  background-color: rgba(59, 59, 58, 0.9) !important;
+  background-color: rgba(73, 73, 72, 0.95) !important;
   transition: background-color 0.1s; }
 
 .start-menu-button {
   width: 48px;
-  height: 48px; }
-
-.changeable-width {
-  transition: background-color 0.2s, width 0.2s !important; }
+  height: 48px;
+  overflow: hidden; }
+  .start-menu-button p {
+    margin-left: 48px;
+    font-weight: 100; }
 
 footer {
   width: 100%;
@@ -26,54 +32,259 @@ footer {
   footer * {
     height: 100%; }
   footer .start-button {
-    flex-basis: 38px;
-    background: url("start-button.png") no-repeat center; }
+    width: 36px;
+    background: url("images/start-button.png") no-repeat center;
+    margin-right: 3px; }
     footer .start-button:hover {
-      background: url("start-button-hover.png") no-repeat center; }
+      background: url("images/start-button-hover.png") no-repeat center; }
   footer .taskbar-apps {
-    flex: 8 4; }
+    flex: auto; }
   footer .taskbar-buttons {
-    flex-basis: 165px;
+    width: 163px;
     display: flex;
     justify-content: space-between; }
     footer .taskbar-buttons .internet {
-      background: url("internet.png") no-repeat center;
-      flex-basis: 26px; }
+      background: url("images/internet.png") no-repeat center;
+      width: 24px; }
     footer .taskbar-buttons .volume {
-      background: url("volume.png") no-repeat center;
-      flex-basis: 26px; }
+      background: url("images/volume.png") no-repeat center;
+      width: 24px; }
     footer .taskbar-buttons .lang {
-      background: url("lang-eng.png") no-repeat center;
-      flex-basis: 38px; }
+      background: url("images/lang-eng.png") no-repeat center;
+      width: 36px; }
     footer .taskbar-buttons .time {
-      background: url("time.png") no-repeat center;
-      flex-basis: 43px; }
+      background: url("images/time.png") no-repeat center;
+      width: 39px; }
     footer .taskbar-buttons .notification-bar-open-button {
-      flex-basis: 44px;
-      background: url("notification.png") no-repeat center; }
+      width: 40px;
+      background: url("images/notification.png") no-repeat center; }
   footer .roll-all-windows {
-    flex-basis: 4px;
-    border-left: 1px solid #696A6A;
+    width: 4px;
+    border-left: 1px solid #7C7B79;
     margin-left: 8px; }
 
 #start-menu {
   position: absolute;
   width: 637px;
-  height: 0;
-  background-color: rgba(3, 4, 5, 0.55);
-  border-top: 1px solid rgba(105, 106, 106, 0.5);
-  border-right: 1px solid rgba(105, 106, 106, 0.5);
+  background-color: rgba(3, 4, 5, 0.75);
+  border-top: 1px solid rgba(124, 123, 121, 0.5);
+  border-right: 1px solid rgba(124, 123, 121, 0.5);
   left: 0;
   bottom: 30px;
-  transition: height 0.2s, opacity 0.2s;
   opacity: 0;
-  padding-top: 4px;
-  overflow: hidden; }
+  height: 0;
+  overflow: hidden;
+  user-select: none;
+  z-index: 8;
+  display: flex;
+  flex-direction: row;
+  transition: 0.2s; }
+  #start-menu .changeable-width {
+    transition: width 0.2s, background-color 0.2s; }
+  #start-menu .popup-menu {
+    width: 256px;
+    background-color: #2b2b2b;
+    position: absolute;
+    font-size: 12px;
+    z-index: 20;
+    padding: 8px 0;
+    border: 1px solid rgba(124, 123, 121, 0.8);
+    overflow: hidden;
+    height: 0;
+    opacity: 0;
+    transition: 0.2s; }
+    #start-menu .popup-menu p {
+      margin: 0;
+      padding: 12px; }
+  #start-menu .popup-menu-open {
+    height: 112px !important;
+    opacity: 1 !important; }
+  #start-menu #user-popup {
+    bottom: 148px; }
+  #start-menu #power-popup {
+    bottom: 52px; }
   #start-menu #side-buttons-container {
-    width: 48px;
+    position: absolute;
     height: 100%;
-    z-index: 6; }
-    #start-menu #side-buttons-container .open-descriptions {
-      background: url("open-desc.png") no-repeat center; }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    white-space: nowrap;
+    z-index: 9;
+    width: 48px; }
+    #start-menu #side-buttons-container > div:first-child {
+      background: url("images/open-desc.png") no-repeat 16px;
+      font-weight: 900 !important;
+      margin-top: 4px; }
+    #start-menu #side-buttons-container #start-menu-buttons-container div:first-child {
+      background: url("images/user-icon.png") no-repeat 14px; }
+    #start-menu #side-buttons-container #start-menu-buttons-container div:nth-child(2) {
+      background: url("images/settings-icon.png") no-repeat 16px; }
+    #start-menu #side-buttons-container #start-menu-buttons-container div:last-child {
+      background: url("images/power-icon.png") no-repeat 17px; }
+  #start-menu .side-buttons-container-open {
+    width: 256px !important;
+    background-color: #1F1F1F; }
+  #start-menu .app-list {
+    display: flex;
+    flex-direction: column;
+    width: 259px;
+    height: 100%;
+    margin-left: 48px; }
+    #start-menu .app-list h4:first-of-type {
+      margin-top: 7px !important; }
+    #start-menu .app-list h4, #start-menu .app-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 36px;
+      font-weight: 100;
+      font-size: 12px;
+      text-align: left;
+      margin: 0;
+      padding-left: 16px; }
+      #start-menu .app-list h4 div, #start-menu .app-list li div {
+        display: flex;
+        align-items: center; }
+      #start-menu .app-list h4 img, #start-menu .app-list li img {
+        width: 32px;
+        height: 32px;
+        margin-right: 8px; }
+    #start-menu .app-list ul {
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+      width: 100%;
+      margin: 0; }
+    #start-menu .app-list .roll-down-arrow {
+      width: 8px;
+      height: 4px;
+      margin-right: 20px; }
+    #start-menu .app-list .hidden-dir {
+      overflow: hidden;
+      transition: height 0.2s; }
+      #start-menu .app-list .hidden-dir li {
+        padding-left: 24px; }
+  #start-menu #start-menu-tiles {
+    display: flex;
+    flex-direction: column;
+    margin: 13px 16px 0 5px;
+    flex-grow: 5; }
+    #start-menu #start-menu-tiles p {
+      font-size: 12px;
+      margin: 2px 0;
+      height: 32px;
+      display: flex;
+      align-items: center; }
+      #start-menu #start-menu-tiles p:hover {
+        background: url("images/tiles-title-move.png") no-repeat right; }
+    #start-menu #start-menu-tiles p:first-child {
+      margin-top: 0; }
+    #start-menu #start-menu-tiles div {
+      display: flex;
+      margin: 2px 0; }
+    #start-menu #start-menu-tiles img {
+      margin: 0 2px;
+      box-sizing: border-box !important; }
+    #start-menu #start-menu-tiles img:first-child {
+      margin-left: 0; }
+
+.start-menu-open {
+  height: 589px !important;
+  opacity: 1 !important; }
+
+#notification-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100% - 30px);
+  width: 360px;
+  background-color: rgba(3, 4, 5, 0.75);
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 8;
+  border-left: 1px solid rgba(124, 123, 121, 0.6);
+  cursor: default;
+  user-select: none;
+  overflow: hidden;
+  transform: translate(360px);
+  transition: 0.3s; }
+  #notification-bar #notification-center {
+    margin: 20px 12px; }
+    #notification-bar #notification-center h2 {
+      font-size: 15px;
+      margin: 0 0 42px 0; }
+    #notification-bar #notification-center p {
+      font-size: 15px;
+      color: #b1b1b1;
+      font-weight: 500;
+      margin: 0; }
+  #notification-bar #notification-tiles {
+    width: 100%; }
+    #notification-bar #notification-tiles #toggle-tiles {
+      color: #a1a1a1;
+      font-size: 12px;
+      text-align: right;
+      height: 50px;
+      display: flex;
+      justify-content: flex-end; }
+      #notification-bar #notification-tiles #toggle-tiles p {
+        margin: 0;
+        width: 20%;
+        height: 100%;
+        text-align: center;
+        display: flex;
+        align-items: center; }
+        #notification-bar #notification-tiles #toggle-tiles p:hover {
+          color: white; }
+    #notification-bar #notification-tiles .container {
+      display: flex;
+      flex-flow: row wrap;
+      margin: 2px;
+      overflow: hidden;
+      height: 128px;
+      transition: height 0.2s; }
+      #notification-bar #notification-tiles .container div {
+        width: 85px;
+        height: 60px;
+        background-color: rgba(88, 88, 88, 0.9) !important;
+        background-position: 4px 5px !important;
+        margin: 2px;
+        display: flex;
+        align-items: flex-end;
+        box-sizing: border-box !important; }
+        #notification-bar #notification-tiles .container div:hover {
+          border: 2px solid #999999; }
+        #notification-bar #notification-tiles .container div p {
+          color: white;
+          text-align: left;
+          font-size: 11px;
+          margin: 0 0 5px 4px;
+          width: 80%;
+          word-wrap: break-word; }
+      #notification-bar #notification-tiles .container #tablet-mode {
+        background: url("images/tablet-mode.png") no-repeat; }
+      #notification-bar #notification-tiles .container #network {
+        background: url("images/network.png") no-repeat; }
+      #notification-bar #notification-tiles .container #all-settings {
+        background: url("images/settings-icon.png") no-repeat; }
+      #notification-bar #notification-tiles .container #do-not-disturb {
+        background: url("images/do-not-disturb.png") no-repeat; }
+      #notification-bar #notification-tiles .container #vpn {
+        background: url("images/vpn.png") no-repeat; }
+      #notification-bar #notification-tiles .container #project-screen {
+        background: url("images/project.png") no-repeat; }
+      #notification-bar #notification-tiles .container #connect {
+        background: url("images/connect.png") no-repeat; }
+    #notification-bar #notification-tiles .container-small {
+      height: 64px !important; }
+
+.notification-bar-open {
+  transform: translate(0) !important; }
+
+@media all and (max-width: 800px) {
+  #start-menu {
+    width: 100%; } }
 
 /*# sourceMappingURL=main.css.map */

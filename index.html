@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Windows 10</title>
+    <title>Windows 10 web</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
 </head>
@@ -15,47 +15,166 @@
         <div class="volume hover"></div>
         <div class="lang hover"></div>
         <div class="time hover"></div>
-        <div class="notification-bar-open-button hover"></div>
+        <div class="notification-bar-open-button hover" onclick="toggleNotificationBar()"></div>
     </div>
     <div class="roll-all-windows hover"></div>
 </footer>
 <div id="start-menu">
+    <div class="popup-menu" id="user-popup">
+        <p class="hover">Изменить параметры учетной записи</p>
+        <p class="hover">Заблокировать</p>
+        <p class="hover">Выход</p>
+    </div>
+    <div class="popup-menu" id="power-popup">
+        <p>Спязий режим</p>
+        <p>Завершение работы</p>
+        <p>Перезагрузка</p>
+    </div>
     <div class="changeable-width" id="side-buttons-container">
-        <div class="open-descriptions start-menu-button changeable-width hover" onclick="openSideButtonsContainer()"></div>
+        <div class="start-menu-button changeable-width hover" onclick="openSideButtonsContainer()"><p>ПУСК</p></div>
+        <div id="start-menu-buttons-container">
+            <div class="start-menu-button changeable-width hover" onclick="togglePopupMenu('user-popup')"><p>Пользователь</p></div>
+            <div class="start-menu-button changeable-width hover"><p>Параметры</p></div>
+            <div class="start-menu-button changeable-width hover" onclick="togglePopupMenu('power-popup')"><p>Выключение</p></div>
+        </div>
+    </div>
+    <div class="app-list">
+        <h4 class="hover">Часто используемые</h4>
+        <ul>
+            <li class="hover"><div><img src="images/webstorm.png">JetBrains WebStorm</div></li>
+            <li class="hover"><div><img src="images/stardew.png">Stardew Valley</div></li>
+        </ul>
+        <h4 class="hover">M</h4>
+        <ul>
+            <li class="start-menu-dir hover" onclick="toggleDir()">
+                <div>
+                    <img src="images/start-menu-dir-closed.png" class="dir-img">
+                    Microsoft Office 2016
+                </div>
+                <img src="images/roll-down-arrow.png" class="roll-down-arrow">
+            </li>
+            <ul class="hidden-dir" style="height: 0">
+                <li class="hover"><div><img src="images/word.png">Word 2016</div></li>
+                <li class="hover"><div><img src="images/excel.png">Excel 2016</div></li>
+                <li class="hover"><div><img src="images/powerpoint.png">PowerPoint 2016</div></li>
+            </ul>
+        </ul>
+    </div>
+    <div id="start-menu-tiles">
+        <p>Tools</p>
+        <div>
+            <img src="images/scissors.png">
+            <img src="images/paint-net.png">
+            <img src="images/geany.png">
+            <img src="images/google-drive-sync.png">
+        </div>
+        <p>Browsers</p>
+        <div>
+            <img src="images/chrome.png">
+            <img src="images/firefox.png">
+            <img src="images/opera.png">
+        </div>
+        <p>Apps</p>
+        <div>
+            <img src="images/spotify.png">
+            <img src="images/discord.png">
+            <img src="images/telegram.png">
+        </div>
+        <div>
+            <img src="images/steam.png">
+            <img src="images/origin.png">
+            <img src="images/uplay.png">
+            <img src="images/utorrent.png">
+        </div>
+    </div>
+</div>
+<div id="notification-bar">
+    <div id="notification-center">
+        <h2>ЦЕНТР УВЕДОМЛЕНИЙ</h2>
+        <p>Новых уведомлений нет</p>
+    </div>
+    <div id="notification-tiles">
+        <div id="toggle-tiles">
+            <p onclick="notificationTilesToggle()">Свернуть</p>
+        </div>
+        <div id="notification-bar-tiles-container" class="container">
+            <div id="tablet-mode"><p>Режим планшета</p></div>
+            <div id="network"><p>Сеть</p></div>
+            <div id="all-settings"><p>Все параметры</p></div>
+            <div id="do-not-disturb"><p>Не беспокоить</p></div>
+            <div id="vpn"><p>Виртуальная сеть (VPN)</p></div>
+            <div id="project-screen"><p>Проеци&shy;ровать</p></div>
+            <div id="connect"><p>Подклю&shy;читься</p></div>
+        </div>
     </div>
 </div>
 <script>
-    let x = 0;
-    let y = 0;
     const widthChange = document.getElementsByClassName("changeable-width");
-    const sideButtonsContainer = document.getElementById("side-buttons-container");
     const startMenu = document.getElementById("start-menu");
+    const dirs = document.getElementsByClassName("hidden-dir");
+    const popupMenus = document.getElementsByClassName("popup-menu");
+    const dirArrows = document.getElementsByClassName("roll-down-arrow");
+    const dirImgs = document.querySelectorAll(".dir-img");
+    const notificationBar = document.querySelector("#notification-bar");
+    const notificationTilesContainer = document.querySelector("#notification-bar-tiles-container");
 
     function openSideButtonsContainer() {
-        if (x === 0) {
-            for (let i = 0; i < widthChange.length; i++) {
-                widthChange[i].style.width = "256px";
-            }
-            sideButtonsContainer.style.backgroundColor = "#1F1F1F";
-            x = 1;
-        } else {
-            for (let i = 0; i < widthChange.length; i++) {
-                widthChange[i].style.width = "48px";
-            }
-            sideButtonsContainer.style.backgroundColor = "initial";
-            x = 0;
+        for (let i = 0; i < widthChange.length; i++) {
+            widthChange[i].classList.toggle("side-buttons-container-open");
         }
     }
 
     function openStartMenu() {
-        if (y === 0) {
-            startMenu.style.height = "557px";
-            startMenu.style.opacity = "1";
-            y = 1;
+        startMenu.classList.toggle("start-menu-open");
+        if (startMenu.classList.contains("start-menu-open")) {
+            for (let i = 0; i < widthChange.length; i++) {
+                widthChange[i].classList.remove("side-buttons-container-open");
+            }
+            for (let i = 0; i < dirs.length; i++) {
+                dirs[i].style.height = "0px";
+            }
+            for (let i = 0; i < dirArrows.length; i++) {
+                dirArrows[i].src = "images/roll-down-arrow.png";
+            }
+            for (let i = 0; i < dirImgs.length; i++) {
+                dirImgs[i].src = "images/start-menu-dir-closed.png";
+            }
+            for (let i = 0; i < popupMenus.length; i++) {
+                popupMenus[i].classList.remove("popup-menu-open");
+            }
+        }
+    }
+    
+    function toggleDir() {
+        let hiddenDir = event.currentTarget.nextElementSibling;
+        let dirImg = event.currentTarget.firstElementChild.firstElementChild;
+        let arrowImg = event.currentTarget.children[1];
+
+        if (hiddenDir.style.height === "0px") {
+            hiddenDir.style.height = (hiddenDir.children.length * 36).toString() + "px";
+            dirImg.src = "images/start-menu-dir-open.png";
+            arrowImg.src = "images/roll-up-arrow.png"
         } else {
-            startMenu.style.height = "0";
-            startMenu.style.opacity = "0";
-            y = 0;
+            hiddenDir.style.height = "0";
+            dirImg.src = "images/start-menu-dir-closed.png";
+            arrowImg.src = "images/roll-down-arrow.png"
+        }
+    }
+    
+    function togglePopupMenu(popup) {
+        document.getElementById(popup).classList.toggle("popup-menu-open");
+    }
+    
+    function toggleNotificationBar() {
+        notificationBar.classList.toggle("notification-bar-open");
+    }
+    
+    function notificationTilesToggle() {
+        notificationTilesContainer.classList.toggle("container-small");
+        if (notificationTilesContainer.classList.contains("container-small")) {
+            event.currentTarget.innerHTML = "Развернуть";
+        } else {
+            event.currentTarget.innerHTML = "Свернуть";
         }
     }
 </script>
