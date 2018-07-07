@@ -1,29 +1,42 @@
 $background: rgba(3, 4, 5, 0.85);
-$hover: rgba(59, 59, 58, 0.9);
-$taskbar-app-small: 26px;
+$hover: rgba(87, 87, 86, 0.70);
 $footer-height: 30px;
-$gray: #696A6A;
+$gray: #7C7B79;
 $start-menu-button-width-height: 48px;
+$border-color: rgb(153, 153, 153);
+$tiles-container-height: 128px;
+$blue-theme: #4DACCF;
 
 body {
-  background: url("background.jpg") no-repeat fixed center;
-  box-sizing: border-box;
+  background: url("images/background.jpg") no-repeat fixed center;
+  color: #fff;
+  font-family: Roboto, sans-serif;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+ul {
+  padding: 0;
 }
 
 .hover {
   &:hover {
-    background-color: $hover!important;
-    transition: background-color 0.1s;
+    background-color: $hover !important;
+    transition: background-color 0.1s !important;
   }
 }
 
 .start-menu-button {
   width: $start-menu-button-width-height;
   height: $start-menu-button-width-height;
-}
+  overflow: hidden;
 
-.changeable-width {
-  transition: background-color 0.2s, width 0.2s!important;
+  p {
+    margin-left: $start-menu-button-width-height;
+    font-weight: 100;
+  }
 }
 
 footer {
@@ -36,57 +49,71 @@ footer {
   left: 0;
   justify-content: space-between;
   z-index: 10;
+  cursor: default;
+  user-select: none;
 
   * {
     height: 100%;
   }
 
   .start-button {
-    flex-basis: 38px;
-    background: url("start-button.png") no-repeat center;
+    width: 36px;
+    background: url("images/start-button.png") no-repeat center;
+    margin-right: 3px;
 
     &:hover {
-      background: url("start-button-hover.png") no-repeat center;
+      background: url("images/start-button-hover.png") no-repeat center;
     }
   }
 
   .taskbar-apps {
-    flex: 8 4;
+    flex: auto;
   }
 
   .taskbar-buttons {
-    flex-basis: 165px;
+    width: 163px;
     display: flex;
     justify-content: space-between;
 
     .internet {
-      background: url("internet.png") no-repeat center;
-      flex-basis: $taskbar-app-small;
+      background: url("images/internet.png") no-repeat center;
+      width: 24px;
     }
 
     .volume {
-      background: url("volume.png") no-repeat center;
-      flex-basis: $taskbar-app-small;
+      background: url("images/volume.png") no-repeat center;
+      width: 24px;
     }
 
     .lang {
-      background: url("lang-eng.png") no-repeat center;
-      flex-basis: $taskbar-app-small + 12px;
+      background: url("images/lang-eng.png") no-repeat center;
+      width: 36px;
     }
 
     .time {
-      background: url("time.png") no-repeat center;
-      flex-basis: $taskbar-app-small + 17px;
+      width: 39px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      p {
+        margin: 0;
+        height: 70%;
+        font-size: 13px;
+        font-weight: 100;
+        position: relative;
+        top: 1px;
+      }
     }
 
     .notification-bar-open-button {
-      flex-basis: $taskbar-app-small + 18px;
-      background: url("notification.png") no-repeat center;
+      width: 40px;
+      background: url("images/notification.png") no-repeat center;
     }
   }
 
   .roll-all-windows {
-    flex-basis: 4px;
+    width: 4px;
     border-left: 1px solid $gray;
     margin-left: 8px;
   }
@@ -95,24 +122,374 @@ footer {
 #start-menu {
   position: absolute;
   width: 637px;
-  height: 0;
-  background-color: fade_out($background, 0.3);
+  background-color: fade_out($background, 0.1);
   border-top: 1px solid fade_out($gray, 0.5);
   border-right: 1px solid fade_out($gray, 0.5);
   left: 0;
   bottom: $footer-height;
-  transition: height 0.2s, opacity 0.2s;
   opacity: 0;
-  padding-top: 4px;
+  height: 0;
   overflow: hidden;
+  user-select: none;
+  z-index: 8;
+  display: flex;
+  flex-direction: row;
+  transition: 0.2s;
 
-  #side-buttons-container {
-    width: $start-menu-button-width-height;
-    height: 100%;
-    z-index: 6;
+  .changeable-width {
+    transition: width 0.2s, background-color 0.2s !important;
+  }
 
-    .open-descriptions {
-      background: url("open-desc.png")no-repeat center;
+  .popup-menu {
+    box-sizing: border-box !important;
+    width: 256px;
+    background-color: rgb(43, 43, 43);
+    position: absolute;
+    font-size: 12px;
+    z-index: 20;
+    padding: 0;
+    border: none;
+    overflow: hidden;
+    height: 0;
+    opacity: 0;
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    div {
+      margin: 0;
+      padding: 12px;
+      height: 32px;
+      display: flex;
+      justify-content: left;
+      align-items: center;
+
+      p {
+        padding-left: 12px;
+      }
     }
   }
+
+  .popup-menu-open {
+    height: 114px !important;
+    opacity: 1 !important;
+    border: 1px solid fade_out($gray, 0.2) !important;
+    padding: 8px 0 !important;
+  }
+
+  #user-popup {
+    bottom: $start-menu-button-width-height * 3 + 4px;
+  }
+
+  #power-popup {
+    bottom: $start-menu-button-width-height + 4px;
+  }
+
+  #side-buttons-container {
+    position: absolute;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    white-space: nowrap;
+    z-index: 9;
+    width: $start-menu-button-width-height;
+
+
+    & > div:first-child {
+      background: url("images/open-desc.png") no-repeat 16px;
+      font-weight: 900 !important;
+      margin-top: 4px;
+    }
+
+    #start-menu-buttons-container div:first-child {
+      background: url("images/user-icon.png") no-repeat 14px;
+    }
+
+    #start-menu-buttons-container div:nth-child(2) {
+      background: url("images/settings-icon.png") no-repeat 16px;
+    }
+
+    #start-menu-buttons-container div:last-child {
+      background: url("images/power-icon.png") no-repeat 17px;
+    }
+  }
+
+  .side-buttons-container-open {
+    width: 256px !important;
+    background-color: #1F1F1F;
+  }
+
+  .app-list {
+    display: flex;
+    flex-direction: column;
+    width: 259px;
+    height: 100%;
+    margin-left: $start-menu-button-width-height;
+
+    h4:first-of-type {
+      margin-top: 7px !important;
+    }
+
+    h4, li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 36px;
+      font-weight: 100;
+      font-size: 12px;
+      text-align: left;
+      margin: 0;
+      padding-left: 16px;
+
+      div {
+        display: flex;
+        align-items: center;
+      }
+
+      img {
+        width: 32px;
+        height: 32px;
+        margin-right: 8px;
+      }
+    }
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+      width: 100%;
+      margin: 0;
+    }
+
+    .roll-down-arrow {
+        width: 8px;
+        height: 4px;
+        margin-right: 20px;
+    }
+
+    .hidden-dir {
+      overflow: hidden;
+      transition: height 0.2s;
+
+      li {
+        padding-left: 24px;
+      }
+    }
+  }
+
+  #start-menu-tiles {
+    display: flex;
+    flex-direction: column;
+    margin: 13px 16px 0 5px;
+    flex-grow: 5;
+
+    p {
+      font-size: 12px;
+      margin: 2px 0;
+      height: 32px;
+      display: flex;
+      align-items: center;
+
+      &:hover {
+        background: url("images/tiles-title-move.png") no-repeat right;
+      }
+    }
+
+    p:first-child {
+      margin-top: 0;
+    }
+
+    div {
+      display: flex;
+      margin: 2px 0;
+    }
+
+    img {
+      margin: 0 2px;
+      box-sizing: border-box !important;
+    }
+
+    img:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.start-menu-open {
+  height: 589px !important;
+  opacity: 1 !important;
+}
+
+#notification-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100% - 30px);
+  width: 360px;
+  background-color: fade_out($background, 0.1);
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 8;
+  border-left: 1px solid fade_out($gray, 0.4);
+  cursor: default;
+  user-select: none;
+  overflow: hidden;
+  transform: translate(100%);
+  transition: 0.3s;
+
+  #notification-center {
+    margin: 20px 12px;
+
+    h2 {
+      font-size: 15px;
+      margin: 0 0 42px 0;
+    }
+
+    p {
+      font-size: 15px;
+      color: rgb(177, 177, 177);
+      font-weight: 500;
+      margin: 0;
+    }
+  }
+
+  #notification-tiles {
+    width: 100%;
+
+    #toggle-tiles {
+      color: rgb(161, 161, 161);
+      font-size: 12px;
+      text-align: right;
+      height: 50px;
+      display: flex;
+      justify-content: flex-end;
+
+      p {
+        margin: 0;
+        width: 20%;
+        height: 100%;
+        text-align: center;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+          color: white;
+        }
+      }
+    }
+
+    .container {
+      display: flex;
+      flex-flow: row wrap;
+      margin: 2px;
+      overflow: hidden;
+      height: $tiles-container-height;
+      transition: height 0.2s;
+
+      div {
+        width: 85px;
+        height: 60px;
+        background-color: rgba(88, 88, 88, 0.9) !important;
+        background-position: 4px 5px !important;
+        margin: 2px;
+        display: flex;
+        align-items: flex-end;
+        box-sizing: border-box !important;
+
+        &:hover {
+          border: 2px solid $border-color;
+        }
+
+        p {
+          color: white;
+          text-align: left;
+          font-size: 11px;
+          margin: 0 0 5px 4px;
+          width: 80%;
+          word-wrap: break-word;
+        }
+      }
+
+      #tablet-mode {
+        background: url("images/tablet-mode.png") no-repeat;
+      }
+
+      #network {
+        background: url("images/network.png") no-repeat;
+      }
+
+      #all-settings {
+        background: url("images/settings-icon.png") no-repeat;
+      }
+
+      #do-not-disturb {
+        background: url("images/do-not-disturb.png") no-repeat;
+      }
+
+      #vpn {
+        background: url("images/vpn.png") no-repeat;
+      }
+
+      #project-screen {
+        background: url("images/project.png") no-repeat;
+      }
+
+      #connect {
+        background: url("images/connect.png") no-repeat;
+      }
+    }
+
+    .container-small {
+      height: $tiles-container-height / 2 !important;
+    }
+  }
+}
+
+.notification-bar-open {
+  transform: translate(0) !important;
+}
+
+#calendar {
+  position: absolute;
+  bottom: $footer-height;
+  right: 0;
+  width: 361px;
+  height: 0;
+  background-color: rgba(40, 40, 40, 0.8);
+  border-left: 1px solid fade_out($gray, 0.4);
+  border-top: 1px solid fade_out($gray, 0.4);
+  cursor: default;
+  user-select: none;
+  box-sizing: border-box;
+  transition: 0.2s;
+  opacity: 0;
+
+  h1 {
+    margin: 15px 0 0 15px;
+    font-size: 45px;
+    font-weight: 100;
+  }
+
+  p {
+    margin: 0 0 15px 15px;
+    font-weight: 100;
+    color: $blue-theme;
+    font-size: 15px;
+
+    &:hover {
+      color: #a3a2a0;
+    }
+  }
+}
+
+.calendar-open {
+  height: 113px !important;
+  opacity: 1 !important;
+}
+
+@media all and (max-width: 800px) {
+  #start-menu {width: 100%;}
 }

@@ -14,21 +14,21 @@
         <div class="internet hover"></div>
         <div class="volume hover"></div>
         <div class="lang hover"></div>
-        <div class="time hover"></div>
+        <div class="time hover" onclick="toggleCalendar()"><p id="taskbar-time"></p></div>
         <div class="notification-bar-open-button hover" onclick="toggleNotificationBar()"></div>
     </div>
     <div class="roll-all-windows hover"></div>
 </footer>
 <div id="start-menu">
     <div class="popup-menu" id="user-popup">
-        <p class="hover">Изменить параметры учетной записи</p>
-        <p class="hover">Заблокировать</p>
-        <p class="hover">Выход</p>
+        <div class="hover"><p>Изменить параметры учетной записи</p></div>
+        <div class="hover"><p>Заблокировать</p></div>
+        <div class="hover"><p>Выход</p></div>
     </div>
     <div class="popup-menu" id="power-popup">
-        <p>Спязий режим</p>
-        <p>Завершение работы</p>
-        <p>Перезагрузка</p>
+        <div class="hover"><p>Спящий режим</p></div>
+        <div class="hover"><p>Завершение работы</p></div>
+        <div class="hover"><p>Перезагрузка</p></div>
     </div>
     <div class="changeable-width" id="side-buttons-container">
         <div class="start-menu-button changeable-width hover" onclick="openSideButtonsContainer()"><p>ПУСК</p></div>
@@ -108,6 +108,10 @@
         </div>
     </div>
 </div>
+<div id="calendar">
+    <h1 id="insert-time"></h1>
+    <p id="insert-date"></p>
+</div>
 <script>
     const widthChange = document.getElementsByClassName("changeable-width");
     const startMenu = document.getElementById("start-menu");
@@ -117,6 +121,41 @@
     const dirImgs = document.querySelectorAll(".dir-img");
     const notificationBar = document.querySelector("#notification-bar");
     const notificationTilesContainer = document.querySelector("#notification-bar-tiles-container");
+    const calendar = document.querySelector("#calendar");
+
+    function addZero(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+
+    function getMonthName(i, z) {
+        const monthNames = ["январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"];
+        i = monthNames[i];
+        if (z) {
+            if (i.endsWith("т")) {
+                i = i.split(i.charAt(i.length-1))[0] + "а";
+            } else {
+                i = i.split(i.charAt(i.length-1))[0] + "я";
+            }
+        }
+        return i;
+    }
+
+    let now = new Date();
+    document.querySelector("#insert-time").innerHTML = now.toLocaleTimeString();
+    document.querySelector("#insert-date").innerHTML = String(now.getDate()) + " " + getMonthName(now.getMonth(), true) + " " + now.getFullYear() + " г.";
+    document.querySelector("#taskbar-time").innerHTML = String(now.getHours()) + ":" + String(addZero(now.getMinutes()));
+
+    function updateTime() {
+        let now = new Date();
+        document.querySelector("#insert-time").innerHTML = now.toLocaleTimeString();
+        document.querySelector("#insert-date").innerHTML = String(now.getDate()) + " " + getMonthName(now.getMonth(), true) + " " + now.getFullYear() + " г.";
+        document.querySelector("#taskbar-time").innerHTML = String(now.getHours()) + ":" + String(addZero(now.getMinutes()));
+    }
+
+    setInterval(updateTime, 1000);
 
     function openSideButtonsContainer() {
         for (let i = 0; i < widthChange.length; i++) {
@@ -126,7 +165,7 @@
 
     function openStartMenu() {
         startMenu.classList.toggle("start-menu-open");
-        if (startMenu.classList.contains("start-menu-open")) {
+        if (!startMenu.classList.contains("start-menu-open")) {
             for (let i = 0; i < widthChange.length; i++) {
                 widthChange[i].classList.remove("side-buttons-container-open");
             }
@@ -143,8 +182,13 @@
                 popupMenus[i].classList.remove("popup-menu-open");
             }
         }
+        notificationBar.classList.remove("notification-bar-open");
     }
-    
+
+    function toggleCalendar() {
+        calendar.classList.toggle("calendar-open");
+    }
+
     function toggleDir() {
         let hiddenDir = event.currentTarget.nextElementSibling;
         let dirImg = event.currentTarget.firstElementChild.firstElementChild;
