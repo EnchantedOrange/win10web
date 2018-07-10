@@ -55,8 +55,17 @@ footer {
       background: url("images/volume.png") no-repeat center;
       width: 24px; }
     footer .taskbar-buttons .lang {
-      background: url("images/lang-eng.png") no-repeat center;
-      width: 36px; }
+      width: 36px;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+      footer .taskbar-buttons .lang p {
+        margin: 0;
+        height: 70%;
+        font-size: 13px;
+        font-weight: 100;
+        position: relative;
+        top: 1px; }
     footer .taskbar-buttons .time {
       width: 39px;
       display: flex;
@@ -118,8 +127,6 @@ footer {
       display: flex;
       justify-content: left;
       align-items: center; }
-      #start-menu .popup-menu div p {
-        padding-left: 12px; }
   #start-menu .popup-menu-open {
     height: 114px !important;
     opacity: 1 !important;
@@ -337,6 +344,35 @@ footer {
 
 .calendar-open {
   height: 113px !important;
+  opacity: 1 !important; }
+
+#lang-selector {
+  position: absolute;
+  right: 0;
+  bottom: 30px;
+  width: 301px;
+  height: 0;
+  opacity: 0;
+  border-top: 1px solid rgba(124, 123, 121, 0.6);
+  border-left: 1px solid rgba(124, 123, 121, 0.6);
+  display: flex;
+  flex-direction: column;
+  padding: 5px 0;
+  box-sizing: border-box;
+  background-color: rgba(40, 40, 40, 0.87);
+  transition: 0.2s; }
+  #lang-selector > div {
+    width: 100%;
+    height: 60px;
+    display: flex; }
+    #lang-selector > div div {
+      margin: auto 0; }
+    #lang-selector > div .lang-label {
+      flex-basis: 25%;
+      text-align: center; }
+
+.lang-selector-open {
+  height: 131px !important;
   opacity: 1 !important; }
 
 @media all and (max-width: 800px) {

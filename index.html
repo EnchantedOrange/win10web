@@ -13,7 +13,7 @@
     <div class="taskbar-buttons">
         <div class="internet hover"></div>
         <div class="volume hover"></div>
-        <div class="lang hover"></div>
+        <div class="lang hover" onclick="toggleLangSelector()"><p id="lang-indicator">ENG</p></div>
         <div class="time hover" onclick="toggleCalendar()"><p id="taskbar-time"></p></div>
         <div class="notification-bar-open-button hover" onclick="toggleNotificationBar()"></div>
     </div>
@@ -112,6 +112,16 @@
     <h1 id="insert-time"></h1>
     <p id="insert-date"></p>
 </div>
+<div id="lang-selector">
+    <div class="lang-selector-bar hover" onclick="selectLang('РУС')">
+        <div class="lang-label">РУС<br>RU</div>
+        <div>Русский<br>Русская клавиатура</div>
+    </div>
+    <div class="lang-selector-bar hover" onclick="selectLang('ENG')">
+        <div class="lang-label">ENG</div>
+        <div>Английский (США)<br>США клавиатура</div>
+    </div>
+</div>
 <script>
     const widthChange = document.getElementsByClassName("changeable-width");
     const startMenu = document.getElementById("start-menu");
@@ -122,6 +132,16 @@
     const notificationBar = document.querySelector("#notification-bar");
     const notificationTilesContainer = document.querySelector("#notification-bar-tiles-container");
     const calendar = document.querySelector("#calendar");
+    const langIndicator = document.querySelector("#lang-indicator");
+    const langSelectorBars = document.querySelectorAll(".lang-selector-bar");
+
+    function selectLang(lang) {
+        langIndicator.innerHTML = lang;
+        for (let i = 0; i < langSelectorBars.length; i++) {
+            langSelectorBars[i].style.backgroundColor = "initial";
+        }
+        event.currentTarget.style.backgroundColor = "rgb(77, 141, 164)";
+    }
 
     function addZero(i) {
         if (i < 10) {
@@ -220,6 +240,10 @@
         } else {
             event.currentTarget.innerHTML = "Свернуть";
         }
+    }
+
+    function toggleLangSelector() {
+        document.querySelector("#lang-selector").classList.toggle("lang-selector-open");
     }
 </script>
 </body>
