@@ -12,7 +12,7 @@
     <div class="taskbar-apps"></div>
     <div class="taskbar-buttons">
         <div class="internet hover"></div>
-        <div class="volume hover"></div>
+        <div class="volume hover" onclick="toggleVolumeMenu()"></div>
         <div class="lang hover" onclick="toggleLangSelector()"><p id="lang-indicator">ENG</p></div>
         <div class="time hover" onclick="toggleCalendar()"><p id="taskbar-time"></p></div>
         <div class="notification-bar-open-button hover" onclick="toggleNotificationBar()"></div>
@@ -122,6 +122,14 @@
         <div>Английский (США)<br>США клавиатура</div>
     </div>
 </div>
+<div id="volume-menu">
+    <p>Динамики</p>
+    <div>
+        <img id="volume-big" src="images/volume-big.png">
+        <input id="volume-slider" type="range" min="0" max="100" value="100">
+        <p id="volume-slider-output">100</p>
+    </div>
+</div>
 <script>
     const widthChange = document.getElementsByClassName("changeable-width");
     const startMenu = document.getElementById("start-menu");
@@ -134,6 +142,21 @@
     const calendar = document.querySelector("#calendar");
     const langIndicator = document.querySelector("#lang-indicator");
     const langSelectorBars = document.querySelectorAll(".lang-selector-bar");
+    const volumeSlider = document.querySelector("#volume-slider");
+    const volumeBig = document.querySelector("#volume-big");
+
+    volumeSlider.oninput = function() {
+        document.querySelector("#volume-slider-output").innerHTML = this.value;
+        if (volumeSlider.value == 0) {
+            volumeBig.src = "images/volume-big-0.png";
+        } else if (volumeSlider.value >= 1 && volumeSlider.value <= 32) {
+            volumeBig.src = "images/volume-big-1-32.png";
+        } else if (volumeSlider.value >= 33 && volumeSlider.value <= 65) {
+            volumeBig.src = "images/volume-big-33-65.png";
+        } else {
+            volumeBig.src = "images/volume-big.png";
+        }
+    }
 
     function selectLang(lang) {
         langIndicator.innerHTML = lang;
@@ -244,6 +267,10 @@
 
     function toggleLangSelector() {
         document.querySelector("#lang-selector").classList.toggle("lang-selector-open");
+    }
+
+    function toggleVolumeMenu() {
+        document.querySelector("#volume-menu").classList.toggle("volume-menu-open");
     }
 </script>
 </body>
