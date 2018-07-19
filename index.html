@@ -7,11 +7,14 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
+<div id="test-button">
+    Press me
+</div>
 <footer>
     <div class="start-button hover" onclick="openStartMenu()"></div>
     <div class="taskbar-apps"></div>
     <div class="taskbar-buttons">
-        <div class="internet hover"></div>
+        <div id="taskbar-internet" class="internet hover"></div>
         <div class="volume hover" onclick="toggleVolumeMenu()"></div>
         <div class="lang hover" onclick="toggleLangSelector()"><p id="lang-indicator">ENG</p></div>
         <div class="time hover" onclick="toggleCalendar()"><p id="taskbar-time"></p></div>
@@ -130,6 +133,15 @@
         <p id="volume-slider-output">100</p>
     </div>
 </div>
+<div id="network-menu">
+    <div id="current-network" class="hover">
+        <img src="images/network-big.png">
+        <div>
+            <p>Сеть</p>
+            <p>Подключено</p>
+        </div>
+    </div>
+</div>
 <script>
     const widthChange = document.getElementsByClassName("changeable-width");
     const startMenu = document.getElementById("start-menu");
@@ -145,6 +157,9 @@
     const volumeSlider = document.querySelector("#volume-slider");
     const volumeBig = document.querySelector("#volume-big");
 
+    document.querySelector("#test-button").onmousedown = function() {event.currentTarget.style.borderStyle = "inset"};
+    document.querySelector("#test-button").onmouseup = function() {event.currentTarget.style.borderStyle = "outset"};
+
     volumeSlider.oninput = function() {
         document.querySelector("#volume-slider-output").innerHTML = this.value;
         if (volumeSlider.value == 0) {
@@ -157,6 +172,8 @@
             volumeBig.src = "images/volume-big.png";
         }
     }
+
+    document.querySelector("#taskbar-internet").onclick = function () {document.querySelector("#network-menu").classList.toggle("network-menu-open")};
 
     function selectLang(lang) {
         langIndicator.innerHTML = lang;

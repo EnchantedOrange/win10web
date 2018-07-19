@@ -22,6 +22,20 @@ ul {
     margin-left: 48px;
     font-weight: 100; }
 
+#test-button {
+  width: 300px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  position: relative;
+  top: 200px;
+  background: green;
+  border: 3px outset #24ae20;
+  box-shadow: 0 0 0 3px #000;
+  user-select: none; }
+
 footer {
   width: 100%;
   height: 30px;
@@ -222,10 +236,6 @@ footer {
     #start-menu #start-menu-tiles img:first-child {
       margin-left: 0; }
 
-.start-menu-open {
-  height: 589px !important;
-  opacity: 1 !important; }
-
 #notification-bar {
   display: flex;
   flex-direction: column;
@@ -313,9 +323,6 @@ footer {
     #notification-bar #notification-tiles .container-small {
       height: 64px !important; }
 
-.notification-bar-open {
-  transform: translate(0) !important; }
-
 #calendar {
   position: absolute;
   bottom: 30px;
@@ -341,10 +348,6 @@ footer {
     font-size: 15px; }
     #calendar p:hover {
       color: #a3a2a0; }
-
-.calendar-open {
-  height: 113px !important;
-  opacity: 1 !important; }
 
 #lang-selector {
   position: absolute;
@@ -421,12 +424,60 @@ footer {
       font-size: 20px;
       margin: 0 18px; }
 
+#network-menu {
+  position: absolute;
+  bottom: 30px;
+  right: 0;
+  width: 360px;
+  height: 0;
+  opacity: 0;
+  padding: 12px 0;
+  border-top: 1px solid rgba(124, 123, 121, 0.6);
+  border-left: 1px solid rgba(124, 123, 121, 0.6);
+  background: rgba(40, 40, 40, 0.87);
+  transition: 0.2s;
+  box-sizing: border-box; }
+  #network-menu #current-network {
+    width: 100%;
+    height: 56px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center; }
+    #network-menu #current-network img {
+      margin: 0 12px; }
+    #network-menu #current-network div {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+      font-weight: 100; }
+      #network-menu #current-network div p {
+        margin: 0; }
+      #network-menu #current-network div p:last-child {
+        color: #a1a1a1; }
+
+.start-menu-open {
+  height: 589px !important;
+  opacity: 1 !important; }
+
+.notification-bar-open {
+  transform: translate(0) !important; }
+
+.calendar-open {
+  height: 113px !important;
+  opacity: 1 !important; }
+
 .volume-menu-open {
   height: 101px !important;
   opacity: 1 !important; }
 
 .lang-selector-open {
   height: 131px !important;
+  opacity: 1 !important; }
+
+.network-menu-open {
+  height: 80px !important;
   opacity: 1 !important; }
 
 @media all and (max-width: 800px) {
