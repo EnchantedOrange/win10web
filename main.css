@@ -5,7 +5,36 @@ body {
   overflow: hidden;
   width: 100%;
   height: 100%;
-  margin: 0; }
+  margin: 0;
+  user-select: none; }
+
+.window {
+  position: absolute;
+  left: 100px;
+  top: 50px;
+  z-index: 50;
+  width: 1000px;
+  border: 1px solid #61b5d4;
+  display: none; }
+  .window .window-header {
+    height: 30px;
+    width: 100%;
+    background: #4DACCF;
+    display: flex;
+    justify-content: space-between; }
+    .window .window-header .window-header-logo {
+      width: 29px;
+      height: 100%;
+      background: url("images/mypc.png") no-repeat center; }
+    .window .window-header .window-close-button {
+      width: 45px;
+      height: 100%;
+      background: url("images/window-close-button.png") no-repeat center; }
+      .window .window-header .window-close-button:hover {
+        background-color: #e81123; }
+  .window .window-body {
+    height: 600px;
+    background: #fff; }
 
 ul {
   padding: 0; }
@@ -22,20 +51,6 @@ ul {
     margin-left: 48px;
     font-weight: 100; }
 
-#test-button {
-  width: 300px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-  position: relative;
-  top: 200px;
-  background: green;
-  border: 3px outset #24ae20;
-  box-shadow: 0 0 0 3px #000;
-  user-select: none; }
-
 footer {
   width: 100%;
   height: 30px;
@@ -46,8 +61,7 @@ footer {
   left: 0;
   justify-content: space-between;
   z-index: 10;
-  cursor: default;
-  user-select: none; }
+  cursor: default; }
   footer * {
     height: 100%; }
   footer .start-button {
@@ -97,8 +111,7 @@ footer {
       background: url("images/notification.png") no-repeat center; }
   footer .roll-all-windows {
     width: 4px;
-    border-left: 1px solid #7C7B79;
-    margin-left: 8px; }
+    border-left: 1px solid #7C7B79; }
 
 #start-menu {
   position: absolute;
@@ -111,7 +124,6 @@ footer {
   opacity: 0;
   height: 0;
   overflow: hidden;
-  user-select: none;
   z-index: 8;
   display: flex;
   flex-direction: row;
@@ -147,7 +159,7 @@ footer {
     border: 1px solid rgba(124, 123, 121, 0.8) !important;
     padding: 8px 0 !important; }
   #start-menu #user-popup {
-    bottom: 148px; }
+    bottom: 196px; }
   #start-menu #power-popup {
     bottom: 52px; }
   #start-menu #side-buttons-container {
@@ -166,6 +178,8 @@ footer {
     #start-menu #side-buttons-container #start-menu-buttons-container div:first-child {
       background: url("images/user-icon.png") no-repeat 14px; }
     #start-menu #side-buttons-container #start-menu-buttons-container div:nth-child(2) {
+      background: url("images/explorer.png") no-repeat 16px; }
+    #start-menu #side-buttons-container #start-menu-buttons-container div:nth-child(3) {
       background: url("images/settings-icon.png") no-repeat 16px; }
     #start-menu #side-buttons-container #start-menu-buttons-container div:last-child {
       background: url("images/power-icon.png") no-repeat 17px; }
@@ -249,7 +263,6 @@ footer {
   z-index: 8;
   border-left: 1px solid rgba(124, 123, 121, 0.6);
   cursor: default;
-  user-select: none;
   overflow: hidden;
   transform: translate(100%);
   transition: 0.3s; }
@@ -333,7 +346,6 @@ footer {
   border-left: 1px solid rgba(124, 123, 121, 0.6);
   border-top: 1px solid rgba(124, 123, 121, 0.6);
   cursor: default;
-  user-select: none;
   box-sizing: border-box;
   transition: 0.2s;
   opacity: 0; }
@@ -389,7 +401,6 @@ footer {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  user-select: none;
   transition: 0.2s; }
   #volume-menu > p {
     flex-basis: 50%;
