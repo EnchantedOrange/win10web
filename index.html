@@ -3,20 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Windows 10 web</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
 <div id="window" class="window">
     <div id="window-header" class="window-header">
         <div class="window-header-logo"></div>
-        <div class="window-close-button" onclick="document.querySelector('#window').style.display = 'none';"></div>
+        <div class="window-control-buttons">
+            <div class="window-roll-button hover-colored"></div>
+            <div class="window-expand-button hover-colored"></div>
+            <div class="window-close-button" onclick="document.querySelector('#window').style.display = 'none';"></div>
+        </div>
     </div>
     <div class="window-body"></div>
 </div>
 <footer>
     <div class="start-button hover" onclick="openStartMenu()"></div>
-    <div class="taskbar-apps"></div>
+    <div class="taskbar-apps">
+        <div id="explorer-taskbar" class="hover" onclick="openWindow()"></div>
+    </div>
     <div class="taskbar-buttons">
         <div id="taskbar-internet" class="internet hover"></div>
         <div class="volume hover" onclick="toggleVolumeMenu()"></div>
@@ -41,7 +47,7 @@
         <div class="start-menu-button changeable-width hover" onclick="openSideButtonsContainer()"><p>ПУСК</p></div>
         <div id="start-menu-buttons-container">
             <div class="start-menu-button changeable-width hover" onclick="togglePopupMenu('user-popup')"><p>Пользователь</p></div>
-            <div class="start-menu-button changeable-width hover" onclick="document.querySelector('#window').style.display = 'block'"><p>Проводник</p></div>
+            <div class="start-menu-button changeable-width hover" onclick="openWindow()"><p>Проводник</p></div>
             <div class="start-menu-button changeable-width hover"><p>Параметры</p></div>
             <div class="start-menu-button changeable-width hover" onclick="togglePopupMenu('power-popup')"><p>Выключение</p></div>
         </div>
@@ -196,6 +202,17 @@
             left: box.left + pageXOffset
         };
     }
+
+    function openWindow() {
+        document.querySelector("#window").style.display = "block";
+        startMenu.classList.remove("start-menu-open");
+    }
+
+    document.querySelector(".window-expand-button").onclick = function () {
+        win.classList.toggle("window-opened");
+        win.style.left = "0px";
+        win.style.top = "0px";
+    };
 
     volumeSlider.oninput = function() {
         document.querySelector("#volume-slider-output").innerHTML = this.value;
