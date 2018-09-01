@@ -8,6 +8,29 @@ body {
   margin: 0;
   user-select: none; }
 
+.gradient-button {
+  position: absolute;
+  top: 10%;
+  left: 40%;
+  width: 300px;
+  height: 80px;
+  border-radius: 100px;
+  background: #4b5a33;
+  overflow: hidden;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.25); }
+  .gradient-button div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle closest-side, #43305a, #4b5a33);
+    transform: translate(-50%, -50%);
+    transition: width .2s ease, height .2s ease; }
+  .gradient-button:hover div {
+    width: 400px;
+    height: 400px; }
+
 ul {
   padding: 0; }
 
@@ -27,6 +50,33 @@ ul {
     margin-left: 48px;
     font-weight: 100; }
 
+.desktop {
+  display: grid;
+  grid-template-columns: repeat(25, 1fr);
+  grid-template-rows: repeat(11, 1fr);
+  grid-gap: 34px 1px;
+  justify-items: center;
+  align-items: center;
+  justify-content: stretch;
+  align-content: stretch; }
+  .desktop .desktop-icon {
+    width: 75px;
+    height: 61px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2px;
+    margin-top: 5px; }
+    .desktop .desktop-icon img {
+      width: 48px;
+      height: 48px; }
+    .desktop .desktop-icon p {
+      font-size: 12px;
+      text-shadow: 2px 2px 4px #000;
+      margin: 0;
+      text-align: center;
+      font-weight: 100; }
+
 .window {
   position: absolute;
   left: 100px;
@@ -34,18 +84,30 @@ ul {
   z-index: 10;
   width: 1000px;
   height: 600px;
-  border: 1px solid #61b5d4;
-  display: none; }
+  border: 1px solid #61b5d4; }
   .window .window-header {
     height: 30px;
     width: 100%;
     background: #4DACCF;
     display: flex;
     justify-content: space-between; }
-    .window .window-header .window-header-logo {
-      width: 29px;
-      height: 100%;
-      background: url("images/mypc.png") no-repeat center; }
+    .window .window-header-container {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center; }
+      .window .window-header-container .window-header-logo {
+        width: 29px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center; }
+        .window .window-header-container .window-header-logo img {
+          width: 16px;
+          height: 16px; }
+      .window .window-header-container p {
+        color: #fff;
+        font-size: 13px;
+        font-weight: 300; }
     .window .window-header .window-control-buttons {
       display: flex; }
       .window .window-header .window-control-buttons .window-roll-button {
@@ -97,10 +159,31 @@ footer {
     footer .start-button:hover {
       background: url("images/start-button-hover.png") no-repeat center; }
   footer .taskbar-apps {
-    flex: auto; }
-    footer .taskbar-apps #explorer-taskbar {
+    flex: auto;
+    display: flex; }
+    footer .taskbar-apps .taskbar-app {
       width: 36px;
-      background: url("images/explorer-taskbar.png") no-repeat center; }
+      height: 100%;
+      margin-right: 1px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      box-sizing: border-box;
+      overflow: hidden;
+      transition: width 0.3s; }
+      footer .taskbar-apps .taskbar-app img {
+        max-width: 16px;
+        max-height: 15px;
+        margin: 0 10px; }
+      footer .taskbar-apps .taskbar-app p {
+        line-height: 30px;
+        font-size: 13px;
+        margin: 0; }
+    footer .taskbar-apps .taskbar-app-open {
+      width: 160px !important;
+      border-bottom: 2px solid #4DACCF; }
+      footer .taskbar-apps .taskbar-app-open img {
+        margin: 0 4px 0 8px !important; }
   footer .taskbar-buttons {
     width: 163px;
     display: flex;
@@ -236,10 +319,17 @@ footer {
       #start-menu .app-list h4 div, #start-menu .app-list li div {
         display: flex;
         align-items: center; }
-      #start-menu .app-list h4 img, #start-menu .app-list li img {
+      #start-menu .app-list h4 .ico, #start-menu .app-list li .ico {
         width: 32px;
         height: 32px;
-        margin-right: 8px; }
+        margin-right: 8px;
+        background-color: #4DACCF;
+        display: flex;
+        justify-content: center;
+        align-items: center; }
+        #start-menu .app-list h4 .ico img, #start-menu .app-list li .ico img {
+          width: 25px;
+          height: 25px; }
     #start-menu .app-list ul {
       display: flex;
       flex-direction: column;
@@ -276,6 +366,8 @@ footer {
     #start-menu #start-menu-tiles img {
       margin: 0 2px;
       box-sizing: border-box !important; }
+      #start-menu #start-menu-tiles img:hover {
+        box-shadow: 0 0 0 2px #999999; }
     #start-menu #start-menu-tiles img:first-child {
       margin-left: 0; }
 
@@ -288,13 +380,13 @@ footer {
   background-color: rgba(3, 4, 5, 0.75);
   position: absolute;
   top: 0;
-  right: 0;
   z-index: 8;
   border-left: 1px solid rgba(124, 123, 121, 0.6);
   cursor: default;
   overflow: hidden;
-  transform: translate(100%);
-  transition: 0.3s; }
+  white-space: nowrap;
+  right: -361px;
+  transition: right 0.3s; }
   #notification-bar #notification-center {
     margin: 20px 12px; }
     #notification-bar #notification-center h2 {
@@ -329,7 +421,8 @@ footer {
       margin: 2px;
       overflow: hidden;
       height: 128px;
-      transition: height 0.2s; }
+      transition: height 0.2s;
+      white-space: normal; }
       #notification-bar #notification-tiles .container div {
         width: 85px;
         height: 60px;
@@ -340,7 +433,7 @@ footer {
         align-items: flex-end;
         box-sizing: border-box !important; }
         #notification-bar #notification-tiles .container div:hover {
-          border: 2px solid #999999; }
+          box-shadow: 0 0 0 2px inset #999999; }
         #notification-bar #notification-tiles .container div p {
           color: white;
           text-align: left;
@@ -461,8 +554,8 @@ footer {
       border-radius: 10px;
       background-color: #2d7d9a; }
     #volume-menu > div p {
-      font-size: 20px;
-      margin: 0 18px; }
+      font-size: 25px;
+      margin: 0 auto; }
 
 #network-menu {
   position: absolute;
@@ -502,7 +595,7 @@ footer {
   opacity: 1 !important; }
 
 .notification-bar-open {
-  transform: translate(0) !important; }
+  right: 0 !important; }
 
 .calendar-open {
   height: 113px !important;

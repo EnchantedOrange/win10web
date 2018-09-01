@@ -3,25 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>Windows 10 web</title>
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
+<div class="gradient-button">
+    <div></div>
+</div>
+<div class="desktop">
+    <div class="desktop-icon desktop-icon-webstorm">
+        <img src="images/webstorm-1.ico">
+        <p>WebStorm</p>
+    </div>
+    <div class="desktop-icon">
+        <img src="images/ESO.ico">
+        <p>The Elder Scrolls Online</p>
+    </div>
+</div>
+<!--
 <div id="window" class="window">
     <div id="window-header" class="window-header">
-        <div class="window-header-logo"></div>
+        <div class="window-header-container">
+            <div class="window-header-logo">
+                <img src="images/mypc.png">
+            </div>
+            <p>Этот компьютер</p>
+        </div>
         <div class="window-control-buttons">
             <div class="window-roll-button hover-colored"></div>
             <div class="window-expand-button hover-colored"></div>
-            <div class="window-close-button" onclick="document.querySelector('#window').style.display = 'none';"></div>
+            <div class="window-close-button"></div>
         </div>
     </div>
     <div class="window-body"></div>
 </div>
+-->
 <footer>
     <div class="start-button hover" onclick="openStartMenu()"></div>
     <div class="taskbar-apps">
-        <div id="explorer-taskbar" class="hover" onclick="openWindow()"></div>
+        <div class="taskbar-app hover" onclick="openWindow()">
+            <img src="images/explorer-taskbar.png">
+            <p>Проводник</p>
+        </div>
     </div>
     <div class="taskbar-buttons">
         <div id="taskbar-internet" class="internet hover"></div>
@@ -55,22 +78,49 @@
     <div class="app-list">
         <h4 class="hover">Часто используемые</h4>
         <ul>
-            <li class="hover"><div><img src="images/webstorm.png">JetBrains WebStorm</div></li>
-            <li class="hover"><div><img src="images/stardew.png">Stardew Valley</div></li>
+            <li class="hover">
+                <div>
+                    <div class="ico">
+                        <img src="images/webstorm-1.ico">
+                    </div>
+                    JetBrains WebStorm
+                </div>
+            </li>
+            <li class="hover">
+                <div>
+                    <img class="ico" src="images/stardew.png">
+                    Stardew Valley
+                </div>
+            </li>
         </ul>
         <h4 class="hover">M</h4>
         <ul>
             <li class="start-menu-dir hover" onclick="toggleDir()">
                 <div>
-                    <img src="images/start-menu-dir-closed.png" class="dir-img">
+                    <img src="images/start-menu-dir-closed.png" class="dir-img ico">
                     Microsoft Office 2016
                 </div>
                 <img src="images/roll-down-arrow.png" class="roll-down-arrow">
             </li>
             <ul class="hidden-dir" style="height: 0">
-                <li class="hover"><div><img src="images/word.png">Word 2016</div></li>
-                <li class="hover"><div><img src="images/excel.png">Excel 2016</div></li>
-                <li class="hover"><div><img src="images/powerpoint.png">PowerPoint 2016</div></li>
+                <li class="hover">
+                    <div>
+                        <img src="images/word.png" class="ico">
+                        Word 2016
+                    </div>
+                </li>
+                <li class="hover">
+                    <div>
+                        <img src="images/excel.png" class="ico">
+                        Excel 2016
+                    </div>
+                </li>
+                <li class="hover">
+                    <div>
+                        <img src="images/powerpoint.png" class="ico">
+                        PowerPoint 2016
+                    </div>
+                </li>
             </ul>
         </ul>
     </div>
@@ -153,196 +203,6 @@
         </div>
     </div>
 </div>
-<script>
-    const widthChange = document.getElementsByClassName("changeable-width");
-    const startMenu = document.getElementById("start-menu");
-    const dirs = document.getElementsByClassName("hidden-dir");
-    const popupMenus = document.getElementsByClassName("popup-menu");
-    const dirArrows = document.getElementsByClassName("roll-down-arrow");
-    const dirImgs = document.querySelectorAll(".dir-img");
-    const notificationBar = document.querySelector("#notification-bar");
-    const notificationTilesContainer = document.querySelector("#notification-bar-tiles-container");
-    const calendar = document.querySelector("#calendar");
-    const langIndicator = document.querySelector("#lang-indicator");
-    const langSelectorBars = document.querySelectorAll(".lang-selector-bar");
-    const volumeSlider = document.querySelector("#volume-slider");
-    const volumeBig = document.querySelector("#volume-big");
-
-    let winHeader = document.querySelector("#window-header");
-    let win = document.querySelector("#window");
-
-    winHeader.onmousedown = function(e) {
-        let coords = getCoords(winHeader);
-        let shiftX = e.pageX - coords.left;
-        let shiftY = e.pageY - coords.top;
-
-        function moveAt(e) {
-            win.style.left = e.pageX - shiftX + "px";
-            win.style.top = e.pageY - shiftY + "px";
-        }
-
-        document.onmousemove = function(e) {
-            moveAt(e);
-        };
-
-        winHeader.onmouseup = function() {
-            document.onmousemove = null;
-            winHeader.onmouseup = null;
-        };
-    };
-
-    win.ondragstart = function() {
-        return false;
-    }
-
-    function getCoords(elem) {
-        let box = elem.getBoundingClientRect();
-        return {
-            top: box.top + pageYOffset,
-            left: box.left + pageXOffset
-        };
-    }
-
-    function openWindow() {
-        document.querySelector("#window").style.display = "block";
-        startMenu.classList.remove("start-menu-open");
-    }
-
-    document.querySelector(".window-expand-button").onclick = function () {
-        win.classList.toggle("window-opened");
-        win.style.left = "0px";
-        win.style.top = "0px";
-    };
-
-    volumeSlider.oninput = function() {
-        document.querySelector("#volume-slider-output").innerHTML = this.value;
-        if (volumeSlider.value == 0) {
-            volumeBig.src = "images/volume-big-0.png";
-        } else if (volumeSlider.value >= 1 && volumeSlider.value <= 32) {
-            volumeBig.src = "images/volume-big-1-32.png";
-        } else if (volumeSlider.value >= 33 && volumeSlider.value <= 65) {
-            volumeBig.src = "images/volume-big-33-65.png";
-        } else {
-            volumeBig.src = "images/volume-big.png";
-        }
-    }
-
-    document.querySelector("#taskbar-internet").onclick = function () {document.querySelector("#network-menu").classList.toggle("network-menu-open")};
-
-    function selectLang(lang) {
-        langIndicator.innerHTML = lang;
-        for (let i = 0; i < langSelectorBars.length; i++) {
-            langSelectorBars[i].style.backgroundColor = "initial";
-        }
-        event.currentTarget.style.backgroundColor = "rgb(77, 141, 164)";
-    }
-
-    function addZero(i) {
-        if (i < 10) {
-            i = "0" + i;
-        }
-        return i;
-    }
-
-    function getMonthName(i, z) {
-        const monthNames = ["январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"];
-        i = monthNames[i];
-        if (z) {
-            if (i.endsWith("т")) {
-                i = i.split(i.charAt(i.length-1))[0] + "а";
-            } else {
-                i = i.split(i.charAt(i.length-1))[0] + "я";
-            }
-        }
-        return i;
-    }
-
-    let now = new Date();
-    document.querySelector("#insert-time").innerHTML = now.toLocaleTimeString();
-    document.querySelector("#insert-date").innerHTML = String(now.getDate()) + " " + getMonthName(now.getMonth(), true) + " " + now.getFullYear() + " г.";
-    document.querySelector("#taskbar-time").innerHTML = String(now.getHours()) + ":" + String(addZero(now.getMinutes()));
-
-    function updateTime() {
-        let now = new Date();
-        document.querySelector("#insert-time").innerHTML = now.toLocaleTimeString();
-        document.querySelector("#insert-date").innerHTML = String(now.getDate()) + " " + getMonthName(now.getMonth(), true) + " " + now.getFullYear() + " г.";
-        document.querySelector("#taskbar-time").innerHTML = String(now.getHours()) + ":" + String(addZero(now.getMinutes()));
-    }
-
-    setInterval(updateTime, 1000);
-
-    function openSideButtonsContainer() {
-        for (let i = 0; i < widthChange.length; i++) {
-            widthChange[i].classList.toggle("side-buttons-container-open");
-        }
-    }
-
-    function openStartMenu() {
-        startMenu.classList.toggle("start-menu-open");
-        if (!startMenu.classList.contains("start-menu-open")) {
-            for (let i = 0; i < widthChange.length; i++) {
-                widthChange[i].classList.remove("side-buttons-container-open");
-            }
-            for (let i = 0; i < dirs.length; i++) {
-                dirs[i].style.height = "0px";
-            }
-            for (let i = 0; i < dirArrows.length; i++) {
-                dirArrows[i].src = "images/roll-down-arrow.png";
-            }
-            for (let i = 0; i < dirImgs.length; i++) {
-                dirImgs[i].src = "images/start-menu-dir-closed.png";
-            }
-            for (let i = 0; i < popupMenus.length; i++) {
-                popupMenus[i].classList.remove("popup-menu-open");
-            }
-        }
-        notificationBar.classList.remove("notification-bar-open");
-    }
-
-    function toggleCalendar() {
-        calendar.classList.toggle("calendar-open");
-    }
-
-    function toggleDir() {
-        let hiddenDir = event.currentTarget.nextElementSibling;
-        let dirImg = event.currentTarget.firstElementChild.firstElementChild;
-        let arrowImg = event.currentTarget.children[1];
-
-        if (hiddenDir.style.height === "0px") {
-            hiddenDir.style.height = (hiddenDir.children.length * 36).toString() + "px";
-            dirImg.src = "images/start-menu-dir-open.png";
-            arrowImg.src = "images/roll-up-arrow.png"
-        } else {
-            hiddenDir.style.height = "0";
-            dirImg.src = "images/start-menu-dir-closed.png";
-            arrowImg.src = "images/roll-down-arrow.png"
-        }
-    }
-    
-    function togglePopupMenu(popup) {
-        document.getElementById(popup).classList.toggle("popup-menu-open");
-    }
-    
-    function toggleNotificationBar() {
-        notificationBar.classList.toggle("notification-bar-open");
-    }
-    
-    function notificationTilesToggle() {
-        notificationTilesContainer.classList.toggle("container-small");
-        if (notificationTilesContainer.classList.contains("container-small")) {
-            event.currentTarget.innerHTML = "Развернуть";
-        } else {
-            event.currentTarget.innerHTML = "Свернуть";
-        }
-    }
-
-    function toggleLangSelector() {
-        document.querySelector("#lang-selector").classList.toggle("lang-selector-open");
-    }
-
-    function toggleVolumeMenu() {
-        document.querySelector("#volume-menu").classList.toggle("volume-menu-open");
-    }
-</script>
+<script src="script.js"></script>
 </body>
 </html>
