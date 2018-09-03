@@ -24,21 +24,31 @@ gradient.addEventListener('mousemove', function(e) {
 
 
 
-function openApp() {
-    const footerAppBar = document.createElement('div');
-    const appIco = event.currentTarget.firstElementChild.getAttribute('src');
-    footerAppBar.classList.add('taskbar-app', 'taskbar-app-open', 'hover');
-    const appName = event.currentTarget.lastElementChild.innerHTML;
-    footerAppBar.innerHTML = `<img src="${appIco}"><p>${appName}</p>`;
-
-    document.querySelector('.taskbar-apps').appendChild(footerAppBar);
-    openWindow(appIco, appName, footerAppBar);
-}
 document.querySelectorAll('.desktop-icon').forEach(function(e) {
-    e.addEventListener('dblclick', openApp);
+    e.addEventListener('dblclick', function() {
+        openApp(false);
+    });
+});
+document.querySelectorAll('.taskbar-app').forEach(function(e) {
+    e.addEventListener('click', openApp);
 });
 
-function openWindow(appIco, appName, footerAppBar) {
+function openApp(isTaskbar) {
+    const appIco = event.currentTarget.firstElementChild.getAttribute('src');
+    const appName = event.currentTarget.lastElementChild.innerHTML;
+    if (!isTaskbar) {
+        const footerAppBar = document.createElement('div');
+        footerAppBar.classList.add('taskbar-app', 'taskbar-app-open', 'hover');
+        footerAppBar.innerHTML = `<img src="${appIco}"><p>${appName}</p>`;
+        document.querySelector('.taskbar-apps').appendChild(footerAppBar);
+        openWindow(appIco, appName, footerAppBar);
+    } else {
+        event.currentTarget.classList.add('taskbar-app-open');
+        openWindow(appIco, appName, event.currentTarget, isTaskbar);
+    }
+}
+
+function openWindow(appIco, appName, footerAppBar, isTaskbar) {
     const window = document.createElement('div');
     window.classList.add('window');
     window.innerHTML =
@@ -92,14 +102,30 @@ function openWindow(appIco, appName, footerAppBar) {
         window.style.top = '0px';
     };
     window.querySelector('.window-close-button').addEventListener('click', function() {
-        document.querySelector('.taskbar-apps').removeChild(footerAppBar);
-        //document.querySelector('.taskbar-app').classList.remove('taskbar-app-open');
+        if (!isTaskbar) {
+            document.querySelector('.taskbar-apps').removeChild(footerAppBar);
+        } else {
+            footerAppBar.classList.remove('taskbar-app-open');
+        }
         document.querySelector('body').removeChild(window);
+        if (isTaskbar) {
+            footerAppBar.addEventListener('click', openApp);
+        }
     });
 
-    footerAppBar.addEventListener('click', function() {
-        window.style.display = 'block';
-    });
+    function toggleWindow() {
+        if (window.style.display !== 'none') {
+            window.style.display = 'none';
+        } else {
+            window.style.display = 'block';
+        }
+    }
+
+    footerAppBar.addEventListener('click', toggleWindow);
+
+    if (isTaskbar) {
+        footerAppBar.removeEventListener('click', openApp);
+    }
 
     document.querySelector('body').appendChild(window);
 
@@ -154,28 +180,21 @@ function addZero(i) {
     return i;
 }
 
-function getMonthName(i, z) {
-    const monthNames = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
+const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+function getMonthName(i) {
     i = monthNames[i];
-    if (z) {
-        if (i.endsWith('т')) {
-            i = i.split(i.charAt(i.length-1))[0] + 'а';
-        } else {
-            i = i.split(i.charAt(i.length-1))[0] + 'я';
-        }
-    }
     return i;
 }
 
 let now = new Date();
 document.querySelector('#insert-time').innerHTML = now.toLocaleTimeString();
-document.querySelector('#insert-date').innerHTML = String(now.getDate()) + ' ' + getMonthName(now.getMonth(), true) + ' ' + now.getFullYear() + ' г.';
+document.querySelector('#insert-date').innerHTML = String(now.getDate()) + ' ' + getMonthName(now.getMonth()) + ' ' + now.getFullYear() + ' г.';
 document.querySelector('#taskbar-time').innerHTML = String(now.getHours()) + ':' + String(addZero(now.getMinutes()));
 
 function updateTime() {
     let now = new Date();
     document.querySelector('#insert-time').innerHTML = now.toLocaleTimeString();
-    document.querySelector('#insert-date').innerHTML = String(now.getDate()) + ' ' + getMonthName(now.getMonth(), true) + ' ' + now.getFullYear() + ' г.';
+    document.querySelector('#insert-date').innerHTML = String(now.getDate()) + ' ' + getMonthName(now.getMonth()) + ' ' + now.getFullYear() + ' г.';
     document.querySelector('#taskbar-time').innerHTML = String(now.getHours()) + ':' + String(addZero(now.getMinutes()));
 }
 
@@ -229,9 +248,12 @@ function toggleDir() {
     }
 }
 
-function togglePopupMenu(popup) {
-    document.getElementById(popup).classList.toggle('popup-menu-open');
-}
+document.querySelectorAll('.toggle-popup')[0].addEventListener('click', function() {
+    document.querySelector('.user-popup').classList.toggle('popup-menu-open');
+});
+document.querySelectorAll('.toggle-popup')[1].addEventListener('click', function() {
+    document.querySelector('.power-popup').classList.toggle('popup-menu-open');
+});
 
 function toggleNotificationBar() {
     notificationBar.classList.toggle('notification-bar-open');

@@ -117,7 +117,6 @@ ul {
   width: 1000px;
   height: 600px;
   border: 1px solid lighten($blue-theme, 5%);
-  //display: none;
 
   .window-header {
     height: 30px;
@@ -377,11 +376,11 @@ footer {
     padding: 8px 0 !important;
   }
 
-  #user-popup {
-    bottom: $start-menu-button-width-height * 4 + 4px;
+  .user-popup {
+    bottom: $start-menu-button-width-height * 3 + 4px;
   }
 
-  #power-popup {
+  .power-popup {
     bottom: $start-menu-button-width-height + 4px;
   }
 
@@ -407,10 +406,6 @@ footer {
     }
 
     #start-menu-buttons-container div:nth-child(2) {
-      background: url("images/explorer.png") no-repeat 16px;
-    }
-
-    #start-menu-buttons-container div:nth-child(3) {
       background: url("images/settings-icon.png") no-repeat 16px;
     }
 
@@ -777,7 +772,7 @@ footer {
       width: 8px;
       height: 24px;
       border-radius: 10px;
-      background-color: rgb(45, 125, 154);
+      background-color: darken($blue-theme, 15%);
     }
 
     p {

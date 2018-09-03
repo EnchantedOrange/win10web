@@ -20,28 +20,10 @@
         <p>The Elder Scrolls Online</p>
     </div>
 </div>
-<!--
-<div id="window" class="window">
-    <div id="window-header" class="window-header">
-        <div class="window-header-container">
-            <div class="window-header-logo">
-                <img src="images/mypc.png">
-            </div>
-            <p>Этот компьютер</p>
-        </div>
-        <div class="window-control-buttons">
-            <div class="window-roll-button hover-colored"></div>
-            <div class="window-expand-button hover-colored"></div>
-            <div class="window-close-button"></div>
-        </div>
-    </div>
-    <div class="window-body"></div>
-</div>
--->
 <footer>
     <div class="start-button hover" onclick="openStartMenu()"></div>
     <div class="taskbar-apps">
-        <div class="taskbar-app hover" onclick="openWindow()">
+        <div class="taskbar-app hover">
             <img src="images/explorer-taskbar.png">
             <p>Проводник</p>
         </div>
@@ -56,12 +38,12 @@
     <div class="roll-all-windows hover"></div>
 </footer>
 <div id="start-menu">
-    <div class="popup-menu" id="user-popup">
+    <div class="popup-menu user-popup">
         <div class="hover"><p>Изменить параметры учетной записи</p></div>
         <div class="hover"><p>Заблокировать</p></div>
         <div class="hover"><p>Выход</p></div>
     </div>
-    <div class="popup-menu" id="power-popup">
+    <div class="popup-menu power-popup">
         <div class="hover"><p>Спящий режим</p></div>
         <div class="hover"><p>Завершение работы</p></div>
         <div class="hover"><p>Перезагрузка</p></div>
@@ -69,10 +51,9 @@
     <div class="changeable-width" id="side-buttons-container">
         <div class="start-menu-button changeable-width hover" onclick="openSideButtonsContainer()"><p>ПУСК</p></div>
         <div id="start-menu-buttons-container">
-            <div class="start-menu-button changeable-width hover" onclick="togglePopupMenu('user-popup')"><p>Пользователь</p></div>
-            <div class="start-menu-button changeable-width hover" onclick="openWindow()"><p>Проводник</p></div>
+            <div class="start-menu-button changeable-width hover toggle-popup"><p>Пользователь</p></div>
             <div class="start-menu-button changeable-width hover"><p>Параметры</p></div>
-            <div class="start-menu-button changeable-width hover" onclick="togglePopupMenu('power-popup')"><p>Выключение</p></div>
+            <div class="start-menu-button changeable-width hover toggle-popup"><p>Выключение</p></div>
         </div>
     </div>
     <div class="app-list">
