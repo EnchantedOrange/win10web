@@ -81,38 +81,97 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             </div>
             <div class="window-body">
                 <div class="control">
-                    <div class="new-game"></div>
+                    <div class="container">
+                        <div class="current-difficulty"></div>
+                        <ul class="choose-minesweeper-size">
+                            <li id="easy">Easy</li>
+                            <li id="medium">Medium</li>
+                            <li id="hard">Hard</li>
+                        </ul>
+                    </div>
+                    <div class="new-game">New game</div>
                 </div>
                 <div class="field"></div>
             </div>
             `;
 
-        for (let y = 1; y <= 8; y++) {
-            for (let x = 1; x <= 8; x++) {
-                let f = document.createElement('div');
-                const coords = y.toString() + x.toString();
-                f.classList.add('field-dot');
-                f.id = 'n' + coords;
-                windowObject.querySelector('.field').appendChild(f);
-            }
-        }
-
-        const dots = windowObject.querySelectorAll('.field-dot');
-        const totalMines = 10;
         let isGameOver = false;
         let mineList = [];
         let alreadyWorked = [];
         let exposedMines = 0;
+        let dots;
+
+        const easyDifficulty = {
+            name: 'Easy',
+            y: 8,
+            x: 8,
+            totalMines: 10
+        };
+        const mediumDifficulty = {
+            name: 'Normal',
+            y: 16,
+            x: 16,
+            totalMines: 40
+        };
+        const hardDifficulty = {
+            name: 'Hard',
+            y: 16,
+            x: 30,
+            totalMines: 99
+        };
+
+        let currentDifficulty = easyDifficulty;
+
+        windowObject.querySelector('#easy').addEventListener('click', function() {
+            currentDifficulty = easyDifficulty;
+        });
+        windowObject.querySelector('#medium').addEventListener('click', function() {
+            currentDifficulty = mediumDifficulty;
+        });
+        windowObject.querySelector('#hard').addEventListener('click', function() {
+            currentDifficulty = hardDifficulty;
+        });
+
+        windowObject.querySelector('.current-difficulty').innerHTML = currentDifficulty.name;
+
+        windowObject.querySelector('.choose-minesweeper-size').addEventListener('click', function() {
+            windowObject.querySelector('.field').innerHTML = '';
+            mineList = [];
+            alreadyWorked = [];
+            exposedMines = 0;
+            isGameOver = false;
+            generateField();
+            placeMines();
+            setEventSistenersForDots();
+            windowObject.querySelector('.current-difficulty').innerHTML = currentDifficulty.name;
+        });
+
+        function generateField() {
+            windowObject.querySelector('.field').style.gridTemplateRows = `repeat(${currentDifficulty.y}, 1fr)`;
+            windowObject.querySelector('.field').style.gridTemplateColumns = `repeat(${currentDifficulty.x}, 1fr)`;
+            for (let y = 1; y <= currentDifficulty.y; y++) {
+                for (let x = 1; x <= currentDifficulty.x; x++) {
+                    let f = document.createElement('div');
+                    const coords = `n${y.toString()}_${x.toString()}`;
+                    f.classList.add('field-dot');
+                    f.id = coords;
+                    windowObject.querySelector('.field').appendChild(f);
+                }
+            }
+            dots = windowObject.querySelectorAll('.field-dot');
+        }
+
+        generateField();
 
         function placeMines() {
             function randomlyPlaceMines() {
-                const rand = Math.floor(Math.random() * 64);
+                const rand = Math.floor(Math.random() * currentDifficulty.x * currentDifficulty.y);
                 if (mineList.includes(rand)) {
                     return randomlyPlaceMines();
                 }
                 return rand;
             }
-            for (let x = 1; x <= totalMines; x++) {
+            for (let x = 1; x <= currentDifficulty.totalMines; x++) {
                 const rand = randomlyPlaceMines();
                 dots[rand].classList.add('mine');
                 mineList.push(rand);
@@ -140,24 +199,24 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 });
             }
             mineList.forEach(function(t) {
-                //Remove numbers from mines
+                //Remove numbers from mines, idk why they appear, tell me please if you know
                 dots[t].innerHTML = '';
             });
         }
 
         function getSquaresAround(i) {
             let squaresRaw = [];
-            const y = parseInt(i.id.slice(1, 2), 10);
-            const x = parseInt(i.id.slice(2, 3), 10);
+            const y = parseInt(i.id.split('n')[1].split('_')[0], 10);
+            const x = parseInt(i.id.split('_')[1], 10);
             squaresRaw.push(
-                windowObject.querySelector('#n' + (y - 1) + (x - 1)),
-                windowObject.querySelector('#n' + (y - 1) + x),
-                windowObject.querySelector('#n' + (y - 1) + (x + 1)),
-                windowObject.querySelector('#n' + y + (x - 1)),
-                windowObject.querySelector('#n' + y + (x + 1)),
-                windowObject.querySelector('#n' + (y + 1) + (x - 1)),
-                windowObject.querySelector('#n' + (y + 1) + x),
-                windowObject.querySelector('#n' + (y + 1) + (x + 1))
+                windowObject.querySelector(`#n${y - 1}_${x - 1}`),
+                windowObject.querySelector(`#n${y - 1}_${x}`),
+                windowObject.querySelector(`#n${y - 1}_${x + 1}`),
+                windowObject.querySelector(`#n${y}_${x - 1}`),
+                windowObject.querySelector(`#n${y}_${x + 1}`),
+                windowObject.querySelector(`#n${y + 1}_${x - 1}`),
+                windowObject.querySelector(`#n${y + 1}_${x}`),
+                windowObject.querySelector(`#n${y + 1}_${x + 1}`)
             );
             let squares = [];
             squaresRaw.forEach(function(sqrw) {
@@ -193,42 +252,53 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
         placeMines();
 
-        dots.forEach(function(d) {
-            d.addEventListener('mousedown', function() {
-                if (!isGameOver) {
-                    if (event.button === 2) {
-                        //RMB
-                        this.classList.toggle('flag');
-                        if (this.classList.contains('mine')) {
-                            if (this.classList.contains('flag')) {
-                                exposedMines += 1;
+        function setEventSistenersForDots() {
+            dots.forEach(function(d) {
+                d.addEventListener('mousedown', function() {
+                    if (!isGameOver) {
+                        if (event.button === 2) {
+                            //RMB
+                            this.classList.toggle('flag');
+                            if (this.classList.contains('mine')) {
+                                if (this.classList.contains('flag')) {
+                                    exposedMines += 1;
+                                } else {
+                                    exposedMines -= 1;
+                                }
+                            }
+                            if (exposedMines === currentDifficulty.totalMines) {
+                                dots.forEach(function(d) {
+                                    if (!d.classList.contains('mine')) {
+                                        d.classList.add('exposed-dot');
+                                    }
+                                });
+                                alert('You win!');
+                            }
+                        } else if (event.button === 0 && !this.classList.contains('flag')) {
+                            //LMB
+                            if (this.classList.contains('mine') && !this.classList.contains('flag')) {
+                                //Game over
+                                isGameOver = true;
+                                windowObject.querySelectorAll('.mine').forEach(function (d) {
+                                    d.classList.add('mine-blown');
+                                });
+                                windowObject.querySelectorAll('.flag').forEach(function(f) {
+                                    if (!f.classList.contains('mine')) {
+                                        f.innerHTML = '&#10006;';
+                                        f.style.fontSize = '30px';
+                                        f.style.color = '#c60000';
+                                    }
+                                });
                             } else {
-                                exposedMines -= 1;
+                                exposeSquare(this);
                             }
                         }
-                        if (exposedMines === totalMines) {
-                            dots.forEach(function(d) {
-                                if (!d.classList.contains('mine')) {
-                                    d.classList.add('exposed-dot');
-                                }
-                            });
-                            alert('You win!');
-                        }
-                    } else if (event.button === 0 && !this.classList.contains('flag')) {
-                        //LMB
-                        if (this.classList.contains('mine') && !this.classList.contains('flag')) {
-                            //Game over
-                            isGameOver = true;
-                            windowObject.querySelectorAll('.mine').forEach(function (d) {
-                                d.classList.add('mine-blown');
-                            });
-                        } else {
-                            exposeSquare(this);
-                        }
                     }
-                }
+                });
             });
-        });
+        }
+
+        setEventSistenersForDots();
 
         windowObject.querySelector('.new-game').addEventListener('click', function() {
             dots.forEach(function(d) {
