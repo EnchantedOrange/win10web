@@ -135,15 +135,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         windowObject.querySelector('.current-difficulty').innerHTML = currentDifficulty.name;
 
         windowObject.querySelector('.choose-minesweeper-size').addEventListener('click', function() {
-            windowObject.querySelector('.field').innerHTML = '';
-            mineList = [];
-            alreadyWorked = [];
-            exposedMines = 0;
-            isGameOver = false;
-            generateField();
-            placeMines();
-            setEventSistenersForDots();
-            windowObject.querySelector('.current-difficulty').innerHTML = currentDifficulty.name;
+            startNewGame();
         });
 
         function generateField() {
@@ -248,6 +240,18 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             }
         }
 
+        function startNewGame() {
+            windowObject.querySelector('.field').innerHTML = '';
+            mineList = [];
+            alreadyWorked = [];
+            exposedMines = 0;
+            isGameOver = false;
+            generateField();
+            placeMines();
+            setEventSistenersForDots();
+            windowObject.querySelector('.current-difficulty').innerHTML = currentDifficulty.name;
+        }
+
 
 
         placeMines();
@@ -301,15 +305,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         setEventSistenersForDots();
 
         windowObject.querySelector('.new-game').addEventListener('click', function() {
-            dots.forEach(function(d) {
-                d.innerHTML = '';
-                d.classList.remove('mine', 'mine-blown', 'flag', 'exposed-dot');
-            });
-            mineList = [];
-            alreadyWorked = [];
-            exposedMines = 0;
-            placeMines();
-            isGameOver = false;
+            startNewGame();
         });
     } else {
         windowObject.innerHTML =
