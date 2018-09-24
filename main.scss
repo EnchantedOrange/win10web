@@ -87,7 +87,6 @@ ul {
 
   .desktop-icon {
     width: 75px;
-    height: 61px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -105,6 +104,11 @@ ul {
       margin: 0;
       text-align: center;
       font-weight: 100;
+    }
+
+    &:hover {
+      background-color: fade_out($blue-theme, 0.7);
+      outline: 1px solid $blue-theme;
     }
   }
 }

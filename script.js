@@ -32,16 +32,15 @@ function openDesktopApp() {
     openApp(false);
 }
 document.querySelectorAll('.desktop-icon').forEach(function(e) {
-    e.addEventListener('dblclick', openDesktopApp);
-});
-document.querySelectorAll('.minesweeper').forEach(function(e) {
-    e.removeEventListener('dblclick', openDesktopApp);
-    e.addEventListener('dblclick', function() {
-        openApp(false, 'minesweeper');
-    });
+    e.addEventListener('click', openDesktopApp);
 });
 document.querySelectorAll('.taskbar-app').forEach(function(e) {
     e.addEventListener('click', openApp);
+});
+const minesweeper = document.querySelector('.minesweeper');
+minesweeper.removeEventListener('click', openDesktopApp);
+minesweeper.addEventListener('click', function() {
+    openApp(false, 'minesweeper');
 });
 
 function openApp(isTaskbar, windowClass) {
