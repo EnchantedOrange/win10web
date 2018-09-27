@@ -231,14 +231,15 @@ ul {
           top: 43px;
           background: rgba(108, 108, 108, 0.95);
           box-shadow: 0 0 8px 2px rgba(108, 108, 108, 0.71);
-          padding: 5px;
           border-radius: 3px;
 
           li {
             text-align: center;
+            padding: 2px;
+            transition: background .2s;
 
             &:hover {
-
+              background: rgba(88, 88, 88, 0.71);
             }
           }
         }
@@ -282,7 +283,7 @@ ul {
       }
 
       .flag {
-        background-image: url("images/minesweeper-flag.png"), linear-gradient(to bottom right, #4983aa, #005e93);
+        background-image: url("images/minesweeper-flag.png"), linear-gradient(to bottom right, #4983aa, #005e93) !important;
       }
 
       .mine-blown {

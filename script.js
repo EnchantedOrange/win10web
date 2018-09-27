@@ -218,11 +218,16 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             return squares;
         }
 
-        function exposeSquare(q) {
-            if (!alreadyWorked.includes(q)) {
+        function exposeSquare(q, ignoreAlreadyWorked = false) {
+            if ((!alreadyWorked.includes(q) || ignoreAlreadyWorked) && !q.classList.contains('mine')) {
                 if (q.innerHTML !== '') {
                     q.classList.add('exposed-dot');
                     alreadyWorked.push(q);
+                    if (ignoreAlreadyWorked) {
+                        getSquaresAround(q).forEach(function(sq) {
+                            exposeSquare(sq);
+                        });
+                    }
                 } else {
                     q.classList.add('exposed-dot');
                     alreadyWorked.push(q);
@@ -239,6 +244,20 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             }
         }
 
+        function gameOver() {
+            isGameOver = true;
+            windowObject.querySelectorAll('.mine').forEach(function (d) {
+                d.classList.add('mine-blown');
+            });
+            windowObject.querySelectorAll('.flag').forEach(function(f) {
+                if (!f.classList.contains('mine')) {
+                    f.innerHTML = '&#10006;';
+                    f.style.fontSize = '30px';
+                    f.style.color = '#c60000';
+                }
+            });
+        }
+
         function startNewGame() {
             windowObject.querySelector('.field').innerHTML = '';
             mineList = [];
@@ -247,61 +266,88 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             isGameOver = false;
             generateField();
             placeMines();
-            setEventSistenersForDots();
+            setEventListenersForDots();
             windowObject.querySelector('.current-difficulty').innerHTML = currentDifficulty.name;
         }
 
-
-
-        placeMines();
-
-        function setEventSistenersForDots() {
+        function setEventListenersForDots() {
             dots.forEach(function(d) {
                 d.addEventListener('mousedown', function() {
                     if (!isGameOver) {
-                        if (event.button === 2) {
-                            //RMB
-                            this.classList.toggle('flag');
-                            if (this.classList.contains('mine')) {
-                                if (this.classList.contains('flag')) {
-                                    exposedMines += 1;
-                                } else {
-                                    exposedMines -= 1;
+                        if (event.shiftKey && event.button === 0 && !this.classList.contains('flag')) {
+                            this.style.backgroundImage = 'linear-gradient(to bottom right, #005e93, #4983aa)';
+                            if (!this.classList.contains('exposed-dot')) {
+                                getSquaresAround(this).forEach(function(sq) {
+                                    sq.style.backgroundImage = 'linear-gradient(to bottom right, #005e93, #4983aa)';
+                                });
+                            } else {
+                                let flagged = 0;
+                                let mined = 0;
+                                const tit = this;
+                                getSquaresAround(tit).forEach(function(sq) {
+                                    sq.style.backgroundImage = 'linear-gradient(to bottom right, #005e93, #4983aa)';
+                                    if (sq.classList.contains('flag')) {
+                                        flagged += 1;
+                                    }
+                                    if (sq.classList.contains('mine')) {
+                                        mined += 1;
+                                    }
+                                });
+                                if (flagged === mined) {
+                                    let exposeOrNot = true;
+                                    getSquaresAround(tit).forEach(function(sq) {
+                                        if ((sq.classList.contains('mine') && !sq.classList.contains('flag')) || (!sq.classList.contains('mine') && sq.classList.contains('flag'))) {
+                                            exposeOrNot = false;
+                                            gameOver();
+                                        }
+                                    });
+                                    if (exposeOrNot) {
+                                        exposeSquare(tit, true);
+                                    }
                                 }
                             }
-                            if (exposedMines === currentDifficulty.totalMines) {
-                                dots.forEach(function(d) {
-                                    if (!d.classList.contains('mine')) {
-                                        d.classList.add('exposed-dot');
+                        } else if (event.button === 2 && !event.shiftKey) {
+                            //RMB
+                            if (!this.classList.contains('exposed-dot')) {
+                                this.classList.toggle('flag');
+                                if (this.classList.contains('mine')) {
+                                    if (this.classList.contains('flag')) {
+                                        exposedMines += 1;
+                                    } else {
+                                        exposedMines -= 1;
                                     }
-                                });
-                                alert('You win!');
+                                }
+                                if (exposedMines === currentDifficulty.totalMines) {
+                                    dots.forEach(function(d) {
+                                        if (!d.classList.contains('mine')) {
+                                            d.classList.add('exposed-dot');
+                                        }
+                                    });
+                                    alert('You win!');
+                                }
                             }
-                        } else if (event.button === 0 && !this.classList.contains('flag')) {
+                        } else if (event.button === 0 && !this.classList.contains('flag') && !event.shiftKey) {
                             //LMB
                             if (this.classList.contains('mine') && !this.classList.contains('flag')) {
-                                //Game over
-                                isGameOver = true;
-                                windowObject.querySelectorAll('.mine').forEach(function (d) {
-                                    d.classList.add('mine-blown');
-                                });
-                                windowObject.querySelectorAll('.flag').forEach(function(f) {
-                                    if (!f.classList.contains('mine')) {
-                                        f.innerHTML = '&#10006;';
-                                        f.style.fontSize = '30px';
-                                        f.style.color = '#c60000';
-                                    }
-                                });
+                                gameOver();
                             } else {
                                 exposeSquare(this);
                             }
                         }
                     }
                 });
+                d.addEventListener('mouseup', function() {
+                    this.style.backgroundImage = 'linear-gradient(to bottom right, #4983aa, #005e93)';
+                    getSquaresAround(this).forEach(function(sq) {
+                        sq.style.backgroundImage = 'linear-gradient(to bottom right, #4983aa, #005e93)';
+                    })
+                });
             });
         }
 
-        setEventSistenersForDots();
+        placeMines();
+
+        setEventListenersForDots();
 
         windowObject.querySelector('.new-game').addEventListener('click', function() {
             startNewGame();
