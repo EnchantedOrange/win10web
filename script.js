@@ -14,19 +14,7 @@ const volumeBig = document.querySelector('#volume-big');
 
 
 
-document.oncontextmenu = function (){return false};
-
-
-
-const gradient = document.querySelector('.gradient-button');
-gradient.addEventListener('mousemove', function(e) {
-    const x = e.pageX - this.offsetLeft;
-    const y = e.pageY - this.offsetTop;
-    this.firstElementChild.style.left = `${x}px`;
-    this.firstElementChild.style.top = `${y}px`;
-});
-
-
+document.oncontextmenu = () => {return false};
 
 function openDesktopApp() {
     openApp(false);
@@ -40,7 +28,12 @@ document.querySelectorAll('.taskbar-app').forEach(function(e) {
 const minesweeper = document.querySelector('.minesweeper');
 minesweeper.removeEventListener('click', openDesktopApp);
 minesweeper.addEventListener('click', function() {
-    openApp(false, 'minesweeper');
+    openApp(false, 'minesweeper-window');
+});
+const snake = document.querySelector('.snake');
+snake.removeEventListener('click', openDesktopApp);
+snake.addEventListener('click', function() {
+    openApp(false, 'snake-window');
 });
 
 function openApp(isTaskbar, windowClass) {
@@ -62,7 +55,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
     const windowObject = document.createElement('div');
     windowObject.classList.add('window', windowClass);
 
-    if (windowClass === 'minesweeper') {
+    if (windowClass === 'minesweeper-window') {
         windowObject.innerHTML =
             `
             <div class="window-header">
@@ -143,7 +136,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             for (let y = 1; y <= currentDifficulty.y; y++) {
                 for (let x = 1; x <= currentDifficulty.x; x++) {
                     let f = document.createElement('div');
-                    const coords = `n${y.toString()}_${x.toString()}`;
+                    const coords = `n${y}_${x}`;
                     f.classList.add('field-dot');
                     f.id = coords;
                     windowObject.querySelector('.field').appendChild(f);
@@ -352,6 +345,210 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         windowObject.querySelector('.new-game').addEventListener('click', function() {
             startNewGame();
         });
+    } else if (windowClass === 'snake-window') {
+        windowObject.innerHTML =
+            `
+            <div class="window-header">
+                <div class="window-header-container">
+                    <div class="window-header-logo">
+                        <img src="${appIco}">
+                    </div>
+                    <p>${appName}</p>
+                </div>
+                <div class="window-control-buttons">
+                    <div class="window-roll-button hover-colored"></div>
+                    <div class="window-expand-button hover-colored"></div>
+                    <div class="window-close-button"></div>
+                </div>
+            </div>
+            <div class="window-body">
+                <div class="control">
+                    <div class="score">0</div>
+                    <div class="new-game">New game</div>
+                    <div class="help">?</div>
+                    <div class="help-hidden">
+                        <p>WASD/Arrows - move</p>
+                        <p>Esc - pause</p>
+                    </div>
+                </div>
+                <div class="field"></div>
+            </div>
+            `;
+        for (let y = 1; y <= 30; y++) {
+            for (let x = 1; x <= 30; x++) {
+                let f = document.createElement('div');
+                const coords = `n${y}_${x}`;
+                f.classList.add('field-dot');
+                f.id = coords;
+                windowObject.querySelector('.field').appendChild(f);
+            }
+        }
+
+        const dots = windowObject.querySelectorAll('.field-dot');
+        let snakeDirection;
+        let firstClick = true;
+        let snakeInterval;
+        let isgameOver = false;
+        let score = 0;
+        let snakeLength = 0;
+
+        function placeFood() {
+            const x = Math.floor(Math.random() * 30 * 30);
+            if (dots[x].classList.contains('snake-body') || dots[x].classList.contains('snake-current-position')) {
+                return placeFood();
+            } else {
+                dots[x].classList.add('food');
+            }
+        }
+
+        function getDirection(key) {
+            let d;
+            switch (key) {
+                case 'ArrowUp':
+                case 'ц':
+                case 'w':
+                    d = 'up';
+                    break;
+                case 'ArrowLeft':
+                case 'ф':
+                case 'a':
+                    d = 'left';
+                    break;
+                case 'ArrowDown':
+                case 'ы':
+                case 's':
+                    d = 'down';
+                    break;
+                case 'ArrowRight':
+                case 'в':
+                case 'd':
+                    d = 'right';
+                    break;
+                case 'Escape':
+                    d = 'pause';
+                    break;
+                default:
+                    d = null;
+            }
+            return d;
+        }
+
+        function getNextSquare(snakePos, snakeDirection) {
+            let toY = parseInt(snakePos.id.split('n')[1].split('_')[0], 10);
+            let toX = parseInt(snakePos.id.split('_')[1], 10);
+
+            switch (snakeDirection) {
+                case 'up':
+                    toY -= 1;
+                    break;
+                case 'left':
+                    toX -= 1;
+                    break;
+                case 'down':
+                    toY += 1;
+                    break;
+                case 'right':
+                    toX += 1;
+                    break;
+                default:
+                    return null;
+            }
+
+            if (toY === 0) {
+                toY = 30;
+            } else if (toY === 31) {
+                toY = 1;
+            }
+            if (toX === 0) {
+                toX = 30;
+            } else if (toX === 31) {
+                toX = 1;
+            }
+
+            return windowObject.querySelector(`#n${toY}_${toX}`);
+        }
+
+        function moveSnake() {
+            const snakePos = windowObject.querySelector('.snake-current-position');
+
+            windowObject.querySelectorAll('.snake-body').forEach((e) => {
+                if (!isgameOver) {
+                    let coef = parseInt(e.classList.item(2).split('snake-body-')[1], 10);
+                    e.classList.remove(`snake-body-${coef}`);
+                    coef -= 1;
+                    if (coef === 0) {
+                        e.classList.remove('snake-body');
+                    } else {
+                        e.classList.add(`snake-body-${coef}`);
+                    }
+                }
+            });
+            
+            let nextPos = getNextSquare(snakePos, snakeDirection);
+            snakePos.classList.remove('snake-current-position');
+
+            if (snakeLength > 0) {
+                snakePos.classList.add('snake-body', `snake-body-${snakeLength}`);
+            }
+
+            nextPos.classList.add('snake-current-position');
+
+            if (nextPos.classList.contains('food')) {
+                score += 100;
+                windowObject.querySelector('.score').innerHTML = score;
+                snakeLength += 1;
+                nextPos.classList.remove('food');
+                placeFood();
+            } else if (nextPos.classList.contains('snake-body')) {
+                gameOver();
+            }
+        }
+
+        function gameOver() {
+            clearInterval(snakeInterval);
+            isgameOver = true;
+            alert('Game over!');
+        }
+
+        function newGame() {
+            firstClick = true;
+            isgameOver = false;
+            score = 0;
+            windowObject.querySelector('.score').innerHTML = '0';
+            snakeLength = 0;
+            clearInterval(snakeInterval);
+            dots.forEach((e) => {
+                e.classList = '';
+                e.classList.add('field-dot');
+            });
+            windowObject.querySelector('#n5_5').classList.add('snake-current-position');
+            placeFood();
+        }
+
+        newGame();
+
+        document.addEventListener('keydown', function() {
+            const direction = getDirection(event.key);
+            if (direction === 'pause') {
+                clearInterval(snakeInterval);
+                firstClick = true;
+            } else if (direction) {
+                const isSnakeBody = getNextSquare(windowObject.querySelector('.snake-current-position'), direction).classList.contains('snake-body');
+                if (!isgameOver && !isSnakeBody) {
+                    snakeDirection = direction;
+                    if (firstClick) {
+                        snakeInterval = setInterval(moveSnake, 300);
+                        firstClick = false;
+                    } else {
+                        moveSnake();
+                    }
+                }
+            }
+        });
+
+        windowObject.querySelector('.new-game').addEventListener('click', () => {
+            newGame();
+        });
     } else {
         windowObject.innerHTML =
             `
@@ -417,11 +614,9 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             document.querySelector('.taskbar-apps').removeChild(footerAppBar);
         } else {
             footerAppBar.classList.remove('taskbar-app-open');
-        }
-        document.querySelector('body').removeChild(windowObject);
-        if (isTaskbar) {
             footerAppBar.addEventListener('click', openApp);
         }
+        document.querySelector('body').removeChild(windowObject);
     });
 
     function toggleWindow() {

@@ -9,6 +9,7 @@ $tiles-container-height: 128px;
 
 body {
   background: url("images/background.jpg") no-repeat fixed center;
+  object-fit: cover;
   color: #fff;
   font-family: Roboto, sans-serif;
   overflow: hidden;
@@ -16,34 +17,6 @@ body {
   height: 100%;
   margin: 0;
   user-select: none;
-}
-
-.gradient-button {
-  position: absolute;
-  top: 10%;
-  left: 40%;
-  width: 300px;
-  height: 80px;
-  border-radius: 100px;
-  background: #4b5a33;
-  overflow: hidden;
-  box-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
-
-  div {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 0;
-    height: 0;
-    background: radial-gradient(circle closest-side, #43305a, #4b5a33);
-    transform: translate(-50%, -50%);
-    transition: width .2s ease, height .2s ease;
-  }
-
-  &:hover div {
-    width: 400px;
-    height: 400px;
-  }
 }
 
 ul {
@@ -77,9 +50,10 @@ ul {
 
 .desktop {
   display: grid;
-  grid-template-columns: repeat(25, 1fr);
-  grid-template-rows: repeat(11, 1fr);
-  grid-gap: 34px 1px;
+  grid-template-columns: repeat(17, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  grid-gap: 30px 1px;
+  grid-auto-flow: column;
   justify-items: center;
   align-items: center;
   justify-content: stretch;
@@ -198,7 +172,7 @@ ul {
   }
 }
 
-.minesweeper {
+.minesweeper-window {
   width: auto;
   height: auto;
 
@@ -232,6 +206,7 @@ ul {
           background: rgba(108, 108, 108, 0.95);
           box-shadow: 0 0 8px 2px rgba(108, 108, 108, 0.71);
           border-radius: 3px;
+          cursor: pointer;
 
           li {
             text-align: center;
@@ -252,6 +227,7 @@ ul {
         padding: 2px 5px;
         background: rgba(108, 108, 108, 0.71);
         font-weight: 700;
+        cursor: pointer;
 
         &:hover {
           box-shadow: 0 0 8px 2px rgba(108, 108, 108, 0.71), 0 0 8px 2px rgba(108, 108, 108, 0.71) inset;
@@ -295,6 +271,92 @@ ul {
         background: lightblue !important;
         background: none;
         font-size: 20px;
+      }
+    }
+  }
+}
+
+.snake-window {
+  width: auto;
+  height: auto;
+
+  .window-body {
+    background: #000;
+
+    .control {
+      height: 2.3rem;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+
+      .score, .new-game, .help {
+        border: 1px solid #90d445;
+        padding: 2px 20px;
+        box-sizing: border-box;
+      }
+
+      .new-game, .help {
+        cursor: pointer;
+      }
+
+      .help-hidden {
+        display: none;
+        position: absolute;
+        top: 1.5rem;
+        right: -11rem;
+        background: #fff;
+        padding: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        color: rgb(65, 65, 65);
+        z-index: 10;
+
+        &::before {
+          content: "";
+          width: 1rem;
+          height: 1rem;
+          background-color: #fff;
+          overflow: hidden;
+          position: absolute;
+          left: -0.5rem;
+          transform: rotate(45deg);
+        }
+
+        p {
+          margin: 0;
+        }
+      }
+
+      .help:hover ~ .help-hidden {
+        display: block;
+      }
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: repeat(30, 1fr);
+      grid-template-rows: repeat(30, 1fr);
+      grid-gap: 1px;
+      place-items: center;
+      place-content: space-evenly;
+      padding: 0 5px 5px;
+
+      .field-dot {
+        width: 10px;
+        height: 10px;
+        background: #212121;
+      }
+
+      .food {
+        background: #a10000;
+      }
+
+      .snake-current-position {
+        background: #90d445;
+      }
+
+      .snake-body {
+        background: #5b8f24;
       }
     }
   }
@@ -852,8 +914,6 @@ footer {
     align-items: center;
 
     img {
-      #width: 24px;
-      #height: 22px;
       margin: 0 18px;
     }
 
