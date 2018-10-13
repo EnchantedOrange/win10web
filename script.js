@@ -72,18 +72,42 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 </div>
             </div>
             <div class="window-body">
-                <div class="control">
-                    <div class="container">
-                        <div class="current-difficulty"></div>
-                        <ul class="choose-minesweeper-size">
-                            <li id="easy">Easy</li>
-                            <li id="medium">Medium</li>
-                            <li id="hard">Hard</li>
-                        </ul>
+                <div class="first-column">
+                    <div class="control">
+                        <div class="container">
+                            <div class="current-difficulty button"></div>
+                            <ul class="choose-minesweeper-size">
+                                <li id="easy">Easy</li>
+                                <li id="medium">Medium</li>
+                                <li id="hard">Hard</li>
+                            </ul>
+                        </div>
+                        <div class="new-game button">New game</div>
                     </div>
-                    <div class="new-game">New game</div>
+                    <div class="field"></div>
                 </div>
-                <div class="field"></div>
+                <div class="store">
+                    <div class="store-header">
+                        <h1>Store</h1>
+                        <p class="points"></p>
+                    </div>
+                    <div class="store-item">
+                        <p>Mark 1 mine</p>
+                        <div class="button" id="mark1mine">50 points</div>
+                    </div>
+                    <div class="store-item">
+                        <p>Mark 3 mines</p>
+                        <div class="button" id="mark3mines">125 points</div>
+                    </div>
+                    <div class="store-item">
+                        <p>Mark 5 mines</p>
+                        <div class="button" id="mark5mines">200 points</div>
+                    </div>
+                    <div class="store-item">
+                        <p>Open a field without mines</p>
+                        <div class="button" id="openfield">150 points</div>
+                    </div>
+                </div>
             </div>
             `;
 
@@ -92,6 +116,9 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         let alreadyWorked = [];
         let exposedMines = 0;
         let dots;
+        let points = 0;
+
+        const pointsCounter = windowObject.querySelector('.points');
 
         const easyDifficulty = {
             name: 'Easy',
@@ -183,7 +210,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 });
             }
             mineList.forEach(function(t) {
-                //Remove numbers from mines, idk why they appear, tell me please if you know
+                //Remove numbers from mines, idk why they appear
                 dots[t].innerHTML = '';
             });
         }
@@ -237,6 +264,25 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             }
         }
 
+        function checkFlaggedMines() {
+            if (exposedMines >= currentDifficulty.totalMines) {
+                dots.forEach(function(d) {
+                    if (!d.classList.contains('mine')) {
+                        d.classList.add('exposed-dot');
+                    }
+                });
+                isGameOver = true;
+                if (currentDifficulty.name === 'Easy') {
+                    addPoints(50);
+                } else if (currentDifficulty.name === 'Normal') {
+                    addPoints(75);
+                } else if (currentDifficulty.name === 'Hard') {
+                    addPoints(100);
+                }
+                alert('You win!');
+            }
+        }
+
         function gameOver() {
             isGameOver = true;
             windowObject.querySelectorAll('.mine').forEach(function (d) {
@@ -280,10 +326,10 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                                 getSquaresAround(tit).forEach(function(sq) {
                                     sq.style.backgroundImage = 'linear-gradient(to bottom right, #005e93, #4983aa)';
                                     if (sq.classList.contains('flag')) {
-                                        flagged += 1;
+                                        flagged++;
                                     }
                                     if (sq.classList.contains('mine')) {
-                                        mined += 1;
+                                        mined++;
                                     }
                                 });
                                 if (flagged === mined) {
@@ -305,19 +351,12 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                                 this.classList.toggle('flag');
                                 if (this.classList.contains('mine')) {
                                     if (this.classList.contains('flag')) {
-                                        exposedMines += 1;
+                                        exposedMines++;
                                     } else {
-                                        exposedMines -= 1;
+                                        exposedMines--;
                                     }
                                 }
-                                if (exposedMines === currentDifficulty.totalMines) {
-                                    dots.forEach(function(d) {
-                                        if (!d.classList.contains('mine')) {
-                                            d.classList.add('exposed-dot');
-                                        }
-                                    });
-                                    alert('You win!');
-                                }
+                                checkFlaggedMines();
                             }
                         } else if (event.button === 0 && !this.classList.contains('flag') && !event.shiftKey) {
                             //LMB
@@ -338,12 +377,95 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             });
         }
 
+        function setInitialBackground() {
+            setTimeout(() => {
+                pointsCounter.style.backgroundColor = 'initial';
+            }, 1000);
+        }
+
+        function markMines(minesNumber, price) {
+            if (points >= price) {
+                for (let x = 0; x < minesNumber; x++) {
+                    let mines = [];
+                    windowObject.querySelectorAll('.mine').forEach((e) => {
+                        if (!e.classList.contains('flag')) {
+                            mines.push(e);
+                        }
+                    });
+                    if (mines.length > 0) {
+                        mines[Math.floor(Math.random() * mines.length)].classList.add('flag');
+                        exposedMines++;
+                    }
+                }
+                checkFlaggedMines();
+                removePoints(price);
+            } else {
+                notEnoughPoints();
+            }
+        }
+
+        function addPoints(n) {
+            points += n;
+            pointsCounter.innerHTML = points;
+            pointsCounter.style.backgroundColor = 'rgb(89, 252, 89)';
+            setInitialBackground();
+        }
+
+        function removePoints(n) {
+            points -= n;
+            pointsCounter.innerHTML = points;
+            pointsCounter.style.backgroundColor = 'rgb(247, 144, 61)';
+            setInitialBackground();
+        }
+
+        function notEnoughPoints() {
+            pointsCounter.style.backgroundColor = 'rgb(240, 67, 67)';
+            setInitialBackground();
+        }
+
         placeMines();
 
         setEventListenersForDots();
 
-        windowObject.querySelector('.new-game').addEventListener('click', function() {
+        pointsCounter.innerHTML = points;
+
+        windowObject.querySelector('.new-game').addEventListener('click', () => {
             startNewGame();
+        });
+
+        windowObject.querySelector('#mark1mine').addEventListener('click', () => {
+            if (!isGameOver) {
+                markMines(1, 50);
+            }
+        });
+
+        windowObject.querySelector('#mark3mines').addEventListener('click', () => {
+            if (!isGameOver) {
+                markMines(3, 125);
+            }
+        });
+
+        windowObject.querySelector('#mark5mines').addEventListener('click', () => {
+            if (!isGameOver) {
+                markMines(5, 200);
+            }
+        });
+
+        windowObject.querySelector('#openfield').addEventListener('click', () => {
+            if (!isGameOver) {
+                if (points >= 150) {
+                    let freeDots = [];
+                    dots.forEach((e) => {
+                        if (e.innerHTML === '' && !alreadyWorked.includes(e) && !e.classList.contains('mine') && !e.classList.contains('flag')) {
+                            freeDots.push(e);
+                        }
+                    });
+                    exposeSquare(freeDots[Math.floor(Math.random() * freeDots.length)]);
+                    removePoints(150);
+                } else {
+                    notEnoughPoints();
+                }
+            }
         });
     } else if (windowClass === 'snake-window') {
         windowObject.innerHTML =
@@ -372,6 +494,9 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     </div>
                 </div>
                 <div class="field"></div>
+                <div class="game-over-sign">
+                    <h1>GAME OVER</h1>
+                </div>
             </div>
             `;
         for (let y = 1; y <= 30; y++) {
@@ -385,6 +510,8 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         }
 
         const dots = windowObject.querySelectorAll('.field-dot');
+        const gameOverSign = windowObject.querySelector('.game-over-sign');
+
         let snakeDirection;
         let firstClick = true;
         let snakeInterval;
@@ -439,16 +566,16 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
             switch (snakeDirection) {
                 case 'up':
-                    toY -= 1;
+                    toY--;
                     break;
                 case 'left':
-                    toX -= 1;
+                    toX--;
                     break;
                 case 'down':
-                    toY += 1;
+                    toY++;
                     break;
                 case 'right':
-                    toX += 1;
+                    toX++;
                     break;
                 default:
                     return null;
@@ -475,7 +602,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 if (!isgameOver) {
                     let coef = parseInt(e.classList.item(2).split('snake-body-')[1], 10);
                     e.classList.remove(`snake-body-${coef}`);
-                    coef -= 1;
+                    coef--;
                     if (coef === 0) {
                         e.classList.remove('snake-body');
                     } else {
@@ -485,6 +612,10 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             });
             
             let nextPos = getNextSquare(snakePos, snakeDirection);
+            dots.forEach((e) => {
+                e.innerHTML = '';
+            });
+            snakePos.innerHTML = 'F';
             snakePos.classList.remove('snake-current-position');
 
             if (snakeLength > 0) {
@@ -496,7 +627,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             if (nextPos.classList.contains('food')) {
                 score += 100;
                 windowObject.querySelector('.score').innerHTML = score;
-                snakeLength += 1;
+                snakeLength++;
                 nextPos.classList.remove('food');
                 placeFood();
             } else if (nextPos.classList.contains('snake-body')) {
@@ -507,7 +638,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         function gameOver() {
             clearInterval(snakeInterval);
             isgameOver = true;
-            alert('Game over!');
+            gameOverSign.classList.add('game-over-sign-visible');
         }
 
         function newGame() {
@@ -523,6 +654,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             });
             windowObject.querySelector('#n5_5').classList.add('snake-current-position');
             placeFood();
+            gameOverSign.classList.remove('game-over-sign-visible');
         }
 
         newGame();
@@ -533,15 +665,14 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 clearInterval(snakeInterval);
                 firstClick = true;
             } else if (direction) {
-                const isSnakeBody = getNextSquare(windowObject.querySelector('.snake-current-position'), direction).classList.contains('snake-body');
+                const isSnakeBody = getNextSquare(windowObject.querySelector('.snake-current-position'), direction).innerHTML;
                 if (!isgameOver && !isSnakeBody) {
                     snakeDirection = direction;
                     if (firstClick) {
-                        snakeInterval = setInterval(moveSnake, 300);
+                        snakeInterval = setInterval(moveSnake, 500);
                         firstClick = false;
-                    } else {
-                        moveSnake();
                     }
+                    moveSnake();
                 }
             }
         });
