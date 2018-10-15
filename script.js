@@ -107,6 +107,10 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                         <p>Open a field without mines</p>
                         <div class="button" id="openfield">150 points</div>
                     </div>
+                    <div class="store-item">
+                        <p>Golden skin</p>
+                        <div class="button" id="goldenskin">1500 points</div>
+                    </div>
                 </div>
             </div>
             `;
@@ -116,9 +120,25 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         let alreadyWorked = [];
         let exposedMines = 0;
         let dots;
-        let points = 0;
+        let points;
+        try {
+            points = parseInt(document.cookie.split('points=')[1].split(';')[0], 10);
+        } catch(err) {
+            points = 0;
+        }
 
         const pointsCounter = windowObject.querySelector('.points');
+
+        const defaultSkin = '#4983aa, #005e93';
+        const goldenSkin = 'rgb(235,203,27), rgb(167,144,20)';
+        let currentSkin = defaultSkin;
+        try {
+            if (document.cookie.split('skin=')[1].split(';')[0] === 'golden') {
+                currentSkin = goldenSkin;
+            }
+        } catch(err) {
+            null;
+        }
 
         const easyDifficulty = {
             name: 'Easy',
@@ -140,6 +160,8 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         };
 
         let currentDifficulty = easyDifficulty;
+
+        document.documentElement.style.setProperty('--minesweeper-skin', currentSkin);
 
         windowObject.querySelector('#easy').addEventListener('click', function() {
             currentDifficulty = easyDifficulty;
@@ -314,17 +336,18 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 d.addEventListener('mousedown', function() {
                     if (!isGameOver) {
                         if (event.shiftKey && event.button === 0 && !this.classList.contains('flag')) {
-                            this.style.backgroundImage = 'linear-gradient(to bottom right, #005e93, #4983aa)';
+                            const mousedownBackground = `${currentSkin.split(', ')[1]}, ${currentSkin.split(', ')[0]}`;
+                            this.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
                             if (!this.classList.contains('exposed-dot')) {
                                 getSquaresAround(this).forEach(function(sq) {
-                                    sq.style.backgroundImage = 'linear-gradient(to bottom right, #005e93, #4983aa)';
+                                    sq.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
                                 });
                             } else {
                                 let flagged = 0;
                                 let mined = 0;
                                 const tit = this;
                                 getSquaresAround(tit).forEach(function(sq) {
-                                    sq.style.backgroundImage = 'linear-gradient(to bottom right, #005e93, #4983aa)';
+                                    sq.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
                                     if (sq.classList.contains('flag')) {
                                         flagged++;
                                     }
@@ -369,9 +392,9 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     }
                 });
                 d.addEventListener('mouseup', function() {
-                    this.style.backgroundImage = 'linear-gradient(to bottom right, #4983aa, #005e93)';
+                    this.style.backgroundImage = `linear-gradient(to bottom right, ${currentSkin})`;
                     getSquaresAround(this).forEach(function(sq) {
-                        sq.style.backgroundImage = 'linear-gradient(to bottom right, #4983aa, #005e93)';
+                        sq.style.backgroundImage = `linear-gradient(to bottom right, ${currentSkin})`;
                     })
                 });
             });
@@ -384,7 +407,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         }
 
         function markMines(minesNumber, price) {
-            if (points >= price) {
+            if (removePoints(price)) {
                 for (let x = 0; x < minesNumber; x++) {
                     let mines = [];
                     windowObject.querySelectorAll('.mine').forEach((e) => {
@@ -398,29 +421,43 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     }
                 }
                 checkFlaggedMines();
-                removePoints(price);
-            } else {
-                notEnoughPoints();
             }
         }
 
         function addPoints(n) {
             points += n;
+            setCookie('points', points, 30);
             pointsCounter.innerHTML = points;
             pointsCounter.style.backgroundColor = 'rgb(89, 252, 89)';
             setInitialBackground();
         }
 
         function removePoints(n) {
-            points -= n;
-            pointsCounter.innerHTML = points;
-            pointsCounter.style.backgroundColor = 'rgb(247, 144, 61)';
-            setInitialBackground();
+            if (!isGameOver) {
+                if (points >= n) {
+                    points -= n;
+                    setCookie('points', points, 30);
+                    pointsCounter.innerHTML = points;
+                    pointsCounter.style.backgroundColor = 'rgb(247, 144, 61)';
+                    setInitialBackground();
+                    return true;
+                } else {
+                    notEnoughPoints();
+                    return false;
+                }
+            }
         }
 
         function notEnoughPoints() {
             pointsCounter.style.backgroundColor = 'rgb(240, 67, 67)';
             setInitialBackground();
+        }
+
+        function setCookie(name, value, exdays) {
+            let d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            const expires = `expires=${d.toUTCString()}`;
+            document.cookie = `${name}=${value};${expires};path=/`;
         }
 
         placeMines();
@@ -434,37 +471,33 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         });
 
         windowObject.querySelector('#mark1mine').addEventListener('click', () => {
-            if (!isGameOver) {
-                markMines(1, 50);
-            }
+            markMines(1, 50);
         });
 
         windowObject.querySelector('#mark3mines').addEventListener('click', () => {
-            if (!isGameOver) {
-                markMines(3, 125);
-            }
+            markMines(3, 125);
         });
 
         windowObject.querySelector('#mark5mines').addEventListener('click', () => {
-            if (!isGameOver) {
-                markMines(5, 200);
-            }
+            markMines(5, 200);
         });
 
         windowObject.querySelector('#openfield').addEventListener('click', () => {
-            if (!isGameOver) {
-                if (points >= 150) {
-                    let freeDots = [];
-                    dots.forEach((e) => {
-                        if (e.innerHTML === '' && !alreadyWorked.includes(e) && !e.classList.contains('mine') && !e.classList.contains('flag')) {
-                            freeDots.push(e);
-                        }
-                    });
-                    exposeSquare(freeDots[Math.floor(Math.random() * freeDots.length)]);
-                    removePoints(150);
-                } else {
-                    notEnoughPoints();
-                }
+            if (removePoints(150)) {
+                let freeDots = [];
+                dots.forEach((e) => {
+                    if (e.innerHTML === '' && !alreadyWorked.includes(e) && !e.classList.contains('mine') && !e.classList.contains('flag')) {
+                        freeDots.push(e);
+                    }
+                });
+                exposeSquare(freeDots[Math.floor(Math.random() * freeDots.length)]);
+            }
+        });
+
+        windowObject.querySelector('#goldenskin').addEventListener('click', () => {
+            if (removePoints(1500)) {
+                document.documentElement.style.setProperty('--minesweeper-skin', goldenSkin);
+                setCookie('skin', 'golden', 30);
             }
         });
     } else if (windowClass === 'snake-window') {

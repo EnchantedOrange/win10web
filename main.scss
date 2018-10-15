@@ -251,7 +251,7 @@ ul {
         .field-dot {
           width: 25px;
           height: 25px;
-          background-image: linear-gradient(to bottom right, #4983aa, #005e93);
+          background-image: linear-gradient(to bottom right, var(--minesweeper-skin));
           border-radius: 3px;
           justify-self: center;
           place-self: center;
@@ -265,7 +265,7 @@ ul {
         }
 
         .flag {
-          background-image: url("images/minesweeper-flag.png"), linear-gradient(to bottom right, #4983aa, #005e93) !important;
+          background-image: url("images/minesweeper-flag.png"), linear-gradient(to bottom right, var(--minesweeper-skin)) !important;
         }
 
         .mine-blown {
