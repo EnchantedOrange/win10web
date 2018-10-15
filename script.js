@@ -434,17 +434,17 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
         function removePoints(n) {
             if (!isGameOver) {
-                if (points >= n) {
+                //if (points >= n) {
                     points -= n;
                     setCookie('points', points, 30);
                     pointsCounter.innerHTML = points;
                     pointsCounter.style.backgroundColor = 'rgb(247, 144, 61)';
                     setInitialBackground();
                     return true;
-                } else {
+                /*} else {
                     notEnoughPoints();
                     return false;
-                }
+                }*/
             }
         }
 
@@ -497,6 +497,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         windowObject.querySelector('#goldenskin').addEventListener('click', () => {
             if (removePoints(1500)) {
                 document.documentElement.style.setProperty('--minesweeper-skin', goldenSkin);
+                currentSkin = goldenSkin;
                 setCookie('skin', 'golden', 30);
             }
         });
