@@ -82,7 +82,7 @@ ul {
 
     &:hover {
       background-color: fade_out($blue-theme, 0.7);
-      outline: 1px solid $blue-theme;
+      outline: 1px solid fade-out($blue-theme, 0.4);
     }
   }
 }
@@ -333,6 +333,27 @@ ul {
   .window-body {
     background: #000;
 
+    .field-dot {
+      width: 10px;
+      height: 10px;
+      background: #212121;
+    }
+
+    .food {
+      background: #20d60f !important;
+      box-shadow: 0 0 8px #20d60f;
+    }
+
+    .food-extra {
+      background: #f0cf19 !important;
+      box-shadow: 0 0 8px #f0cf19;
+    }
+
+    .food-shrink {
+      background: #e71b1b !important;
+      box-shadow: 0 0 8px #e71b1b;
+    }
+
     .control {
       height: 2.3rem;
       display: flex;
@@ -391,16 +412,6 @@ ul {
       place-content: space-evenly;
       padding: 0 5px 5px;
       font-size: 0;
-
-      .field-dot {
-        width: 10px;
-        height: 10px;
-        background: #212121;
-      }
-
-      .food {
-        background: #a10000;
-      }
 
       .snake-current-position {
         background: #90d445;

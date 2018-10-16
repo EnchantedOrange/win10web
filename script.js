@@ -16,6 +16,13 @@ const volumeBig = document.querySelector('#volume-big');
 
 document.oncontextmenu = () => {return false};
 
+function setCookie(name, value, exdays) {
+    let d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    const expires = `expires=${d.toUTCString()}`;
+    document.cookie = `${name}=${value};${expires};path=/`;
+}
+
 function openDesktopApp() {
     openApp(false);
 }
@@ -232,7 +239,6 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 });
             }
             mineList.forEach(function(t) {
-                //Remove numbers from mines, idk why they appear
                 dots[t].innerHTML = '';
             });
         }
@@ -434,17 +440,17 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
         function removePoints(n) {
             if (!isGameOver) {
-                //if (points >= n) {
+                if (points >= n) {
                     points -= n;
                     setCookie('points', points, 30);
                     pointsCounter.innerHTML = points;
                     pointsCounter.style.backgroundColor = 'rgb(247, 144, 61)';
                     setInitialBackground();
                     return true;
-                /*} else {
+                } else {
                     notEnoughPoints();
                     return false;
-                }*/
+                }
             }
         }
 
@@ -453,11 +459,11 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             setInitialBackground();
         }
 
-        function setCookie(name, value, exdays) {
-            let d = new Date();
-            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-            const expires = `expires=${d.toUTCString()}`;
-            document.cookie = `${name}=${value};${expires};path=/`;
+        function setSkin() {
+            dots.forEach((d) => {
+                document.documentElement.style.setProperty('--minesweeper-skin', currentSkin);
+                d.style.backgroundImage = `linear-gradient(to bottom right, ${currentSkin})`;
+            });
         }
 
         placeMines();
@@ -495,10 +501,15 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         });
 
         windowObject.querySelector('#goldenskin').addEventListener('click', () => {
-            if (removePoints(1500)) {
-                document.documentElement.style.setProperty('--minesweeper-skin', goldenSkin);
-                currentSkin = goldenSkin;
-                setCookie('skin', 'golden', 30);
+            if (document.cookie.includes('skin=golden')) {
+                currentSkin === goldenSkin ? currentSkin = defaultSkin : currentSkin = goldenSkin;
+                setSkin();
+            } else {
+                if (removePoints(1500)) {
+                    currentSkin = goldenSkin;
+                    setSkin();
+                    setCookie('skin', 'golden', 30);
+                }
             }
         });
     } else if (windowClass === 'snake-window') {
@@ -560,6 +571,50 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             } else {
                 dots[x].classList.add('food');
             }
+
+            const randint = Math.floor(Math.random() * 10);
+            if (randint === 1) {
+                placeFoodExtra(x, 'food-extra');
+            } else if (randint === 3) {
+                placeFoodExtra(x, 'food-shrink');
+            }
+        }
+
+        function placeFoodExtra(foodPlace, foodClass) {
+            const x = Math.floor(Math.random() * 30 * 30);
+            if (x === foodPlace || dots[x].classList.contains('snake-body') || dots[x].classList.contains('snake-current-position')) {
+                return placeFoodExtra(foodPlace, foodClass);
+            } else {
+                dots[x].classList.add(foodClass);
+            }
+        }
+
+        function eatFood(pos) {
+            if (pos.classList.contains('food')) {
+                score += 100;
+                snakeLength++;
+                pos.classList.remove('food');
+                windowObject.querySelectorAll('.food-extra').forEach((e) => {
+                    e.classList.remove('food-extra');
+                });
+                windowObject.querySelectorAll('.food-shrink').forEach((e) => {
+                    e.classList.remove('food-shrink');
+                });
+                placeFood();
+            } else if (pos.classList.contains('food-extra')) {
+                score += 300;
+                snakeLength += 3;
+                pos.classList.remove('food-extra');
+            } else if (pos.classList.contains('food-shrink')) {
+                if (score >= 100) {
+                    score -= 100;
+                }
+                if (snakeLength >= 1) {
+                    snakeLength--;
+                }
+                pos.classList.remove('food-shrink');
+            }
+            windowObject.querySelector('.score').innerHTML = score;
         }
 
         function getDirection(key) {
@@ -656,17 +711,13 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 snakePos.classList.add('snake-body', `snake-body-${snakeLength}`);
             }
 
-            nextPos.classList.add('snake-current-position');
-
-            if (nextPos.classList.contains('food')) {
-                score += 100;
-                windowObject.querySelector('.score').innerHTML = score;
-                snakeLength++;
-                nextPos.classList.remove('food');
-                placeFood();
+            if (nextPos.classList.toString().includes('food')) {
+                eatFood(nextPos);
             } else if (nextPos.classList.contains('snake-body')) {
                 gameOver();
             }
+
+            nextPos.classList.add('snake-current-position');
         }
 
         function gameOver() {
