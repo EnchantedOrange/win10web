@@ -563,6 +563,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         let isgameOver = false;
         let score = 0;
         let snakeLength = 0;
+        let invincibilityLeft = 0;
 
         function placeFood() {
             const x = Math.floor(Math.random() * 30 * 30);
@@ -575,8 +576,10 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             const randint = Math.floor(Math.random() * 10);
             if (randint === 1) {
                 placeFoodExtra(x, 'food-extra');
-            } else if (randint === 3) {
+            } else if (randint === 2) {
                 placeFoodExtra(x, 'food-shrink');
+            } else if (randint === 3) {
+                placeFoodExtra(x, 'food-invincible');
             }
         }
 
@@ -594,11 +597,8 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 score += 100;
                 snakeLength++;
                 pos.classList.remove('food');
-                windowObject.querySelectorAll('.food-extra').forEach((e) => {
-                    e.classList.remove('food-extra');
-                });
-                windowObject.querySelectorAll('.food-shrink').forEach((e) => {
-                    e.classList.remove('food-shrink');
+                dots.forEach((i) => {
+                    i.classList.remove('food-extra', 'food-shrink', 'food-invincible');
                 });
                 placeFood();
             } else if (pos.classList.contains('food-extra')) {
@@ -613,6 +613,12 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     snakeLength--;
                 }
                 pos.classList.remove('food-shrink');
+            } else if (pos.classList.contains('food-invincible')) {
+                invincibilityLeft = 20;
+                windowObject.querySelectorAll('.snake-body').forEach((i) => {
+                    i.classList.add('invincible-snake-body');
+                });
+                pos.classList.remove('food-invincible');
             }
             windowObject.querySelector('.score').innerHTML = score;
         }
@@ -689,11 +695,14 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
             windowObject.querySelectorAll('.snake-body').forEach((e) => {
                 if (!isgameOver) {
-                    let coef = parseInt(e.classList.item(2).split('snake-body-')[1], 10);
+                    let coef = parseInt(e.classList.toString().split('snake-body-')[1].split(' ')[0], 10);
                     e.classList.remove(`snake-body-${coef}`);
                     coef--;
                     if (coef === 0) {
                         e.classList.remove('snake-body');
+                        if (invincibilityLeft > 0) {
+                            e.classList.remove('invincible-snake-body');
+                        }
                     } else {
                         e.classList.add(`snake-body-${coef}`);
                     }
@@ -709,11 +718,19 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
             if (snakeLength > 0) {
                 snakePos.classList.add('snake-body', `snake-body-${snakeLength}`);
+                if (invincibilityLeft > 0) {
+                    snakePos.classList.add('invincible-snake-body');
+                    invincibilityLeft--;
+                } else {
+                    dots.forEach((i) => {
+                        i.classList.remove('invincible-snake-body');
+                    });
+                }
             }
 
             if (nextPos.classList.toString().includes('food')) {
                 eatFood(nextPos);
-            } else if (nextPos.classList.contains('snake-body')) {
+            } else if (nextPos.classList.contains('snake-body') && invincibilityLeft === 0) {
                 gameOver();
             }
 
