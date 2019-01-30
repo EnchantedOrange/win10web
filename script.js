@@ -336,44 +336,48 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             setEventListenersForDots();
             windowObject.querySelector('.current-difficulty').innerHTML = currentDifficulty.name;
         }
+        
+        function exposeDotsAround(dot) {
+            const mousedownBackground = `${currentSkin.split(', ')[1]}, ${currentSkin.split(', ')[0]}`;
+            dot.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
+            if (!dot.classList.contains('exposed-dot')) {
+                getSquaresAround(dot).forEach(function(sq) {
+                    sq.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
+                });
+            } else {
+                let flagged = 0;
+                let mined = 0;
+                const tit = dot;
+                getSquaresAround(tit).forEach(function(sq) {
+                    sq.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
+                    if (sq.classList.contains('flag')) {
+                        flagged++;
+                    }
+                    if (sq.classList.contains('mine')) {
+                        mined++;
+                    }
+                });
+                if (flagged === mined) {
+                    let exposeOrNot = true;
+                    getSquaresAround(tit).forEach(function(sq) {
+                        if ((sq.classList.contains('mine') && !sq.classList.contains('flag')) || (!sq.classList.contains('mine') && sq.classList.contains('flag'))) {
+                            exposeOrNot = false;
+                            gameOver();
+                        }
+                    });
+                    if (exposeOrNot) {
+                        exposeSquare(tit, true);
+                    }
+                }
+            }
+        }
 
         function setEventListenersForDots() {
             dots.forEach(function(d) {
-                d.addEventListener('mousedown', function() {
+                d.addEventListener('mousedown', function(event) {
                     if (!isGameOver) {
                         if (event.shiftKey && event.button === 0 && !this.classList.contains('flag')) {
-                            const mousedownBackground = `${currentSkin.split(', ')[1]}, ${currentSkin.split(', ')[0]}`;
-                            this.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
-                            if (!this.classList.contains('exposed-dot')) {
-                                getSquaresAround(this).forEach(function(sq) {
-                                    sq.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
-                                });
-                            } else {
-                                let flagged = 0;
-                                let mined = 0;
-                                const tit = this;
-                                getSquaresAround(tit).forEach(function(sq) {
-                                    sq.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
-                                    if (sq.classList.contains('flag')) {
-                                        flagged++;
-                                    }
-                                    if (sq.classList.contains('mine')) {
-                                        mined++;
-                                    }
-                                });
-                                if (flagged === mined) {
-                                    let exposeOrNot = true;
-                                    getSquaresAround(tit).forEach(function(sq) {
-                                        if ((sq.classList.contains('mine') && !sq.classList.contains('flag')) || (!sq.classList.contains('mine') && sq.classList.contains('flag'))) {
-                                            exposeOrNot = false;
-                                            gameOver();
-                                        }
-                                    });
-                                    if (exposeOrNot) {
-                                        exposeSquare(tit, true);
-                                    }
-                                }
-                            }
+                            exposeDotsAround(this);
                         } else if (event.button === 2 && !event.shiftKey) {
                             //RMB
                             if (!this.classList.contains('exposed-dot')) {
@@ -397,11 +401,14 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                         }
                     }
                 });
-                d.addEventListener('mouseup', function() {
+                d.addEventListener('mouseup', function(event) {
                     this.style.backgroundImage = `linear-gradient(to bottom right, ${currentSkin})`;
                     getSquaresAround(this).forEach(function(sq) {
                         sq.style.backgroundImage = `linear-gradient(to bottom right, ${currentSkin})`;
                     })
+                });
+                d.addEventListener('dblclick', function(event) {
+                    exposeDotsAround(this);
                 });
             });
         }
