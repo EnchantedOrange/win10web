@@ -402,10 +402,9 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     }
                 });
                 d.addEventListener('mouseup', function(event) {
-                    this.style.backgroundImage = `linear-gradient(to bottom right, ${currentSkin})`;
-                    getSquaresAround(this).forEach(function(sq) {
-                        sq.style.backgroundImage = `linear-gradient(to bottom right, ${currentSkin})`;
-                    })
+                    dots.forEach(function(dot) {
+                        dot.style.backgroundImage = '';
+                    });
                 });
                 d.addEventListener('dblclick', function(event) {
                     exposeDotsAround(this);
