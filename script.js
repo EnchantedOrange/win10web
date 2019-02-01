@@ -1039,11 +1039,21 @@ function toggleVolumeMenu() {
 rollAllWindows.addEventListener('click', function() {
     const windows = document.getElementsByClassName('window');
     
-    const windowsCount = windows.length;
+    let openWindowsCount = 0;
     
     windows.forEach(function(win) {
         if (win.style.display !== 'none') {
-            
+            openWindowsCount++;
         }
     });
+    
+    if (openWindowsCount === 0) {
+        windows.forEach(function(win) {
+            win.style.display = 'block';
+        });
+    } else {
+        windows.forEach(function(win) {
+            win.style.display = 'none';
+        });
+    }
 });
