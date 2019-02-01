@@ -809,6 +809,18 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
     }
 
     const winHeader = windowObject.firstElementChild;
+    
+    function rollOrExpandWindow(windowObject) {
+        if (windowObject.classList.contains('window-opened')) {
+            windowObject.style.left = '100px';
+            windowObject.style.top = '50px';
+        } else {
+            windowObject.style.left = '0px';
+            windowObject.style.top = '0px';
+        }
+        windowObject.classList.toggle('window-opened');
+    }
+    
     function getCoords(elem) {
         let box = elem.getBoundingClientRect();
         return {
@@ -816,6 +828,11 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             left: box.left + pageXOffset
         };
     }
+    
+    winHeader.addEventListener('dblclick', function() {
+        rollOrExpandWindow(windowObject);
+    });
+    
     winHeader.addEventListener('mousedown', function(e) {
         let coords = getCoords(winHeader);
         let shiftX = e.pageX - coords.left;
@@ -835,19 +852,15 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             winHeader.onmouseup = null;
         };
     });
+    
     windowObject.querySelector('.window-roll-button').addEventListener('click', function() {
         windowObject.style.display = 'none';
     });
-    windowObject.querySelector('.window-expand-button').onclick = function () {
-        if (windowObject.classList.contains('window-opened')) {
-            windowObject.style.left = '100px';
-            windowObject.style.top = '50px';
-        } else {
-            windowObject.style.left = '0px';
-            windowObject.style.top = '0px';
-        }
-        windowObject.classList.toggle('window-opened');
-    };
+    
+    windowObject.querySelector('.window-expand-button').addEventListener('click', function() {
+        rollOrExpandWindow(windowObject);
+    });
+    
     windowObject.querySelector('.window-close-button').addEventListener('click', function() {
         if (!isTaskbar) {
             document.querySelector('.taskbar-apps').removeChild(footerAppBar);
