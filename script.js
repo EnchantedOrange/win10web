@@ -1037,7 +1037,7 @@ function toggleVolumeMenu() {
 }
 
 rollAllWindows.addEventListener('click', function() {
-    const windows = document.getElementsByClassName('window');
+    const windows = document.querySelectorAll('.window');
     
     let openWindowsCount = 0;
     
