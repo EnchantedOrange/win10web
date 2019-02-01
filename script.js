@@ -11,6 +11,7 @@ const langIndicator = document.querySelector('#lang-indicator');
 const langSelectorBars = document.querySelectorAll('.lang-selector-bar');
 const volumeSlider = document.querySelector('#volume-slider');
 const volumeBig = document.querySelector('#volume-big');
+const rollAllWindows = document.getElementsByClassName('roll-all-windows')[0];
 
 
 
@@ -1034,3 +1035,15 @@ function toggleLangSelector() {
 function toggleVolumeMenu() {
     document.querySelector('#volume-menu').classList.toggle('volume-menu-open');
 }
+
+rollAllWindows.addEventListener('click', function() {
+    const windows = document.getElementsByClassName('window');
+    
+    const windowsCount = windows.length;
+    
+    windows.forEach(function(win) {
+        if (win.style.display !== 'none') {
+            
+        }
+    });
+});
