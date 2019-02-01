@@ -845,6 +845,9 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         }
 
         document.onmousemove = function(e) {
+            windowObject.classList.contains('window-opened') &&
+            windowObject.classList.remove('window-opened');
+            
             moveAt(e);
         };
 
