@@ -479,7 +479,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
         pointsCounter.innerHTML = points;
 
-        windowObject.getElementsByClassName('.new-game')[0].addEventListener('click', () => {
+        windowObject.getElementsByClassName('new-game')[0].addEventListener('click', () => {
             startNewGame();
         });
 
