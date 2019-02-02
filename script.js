@@ -105,7 +105,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     </div>
                     <div class="store-item">
                         <p>Mark 3 mines</p>
-                        <div class="button" id="mark3mines">125 points</div>
+                        <div class="button" id="mark3mines">130 points</div>
                     </div>
                     <div class="store-item">
                         <p>Mark 5 mines</p>
@@ -113,11 +113,11 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     </div>
                     <div class="store-item">
                         <p>Open a field without mines</p>
-                        <div class="button" id="openfield">150 points</div>
+                        <div class="button" id="openfield">250 points</div>
                     </div>
                     <div class="store-item">
                         <p>Golden skin</p>
-                        <div class="button" id="goldenskin">1500 points</div>
+                        <div class="button" id="goldenskin">1000 points</div>
                     </div>
                 </div>
             </div>
@@ -304,9 +304,9 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 if (currentDifficulty.name === 'Easy') {
                     addPoints(50);
                 } else if (currentDifficulty.name === 'Normal') {
-                    addPoints(75);
+                    addPoints(125);
                 } else if (currentDifficulty.name === 'Hard') {
-                    addPoints(100);
+                    addPoints(300);
                 }
                 alert('You win!');
             }
@@ -479,24 +479,24 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
         pointsCounter.innerHTML = points;
 
-        windowObject.querySelector('.new-game').addEventListener('click', () => {
+        windowObject.getElementsByClassName('.new-game')[0].addEventListener('click', () => {
             startNewGame();
         });
 
-        windowObject.querySelector('#mark1mine').addEventListener('click', () => {
+        windowObject.getElementById('mark1mine').addEventListener('click', () => {
             markMines(1, 50);
         });
 
-        windowObject.querySelector('#mark3mines').addEventListener('click', () => {
-            markMines(3, 125);
+        windowObject.getElementById('mark3mines').addEventListener('click', () => {
+            markMines(3, 130);
         });
 
-        windowObject.querySelector('#mark5mines').addEventListener('click', () => {
+        windowObject.getElementById('mark5mines').addEventListener('click', () => {
             markMines(5, 200);
         });
 
-        windowObject.querySelector('#openfield').addEventListener('click', () => {
-            if (removePoints(150)) {
+        windowObject.getElementById('openfield').addEventListener('click', () => {
+            if (removePoints(250)) {
                 let freeDots = [];
                 dots.forEach((e) => {
                     if (e.innerHTML === '' && !alreadyWorked.includes(e) && !e.classList.contains('mine') && !e.classList.contains('flag')) {
@@ -507,15 +507,15 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             }
         });
 
-        windowObject.querySelector('#goldenskin').addEventListener('click', () => {
+        windowObject.getElementById('goldenskin').addEventListener('click', () => {
             if (document.cookie.includes('skin=golden')) {
                 currentSkin === goldenSkin ? currentSkin = defaultSkin : currentSkin = goldenSkin;
                 setSkin();
             } else {
-                if (removePoints(1500)) {
+                if (removePoints(1000)) {
                     currentSkin = goldenSkin;
                     setSkin();
-                    setCookie('skin', 'golden', 30);
+                    setCookie('skin', 'golden', 100);
                 }
             }
         });
