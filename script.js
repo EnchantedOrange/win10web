@@ -479,23 +479,23 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
         pointsCounter.innerHTML = points;
 
-        windowObject.getElementsByClassName('new-game')[0].addEventListener('click', () => {
+        windowObject.querySelector('.new-game').addEventListener('click', () => {
             startNewGame();
         });
 
-        windowObject.getElementById('mark1mine').addEventListener('click', () => {
+        windowObject.querySelector('#mark1mine').addEventListener('click', () => {
             markMines(1, 50);
         });
 
-        windowObject.getElementById('mark3mines').addEventListener('click', () => {
+        windowObject.querySelector('#mark3mines').addEventListener('click', () => {
             markMines(3, 130);
         });
 
-        windowObject.getElementById('mark5mines').addEventListener('click', () => {
+        windowObject.querySelector('#mark5mines').addEventListener('click', () => {
             markMines(5, 200);
         });
 
-        windowObject.getElementById('openfield').addEventListener('click', () => {
+        windowObject.querySelector('#openfield').addEventListener('click', () => {
             if (removePoints(250)) {
                 let freeDots = [];
                 dots.forEach((e) => {
@@ -507,7 +507,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             }
         });
 
-        windowObject.getElementById('goldenskin').addEventListener('click', () => {
+        windowObject.querySelector('#goldenskin').addEventListener('click', () => {
             if (document.cookie.includes('skin=golden')) {
                 currentSkin === goldenSkin ? currentSkin = defaultSkin : currentSkin = goldenSkin;
                 setSkin();
