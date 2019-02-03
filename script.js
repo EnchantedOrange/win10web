@@ -294,13 +294,15 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         }
 
         function checkFlaggedMines() {
-            if (exposedMines >= currentDifficulty.totalMines) {
+            if (exposedMines === currentDifficulty.totalMines) {
                 dots.forEach(function(d) {
                     if (!d.classList.contains('mine')) {
                         d.classList.add('exposed-dot');
                     }
                 });
+                
                 isGameOver = true;
+                
                 if (currentDifficulty.name === 'Easy') {
                     addPoints(50);
                 } else if (currentDifficulty.name === 'Normal') {
@@ -308,6 +310,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 } else if (currentDifficulty.name === 'Hard') {
                     addPoints(300);
                 }
+                
                 alert('You win!');
             }
         }
