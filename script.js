@@ -894,6 +894,10 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
     document.querySelector('body').appendChild(windowObject);
 
+    hideShellExperience();
+}
+
+function hideShellExperience() {
     startMenu.classList.remove('start-menu-open');
     for (let i = 0; i < widthChange.length; i++) {
         widthChange[i].classList.remove('side-buttons-container-open');
@@ -1063,3 +1067,5 @@ rollAllWindows.addEventListener('click', function() {
         });
     }
 });
+
+document.body.addEventListener('click', hideShellExperience);
