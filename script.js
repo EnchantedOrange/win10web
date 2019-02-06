@@ -4,13 +4,14 @@ const dirs = document.getElementsByClassName('hidden-dir');
 const popupMenus = document.getElementsByClassName('popup-menu');
 const dirArrows = document.getElementsByClassName('roll-down-arrow');
 const dirImgs = document.querySelectorAll('.dir-img');
-const notificationBar = document.querySelector('#notification-bar');
-const notificationTilesContainer = document.querySelector('#notification-bar-tiles-container');
-const calendar = document.querySelector('#calendar');
-const langIndicator = document.querySelector('#lang-indicator');
+const notificationBar = document.getElementById('notification-bar');
+const notificationTilesContainer = document.getElementById('notification-bar-tiles-container');
+const calendar = document.getElementById('calendar');
+const langIndicator = document.getElementById('lang-indicator');
 const langSelectorBars = document.querySelectorAll('.lang-selector-bar');
-const volumeSlider = document.querySelector('#volume-slider');
-const volumeBig = document.querySelector('#volume-big');
+const volumeSlider = document.getElementById('volume-slider');
+const volumeBig = document.getElementById('volume-big');
+const volumeSliderOutput = document.getElementById('volume-slider-output');
 const rollAllWindows = document.getElementsByClassName('roll-all-windows')[0];
 
 
@@ -915,18 +916,36 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
 
 
-volumeSlider.oninput = function() {
-    document.querySelector('#volume-slider-output').innerHTML = this.value;
-    if (parseInt(volumeSlider.value, 10) === 0) {
+volumeSlider.addEventListener('change', function(event) {
+    changeVolume(parseInt(event.currentTarget.value));
+});
+
+let volumeSliderSavedValue;
+
+volumeBig.addEventListener('click', function() {
+    if (volumeSlider.value !== 0) {
+        volumeSliderSavedValue = volumeSlider.value;
+        volumeSlider.value = 0;
+        changeVolume(0);
+    } else {
+        volumeSlider.value = volumeSliderSavedValue;
+        changeVolume(volumeSliderSavedValue);
+    }
+});
+
+function changeVolume(value) {
+    volumeSliderOutput.innerHTML = value;
+
+    if (value === 0) {
         volumeBig.src = 'images/volume-big-0.png';
-    } else if (volumeSlider.value >= 1 && volumeSlider.value <= 32) {
+    } else if (value >= 1 && value <= 32) {
         volumeBig.src = 'images/volume-big-1-32.png';
-    } else if (volumeSlider.value >= 33 && volumeSlider.value <= 65) {
+    } else if (value >= 33 && value <= 65) {
         volumeBig.src = 'images/volume-big-33-65.png';
     } else {
         volumeBig.src = 'images/volume-big.png';
     }
-};
+}
 
 document.querySelector('#taskbar-internet').onclick = function () {document.querySelector('#network-menu').classList.toggle('network-menu-open')};
 
