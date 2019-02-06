@@ -923,7 +923,7 @@ volumeSlider.addEventListener('change', function(event) {
 let volumeSliderSavedValue;
 
 volumeBig.addEventListener('click', function() {
-    if (volumeSlider.value !== 0) {
+    if (volumeSlider.value != 0) {
         volumeSliderSavedValue = volumeSlider.value;
         volumeSlider.value = 0;
         changeVolume(0);
