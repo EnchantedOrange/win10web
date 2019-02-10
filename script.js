@@ -4,13 +4,15 @@ const dirs = document.getElementsByClassName('hidden-dir');
 const popupMenus = document.getElementsByClassName('popup-menu');
 const dirArrows = document.getElementsByClassName('roll-down-arrow');
 const dirImgs = document.querySelectorAll('.dir-img');
-const notificationBar = document.querySelector('#notification-bar');
-const notificationTilesContainer = document.querySelector('#notification-bar-tiles-container');
-const calendar = document.querySelector('#calendar');
-const langIndicator = document.querySelector('#lang-indicator');
+const notificationBar = document.getElementById('notification-bar');
+const notificationTilesContainer = document.getElementById('notification-bar-tiles-container');
+const calendar = document.getElementById('calendar');
+const langIndicator = document.getElementById('lang-indicator');
 const langSelectorBars = document.querySelectorAll('.lang-selector-bar');
-const volumeSlider = document.querySelector('#volume-slider');
-const volumeBig = document.querySelector('#volume-big');
+const volumeSlider = document.getElementById('volume-slider');
+const volumeBig = document.getElementById('volume-big');
+const volumeSliderOutput = document.getElementById('volume-slider-output');
+const rollAllWindows = document.getElementsByClassName('roll-all-windows')[0];
 
 
 
@@ -26,21 +28,31 @@ function setCookie(name, value, exdays) {
 function openDesktopApp() {
     openApp(false);
 }
+
 document.querySelectorAll('.desktop-icon').forEach(function(e) {
     e.addEventListener('click', openDesktopApp);
 });
+
 document.querySelectorAll('.taskbar-app').forEach(function(e) {
     e.addEventListener('click', openApp);
 });
+
 const minesweeper = document.querySelector('.minesweeper');
 minesweeper.removeEventListener('click', openDesktopApp);
 minesweeper.addEventListener('click', function() {
     openApp(false, 'minesweeper-window');
 });
+
 const snake = document.querySelector('.snake');
 snake.removeEventListener('click', openDesktopApp);
 snake.addEventListener('click', function() {
     openApp(false, 'snake-window');
+});
+
+const esoDesktopIcon = document.getElementsByClassName('eso')[0];
+esoDesktopIcon.removeEventListener('click', openDesktopApp);
+esoDesktopIcon.addEventListener('click', function() {
+    openApp(false, 'eso-window');
 });
 
 function openApp(isTaskbar, windowClass) {
@@ -104,7 +116,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     </div>
                     <div class="store-item">
                         <p>Mark 3 mines</p>
-                        <div class="button" id="mark3mines">125 points</div>
+                        <div class="button" id="mark3mines">130 points</div>
                     </div>
                     <div class="store-item">
                         <p>Mark 5 mines</p>
@@ -112,11 +124,11 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     </div>
                     <div class="store-item">
                         <p>Open a field without mines</p>
-                        <div class="button" id="openfield">150 points</div>
+                        <div class="button" id="openfield">250 points</div>
                     </div>
                     <div class="store-item">
                         <p>Golden skin</p>
-                        <div class="button" id="goldenskin">1500 points</div>
+                        <div class="button" id="goldenskin">1000 points</div>
                     </div>
                 </div>
             </div>
@@ -293,20 +305,23 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         }
 
         function checkFlaggedMines() {
-            if (exposedMines >= currentDifficulty.totalMines) {
+            if (exposedMines === currentDifficulty.totalMines) {
                 dots.forEach(function(d) {
                     if (!d.classList.contains('mine')) {
                         d.classList.add('exposed-dot');
                     }
                 });
+                
                 isGameOver = true;
+                
                 if (currentDifficulty.name === 'Easy') {
                     addPoints(50);
                 } else if (currentDifficulty.name === 'Normal') {
-                    addPoints(75);
+                    addPoints(125);
                 } else if (currentDifficulty.name === 'Hard') {
-                    addPoints(100);
+                    addPoints(300);
                 }
+                
                 alert('You win!');
             }
         }
@@ -336,44 +351,48 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             setEventListenersForDots();
             windowObject.querySelector('.current-difficulty').innerHTML = currentDifficulty.name;
         }
+        
+        function exposeDotsAround(dot) {
+            const mousedownBackground = `${currentSkin.split(', ')[1]}, ${currentSkin.split(', ')[0]}`;
+            dot.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
+            if (!dot.classList.contains('exposed-dot')) {
+                getSquaresAround(dot).forEach(function(sq) {
+                    sq.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
+                });
+            } else {
+                let flagged = 0;
+                let mined = 0;
+                const tit = dot;
+                getSquaresAround(tit).forEach(function(sq) {
+                    sq.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
+                    if (sq.classList.contains('flag')) {
+                        flagged++;
+                    }
+                    if (sq.classList.contains('mine')) {
+                        mined++;
+                    }
+                });
+                if (flagged === mined) {
+                    let exposeOrNot = true;
+                    getSquaresAround(tit).forEach(function(sq) {
+                        if ((sq.classList.contains('mine') && !sq.classList.contains('flag')) || (!sq.classList.contains('mine') && sq.classList.contains('flag'))) {
+                            exposeOrNot = false;
+                            gameOver();
+                        }
+                    });
+                    if (exposeOrNot) {
+                        exposeSquare(tit, true);
+                    }
+                }
+            }
+        }
 
         function setEventListenersForDots() {
             dots.forEach(function(d) {
-                d.addEventListener('mousedown', function() {
+                d.addEventListener('mousedown', function(event) {
                     if (!isGameOver) {
                         if (event.shiftKey && event.button === 0 && !this.classList.contains('flag')) {
-                            const mousedownBackground = `${currentSkin.split(', ')[1]}, ${currentSkin.split(', ')[0]}`;
-                            this.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
-                            if (!this.classList.contains('exposed-dot')) {
-                                getSquaresAround(this).forEach(function(sq) {
-                                    sq.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
-                                });
-                            } else {
-                                let flagged = 0;
-                                let mined = 0;
-                                const tit = this;
-                                getSquaresAround(tit).forEach(function(sq) {
-                                    sq.style.backgroundImage = `linear-gradient(to bottom right, ${mousedownBackground})`;
-                                    if (sq.classList.contains('flag')) {
-                                        flagged++;
-                                    }
-                                    if (sq.classList.contains('mine')) {
-                                        mined++;
-                                    }
-                                });
-                                if (flagged === mined) {
-                                    let exposeOrNot = true;
-                                    getSquaresAround(tit).forEach(function(sq) {
-                                        if ((sq.classList.contains('mine') && !sq.classList.contains('flag')) || (!sq.classList.contains('mine') && sq.classList.contains('flag'))) {
-                                            exposeOrNot = false;
-                                            gameOver();
-                                        }
-                                    });
-                                    if (exposeOrNot) {
-                                        exposeSquare(tit, true);
-                                    }
-                                }
-                            }
+                            exposeDotsAround(this);
                         } else if (event.button === 2 && !event.shiftKey) {
                             //RMB
                             if (!this.classList.contains('exposed-dot')) {
@@ -397,11 +416,13 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                         }
                     }
                 });
-                d.addEventListener('mouseup', function() {
-                    this.style.backgroundImage = `linear-gradient(to bottom right, ${currentSkin})`;
-                    getSquaresAround(this).forEach(function(sq) {
-                        sq.style.backgroundImage = `linear-gradient(to bottom right, ${currentSkin})`;
-                    })
+                d.addEventListener('mouseup', function(event) {
+                    dots.forEach(function(dot) {
+                        dot.style.backgroundImage = '';
+                    });
+                });
+                d.addEventListener('dblclick', function(event) {
+                    exposeDotsAround(this);
                 });
             });
         }
@@ -481,7 +502,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         });
 
         windowObject.querySelector('#mark3mines').addEventListener('click', () => {
-            markMines(3, 125);
+            markMines(3, 130);
         });
 
         windowObject.querySelector('#mark5mines').addEventListener('click', () => {
@@ -489,7 +510,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         });
 
         windowObject.querySelector('#openfield').addEventListener('click', () => {
-            if (removePoints(150)) {
+            if (removePoints(250)) {
                 let freeDots = [];
                 dots.forEach((e) => {
                     if (e.innerHTML === '' && !alreadyWorked.includes(e) && !e.classList.contains('mine') && !e.classList.contains('flag')) {
@@ -505,10 +526,10 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 currentSkin === goldenSkin ? currentSkin = defaultSkin : currentSkin = goldenSkin;
                 setSkin();
             } else {
-                if (removePoints(1500)) {
+                if (removePoints(1000)) {
                     currentSkin = goldenSkin;
                     setSkin();
-                    setCookie('skin', 'golden', 30);
+                    setCookie('skin', 'golden', 100);
                 }
             }
         });
@@ -803,6 +824,18 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
     }
 
     const winHeader = windowObject.firstElementChild;
+    
+    function rollOrExpandWindow(windowObject) {
+        if (windowObject.classList.contains('window-opened')) {
+            windowObject.style.left = '100px';
+            windowObject.style.top = '50px';
+        } else {
+            windowObject.style.left = '0px';
+            windowObject.style.top = '0px';
+        }
+        windowObject.classList.toggle('window-opened');
+    }
+    
     function getCoords(elem) {
         let box = elem.getBoundingClientRect();
         return {
@@ -810,6 +843,11 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             left: box.left + pageXOffset
         };
     }
+    
+    winHeader.addEventListener('dblclick', function() {
+        rollOrExpandWindow(windowObject);
+    });
+    
     winHeader.addEventListener('mousedown', function(e) {
         let coords = getCoords(winHeader);
         let shiftX = e.pageX - coords.left;
@@ -821,6 +859,9 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         }
 
         document.onmousemove = function(e) {
+            windowObject.classList.contains('window-opened') &&
+            windowObject.classList.remove('window-opened');
+            
             moveAt(e);
         };
 
@@ -829,19 +870,15 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             winHeader.onmouseup = null;
         };
     });
+    
     windowObject.querySelector('.window-roll-button').addEventListener('click', function() {
         windowObject.style.display = 'none';
     });
-    windowObject.querySelector('.window-expand-button').onclick = function () {
-        if (windowObject.classList.contains('window-opened')) {
-            windowObject.style.left = '100px';
-            windowObject.style.top = '50px';
-        } else {
-            windowObject.style.left = '0px';
-            windowObject.style.top = '0px';
-        }
-        windowObject.classList.toggle('window-opened');
-    };
+    
+    windowObject.querySelector('.window-expand-button').addEventListener('click', function() {
+        rollOrExpandWindow(windowObject);
+    });
+    
     windowObject.querySelector('.window-close-button').addEventListener('click', function() {
         if (!isTaskbar) {
             document.querySelector('.taskbar-apps').removeChild(footerAppBar);
@@ -889,18 +926,36 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
 
 
-volumeSlider.oninput = function() {
-    document.querySelector('#volume-slider-output').innerHTML = this.value;
-    if (parseInt(volumeSlider.value, 10) === 0) {
+volumeSlider.addEventListener('change', function(event) {
+    changeVolume(parseInt(event.currentTarget.value));
+});
+
+let volumeSliderSavedValue;
+
+volumeBig.addEventListener('click', function() {
+    if (volumeSlider.value != 0) {
+        volumeSliderSavedValue = volumeSlider.value;
+        volumeSlider.value = 0;
+        changeVolume(0);
+    } else {
+        volumeSlider.value = volumeSliderSavedValue;
+        changeVolume(volumeSliderSavedValue);
+    }
+});
+
+function changeVolume(value) {
+    volumeSliderOutput.innerHTML = value;
+
+    if (value === 0) {
         volumeBig.src = 'images/volume-big-0.png';
-    } else if (volumeSlider.value >= 1 && volumeSlider.value <= 32) {
+    } else if (value >= 1 && value <= 32) {
         volumeBig.src = 'images/volume-big-1-32.png';
-    } else if (volumeSlider.value >= 33 && volumeSlider.value <= 65) {
+    } else if (value >= 33 && value <= 65) {
         volumeBig.src = 'images/volume-big-33-65.png';
     } else {
         volumeBig.src = 'images/volume-big.png';
     }
-};
+}
 
 document.querySelector('#taskbar-internet').onclick = function () {document.querySelector('#network-menu').classList.toggle('network-menu-open')};
 
@@ -1015,3 +1070,25 @@ function toggleLangSelector() {
 function toggleVolumeMenu() {
     document.querySelector('#volume-menu').classList.toggle('volume-menu-open');
 }
+
+rollAllWindows.addEventListener('click', function() {
+    const windows = document.querySelectorAll('.window');
+    
+    let openWindowsCount = 0;
+    
+    windows.forEach(function(win) {
+        if (win.style.display !== 'none') {
+            openWindowsCount++;
+        }
+    });
+    
+    if (openWindowsCount === 0) {
+        windows.forEach(function(win) {
+            win.style.display = 'block';
+        });
+    } else {
+        windows.forEach(function(win) {
+            win.style.display = 'none';
+        });
+    }
+});

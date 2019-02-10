@@ -8,8 +8,7 @@ $start-menu-button-width-height: 48px;
 $tiles-container-height: 128px;
 
 body {
-  background: url("images/background.jpg") no-repeat fixed center;
-  object-fit: cover;
+  background-color: #6F9799;
   color: #fff;
   font-family: Roboto, sans-serif;
   overflow: hidden;
@@ -94,7 +93,8 @@ ul {
   z-index: 10;
   width: 1000px;
   height: 600px;
-  border: 1px solid lighten($blue-theme, 5%);
+  border: 1px solid $blue-theme;
+  border-top: 0;
   background: #fff;
 
   .window-header {
@@ -457,6 +457,22 @@ ul {
   }
 }
 
+.eso-window {
+  background-color: #000;
+
+  &::after {
+    content: "";
+    width: 50px;
+    height: 50px;
+    background-image: url("images/eso-loading.png");
+    background-size: 50px;
+    position: absolute;
+    bottom: 2vw;
+    right: 2vw;
+    animation: eso-loading 3s linear infinite;
+  }
+}
+
 footer {
   width: 100%;
   height: $footer-height;
@@ -468,6 +484,7 @@ footer {
   justify-content: space-between;
   z-index: 50;
   cursor: default;
+  box-sizing: border-box;
 
   * {
     height: 100%;
@@ -582,7 +599,7 @@ footer {
 
 #start-menu {
   position: absolute;
-  width: 637px;
+  width: 638px;
   background-color: fade_out($background, 0.1);
   border-top: 1px solid fade_out($gray, 0.5);
   border-right: 1px solid fade_out($gray, 0.5);
@@ -595,6 +612,7 @@ footer {
   display: flex;
   flex-direction: row;
   transition: 0.2s;
+  box-sizing: border-box;
 
   .changeable-width {
     transition: width 0.2s, background-color 0.2s !important;
@@ -798,22 +816,31 @@ footer {
   }
 }
 
+.notification-bar-open {
+  opacity: 1 !important;
+  width: 361px !important;
+  border-width: 1px !important;
+}
+
 #notification-bar {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: calc(100% - 30px);
-  width: 360px;
   background-color: fade_out($background, 0.1);
-  position: absolute;
-  top: 0;
   z-index: 8;
   border-left: 1px solid fade_out($gray, 0.4);
+  border-width: 0;
   cursor: default;
   overflow: hidden;
   white-space: nowrap;
-  right: -361px;
-  transition: right 0.3s;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  opacity: 0;
+  transition: all 0.3s;
+  box-sizing: border-box;
 
   #notification-center {
     margin: 20px 12px;
@@ -933,6 +960,7 @@ footer {
   background-color: rgba(40, 40, 40, 0.8);
   border-left: 1px solid fade_out($gray, 0.4);
   border-top: 1px solid fade_out($gray, 0.4);
+  border-width: 0;
   cursor: default;
   box-sizing: border-box;
   transition: 0.2s;
@@ -965,9 +993,10 @@ footer {
   opacity: 0;
   border-top: 1px solid fade_out($gray, 0.4);
   border-left: 1px solid fade_out($gray, 0.4);
+  border-width: 0;
   display: flex;
   flex-direction: column;
-  padding: 5px 0;
+  padding: 0;
   box-sizing: border-box;
   background-color: rgba(40, 40, 40, 0.87);
   transition: 0.2s;
@@ -999,7 +1028,8 @@ footer {
   background-color: rgba(40, 40, 40, 0.87);
   border-top: 1px solid fade_out($gray, 0.4);
   border-left: 1px solid fade_out($gray, 0.4);
-  padding: 12px;
+  border-width: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -1057,9 +1087,10 @@ footer {
   width: 360px;
   height: 0;
   opacity: 0;
-  padding: 12px 0;
+  padding: 0;
   border-top: 1px solid fade_out($gray, 0.4);
   border-left: 1px solid fade_out($gray, 0.4);
+  border-width: 0;
   background: rgba(40, 40, 40, 0.87);
   transition: 0.2s;
   box-sizing: border-box;
@@ -1097,32 +1128,54 @@ footer {
 .start-menu-open {
   height: 589px !important;
   opacity: 1 !important;
-}
-
-.notification-bar-open {
-  right: 0 !important;
+  border-width: 1px !important;
 }
 
 .calendar-open {
   height: 113px !important;
   opacity: 1 !important;
+  border-width: 1px !important;
 }
 
 .volume-menu-open {
   height: 101px !important;
   opacity: 1 !important;
+  border-width: 1px !important;
+  padding: 12px !important;
 }
 
 .lang-selector-open {
   height: 131px !important;
   opacity: 1 !important;
+  padding: 5px 0 !important;
+  border-width: 1px !important;
 }
 
 .network-menu-open {
   height: 80px !important;
   opacity: 1 !important;
+  border-width: 1px !important;
+  padding: 12px 0 !important;
+}
+
+@keyframes eso-loading {
+  from {transform: rotate(0)}
+  to {transform: rotate(360deg)}
 }
 
 @media all and (max-width: 800px) {
-  #start-menu {width: 100%;}
+  #start-menu, .app-list, .notification-bar-open, #calendar, #volume-menu, #lang-selector, #network-menu, .window {
+    width: 100% !important;
+  }
+
+  #start-menu-tiles {
+    display: none !important;
+  }
+
+  .window {
+    height: 100%;
+    left: 0;
+    top: 0;
+    border: 0;
+  }
 }
