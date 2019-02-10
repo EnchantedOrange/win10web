@@ -28,21 +28,34 @@ function setCookie(name, value, exdays) {
 function openDesktopApp() {
     openApp(false);
 }
+
 document.querySelectorAll('.desktop-icon').forEach(function(e) {
     e.addEventListener('click', openDesktopApp);
 });
+
 document.querySelectorAll('.taskbar-app').forEach(function(e) {
     e.addEventListener('click', openApp);
 });
+
 const minesweeper = document.querySelector('.minesweeper');
+
 minesweeper.removeEventListener('click', openDesktopApp);
 minesweeper.addEventListener('click', function() {
     openApp(false, 'minesweeper-window');
 });
+
 const snake = document.querySelector('.snake');
+
 snake.removeEventListener('click', openDesktopApp);
 snake.addEventListener('click', function() {
     openApp(false, 'snake-window');
+});
+
+const esoDesktopIcon = document.getElementsByClassName('eso')[0];
+
+esoDesktopIcon.removeEventListener('click', openDesktopApp);
+esoDesktopIcon.addEventListener('click', function() {
+    openApp(false, 'eso-window');
 });
 
 function openApp(isTaskbar, windowClass) {
