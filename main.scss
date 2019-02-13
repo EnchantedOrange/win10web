@@ -834,6 +834,12 @@ footer {
   }
 }
 
+.notification-bar-open {
+  opacity: 1 !important;
+  width: 361px !important;
+  border-width: 1px !important;
+}
+
 #notification-bar {
   display: flex;
   flex-direction: column;

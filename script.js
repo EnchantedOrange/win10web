@@ -38,12 +38,14 @@ document.querySelectorAll('.taskbar-app').forEach(function(e) {
 });
 
 const minesweeper = document.querySelector('.minesweeper');
+
 minesweeper.removeEventListener('click', openDesktopApp);
 minesweeper.addEventListener('click', function() {
     openApp(false, 'minesweeper-window');
 });
 
 const snake = document.querySelector('.snake');
+
 snake.removeEventListener('click', openDesktopApp);
 snake.addEventListener('click', function() {
     openApp(false, 'snake-window');
