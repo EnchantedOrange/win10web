@@ -55,6 +55,10 @@ esoDesktopIcon.addEventListener('click', function() {
     openApp(false, 'eso-window');
 });
 
+document.getElementById('parameters').addEventListener('click', function() {
+    openApp(false, 'parameters-window');
+});
+
 function openApp(isTaskbar, windowClass) {
     const appIco = event.currentTarget.firstElementChild.getAttribute('src');
     const appName = event.currentTarget.lastElementChild.innerHTML;
@@ -803,6 +807,34 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         windowObject.querySelector('.new-game').addEventListener('click', () => {
             newGame();
         });
+    } else if (windowClass === 'parameters-window') {
+        windowObject.innerHTML =
+            `
+            <div class="window-header">
+                <div class="window-header-container">
+                    <div class="window-header-logo">
+                        <img src="images/settings-icon.png">
+                    </div>
+                    <p>${appName}</p>
+                </div>
+                <div class="window-control-buttons">
+                    <div class="window-roll-button hover-colored"></div>
+                    <div class="window-expand-button hover-colored"></div>
+                    <div class="window-close-button"></div>
+                </div>
+            </div>
+            <div class="window-body">
+                <div>
+                    <p>Choose theme color:</p>
+                    <input type="color" value="#4daccf">
+                </div>
+            </div>
+            `;
+        windowObject.querySelector('input[type="color"]').addEventListener('change', function() {
+            document.documentElement.style.setProperty('--theme-color', this.value);
+            document.documentElement.style.setProperty('--theme-color-lighten', lightenDarken(this.value, 18));
+            document.documentElement.style.setProperty('--theme-color-darken', lightenDarken(this.value, -20));
+        });
     } else {
         windowObject.innerHTML =
             `
@@ -906,21 +938,27 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
     document.querySelector('body').appendChild(windowObject);
 
     startMenu.classList.remove('start-menu-open');
+
     for (let i = 0; i < widthChange.length; i++) {
         widthChange[i].classList.remove('side-buttons-container-open');
     }
+
     for (let i = 0; i < dirs.length; i++) {
         dirs[i].style.height = '0px';
     }
+
     for (let i = 0; i < dirArrows.length; i++) {
         dirArrows[i].src = 'images/roll-down-arrow.png';
     }
+
     for (let i = 0; i < dirImgs.length; i++) {
         dirImgs[i].src = 'images/start-menu-dir-closed.png';
     }
+
     for (let i = 0; i < popupMenus.length; i++) {
         popupMenus[i].classList.remove('popup-menu-open');
     }
+
     notificationBar.classList.remove('notification-bar-open');
 }
 
@@ -1092,3 +1130,39 @@ rollAllWindows.addEventListener('click', function() {
         });
     }
 });
+
+function lightenDarken(hex, lightenDarken) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+
+    var r = parseInt(result[1], 16);
+    var g = parseInt(result[2], 16);
+    var b = parseInt(result[3], 16);
+
+    r /= 255, g /= 255, b /= 255;
+    var max = Math.max(r, g, b), min = Math.min(r, g, b);
+    var h, s, l = (max + min) / 2;
+
+    if(max == min){
+        h = s = 0; // achromatic
+    } else {
+        var d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch(max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+    }
+
+    s = s*100;
+    s = Math.round(s);
+    l = l*100;
+    l = Math.round(l);
+    l += lightenDarken;
+    h = Math.round(360*h);
+
+    var colorInHSL = 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
+
+    return colorInHSL;
+}

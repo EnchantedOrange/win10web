@@ -2,10 +2,15 @@ $background: rgba(3, 4, 5, 0.85);
 $hover: rgba(87, 87, 86, 0.70);
 $gray: #7C7B79;
 $border-color: rgb(153, 153, 153);
-$blue-theme: #4DACCF;
 $footer-height: 30px;
 $start-menu-button-width-height: 48px;
 $tiles-container-height: 128px;
+
+:root {
+  --theme-color: #4DACCF;
+  --theme-color-lighten: hsl(196, 58%, 64%);
+  --theme-color-darken: hsl(196, 58%, 36%);
+}
 
 body {
   background-color: #6F9799;
@@ -31,7 +36,7 @@ ul {
 
 .hover-colored {
   &:hover {
-    background-color: lighten($blue-theme, 8%) !important;
+    background-color: var(--theme-color-lighten) !important;
     transition: background-color 0.2s !important;
   }
 }
@@ -80,8 +85,8 @@ ul {
     }
 
     &:hover {
-      background-color: fade_out($blue-theme, 0.7);
-      outline: 1px solid fade-out($blue-theme, 0.4);
+      background-color: fade-out(#4DACCF, 0.7);
+      outline: 1px solid #4DACCF;
     }
   }
 }
@@ -93,14 +98,14 @@ ul {
   z-index: 10;
   width: 1000px;
   height: 600px;
-  border: 1px solid $blue-theme;
+  border: 1px solid var(--theme-color);
   border-top: 0;
   background: #fff;
 
   .window-header {
     height: 30px;
     width: 100%;
-    background: $blue-theme;
+    background: var(--theme-color);
     display: flex;
     justify-content: space-between;
 
@@ -166,7 +171,7 @@ ul {
     background: url("images/window-turn-button.png") no-repeat center !important;
 
     &:hover {
-      background-color: lighten($blue-theme, 8%) !important;
+      background-color: var(--theme-color-lighten) !important;
       transition: background-color 0.2s !important;
     }
   }
@@ -473,6 +478,20 @@ ul {
   }
 }
 
+.parameters-window .window-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+  height: calc(100% - 30px);
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
 footer {
   width: 100%;
   height: $footer-height;
@@ -529,7 +548,7 @@ footer {
 
       &-open {
         width: 160px !important;
-        border-bottom: 2px solid $blue-theme;
+        border-bottom: 2px solid var(--theme-color);
   
         img {
           margin: 0 4px 0 8px !important;
@@ -608,7 +627,6 @@ footer {
   opacity: 0;
   height: 0;
   overflow: hidden;
-  z-index: 8;
   display: flex;
   flex-direction: row;
   transition: 0.2s;
@@ -738,7 +756,7 @@ footer {
         width: 32px;
         height: 32px;
         margin-right: 8px;
-        background-color: $blue-theme;
+        background-color: var(--theme-color);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -816,19 +834,12 @@ footer {
   }
 }
 
-.notification-bar-open {
-  opacity: 1 !important;
-  width: 361px !important;
-  border-width: 1px !important;
-}
-
 #notification-bar {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: calc(100% - 30px);
   background-color: fade_out($background, 0.1);
-  z-index: 8;
   border-left: 1px solid fade_out($gray, 0.4);
   border-width: 0;
   cursor: default;
@@ -975,7 +986,7 @@ footer {
   p {
     margin: 0 0 15px 15px;
     font-weight: 100;
-    color: $blue-theme;
+    color: var(--theme-color);
     font-size: 15px;
 
     &:hover {
@@ -1054,7 +1065,7 @@ footer {
       -moz-appearance: none;
       appearance: none;
       height: 2px;
-      background-color: $blue-theme;
+      background-color: var(--theme-color);
       outline: none;
       width: 60%;
 
@@ -1070,7 +1081,7 @@ footer {
       width: 8px;
       height: 24px;
       border-radius: 10px;
-      background-color: darken($blue-theme, 15%);
+      background-color: var(--theme-color-darken);
     }
 
     p {
@@ -1129,12 +1140,21 @@ footer {
   height: 589px !important;
   opacity: 1 !important;
   border-width: 1px !important;
+  z-index: 50;
+}
+
+.notification-bar-open {
+  opacity: 1 !important;
+  width: 361px !important;
+  border-width: 1px !important;
+  z-index: 50;
 }
 
 .calendar-open {
   height: 113px !important;
   opacity: 1 !important;
   border-width: 1px !important;
+  z-index: 50;
 }
 
 .volume-menu-open {
@@ -1142,6 +1162,7 @@ footer {
   opacity: 1 !important;
   border-width: 1px !important;
   padding: 12px !important;
+  z-index: 50;
 }
 
 .lang-selector-open {
@@ -1149,6 +1170,7 @@ footer {
   opacity: 1 !important;
   padding: 5px 0 !important;
   border-width: 1px !important;
+  z-index: 50;
 }
 
 .network-menu-open {
@@ -1156,6 +1178,7 @@ footer {
   opacity: 1 !important;
   border-width: 1px !important;
   padding: 12px 0 !important;
+  z-index: 50;
 }
 
 @keyframes eso-loading {
