@@ -1005,10 +1005,12 @@ document.querySelector('#taskbar-internet').onclick = function () {document.quer
 
 function selectLang(lang) {
     langIndicator.innerHTML = lang;
-    for (let i = 0; i < langSelectorBars.length; i++) {
-        langSelectorBars[i].style.backgroundColor = 'initial';
-    }
-    event.currentTarget.style.backgroundColor = 'rgb(77, 141, 164)';
+
+    langSelectorBars.forEach(function(bar) {
+        bar.classList.remove('lang-selector-bar-active');
+    });
+    
+    event.currentTarget.classList.add('lang-selector-bar-active');
 }
 
 function addZero(i) {

@@ -1032,6 +1032,10 @@ footer {
       text-align: center;
     }
   }
+
+  .lang-selector-bar-active {
+    background-color: var(--theme-color);
+  }
 }
 
 #volume-menu {
