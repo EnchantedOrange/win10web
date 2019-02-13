@@ -970,6 +970,10 @@ volumeSlider.addEventListener('change', function(event) {
     changeVolume(parseInt(event.currentTarget.value));
 });
 
+volumeSlider.addEventListener('mousemove', function(event) {
+    changeVolume(parseInt(event.currentTarget.value));
+});
+
 let volumeSliderSavedValue;
 
 volumeBig.addEventListener('click', function() {
