@@ -288,6 +288,11 @@ ul {
           background-image: url("images/minesweeper-flag.png"), linear-gradient(to bottom right, var(--minesweeper-skin)) !important;
         }
 
+        .question-flag {
+          background-image: url("images/question-mark.svg"), linear-gradient(to bottom right, var(--minesweeper-skin)) !important;
+          background-size: 20px, 25px;
+        }
+
         .mine-blown {
           background-image: url("images/minesweeper.png") !important;
           background-color: rgba(191, 63, 74, 0.69);

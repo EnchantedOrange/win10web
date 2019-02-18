@@ -112,7 +112,8 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                         </div>
                         <div class="mines-counter"></div>
                     </div>
-                    <div class="field"></div>
+                    <div class="field">
+                    </div>
                 </div>
                 <div class="store">
                     <div class="store-header">
@@ -292,8 +293,8 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
         function exposeSquare(q, ignoreAlreadyWorked = false) {
             if ((!alreadyWorked.includes(q) || ignoreAlreadyWorked) && !q.classList.contains('mine')) {
+                q.classList.add('exposed-dot');
                 if (q.innerHTML !== '') {
-                    q.classList.add('exposed-dot');
                     alreadyWorked.push(q);
                     if (ignoreAlreadyWorked) {
                         getSquaresAround(q).forEach(function(sq) {
@@ -301,12 +302,11 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                         });
                     }
                 } else {
-                    q.classList.add('exposed-dot');
                     alreadyWorked.push(q);
                     getSquaresAround(q).forEach(function(sq) {
                         if (sq.innerHTML === '') {
                             exposeSquare(sq);
-                        } else if(sq.classList.contains('flag')) {
+                        } else if(sq.classList.contains('flag') || sq.classList.contains('question-flag')) {
                             null;
                         } else {
                             sq.classList.add('exposed-dot');
@@ -343,14 +343,24 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
         function gameOver() {
             isGameOver = true;
+
             windowObject.querySelectorAll('.mine').forEach(function (d) {
                 d.classList.add('mine-blown');
             });
+
             windowObject.querySelectorAll('.flag').forEach(function(f) {
                 if (!f.classList.contains('mine')) {
                     f.innerHTML = '&#10006;';
                     f.style.fontSize = '30px';
                     f.style.color = '#c60000';
+                }
+            });
+
+            windowObject.querySelectorAll('.question-flag').forEach(function(q) {
+                if (!q.classList.contains('mine')) {
+                    q.innerHTML = '&#10006;';
+                    q.style.fontSize = '30px';
+                    q.style.color = '#c60000';
                 }
             });
         }
@@ -411,20 +421,27 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                         } else if (event.button === 2 && !event.shiftKey) {
                             //RMB
                             if (!this.classList.contains('exposed-dot')) {
-                                this.classList.toggle('flag');
-                                if (this.classList.contains('mine')) {
-                                    if (this.classList.contains('flag')) {
+                                if (!this.classList.contains('flag') && !this.classList.contains('question-flag')) {
+                                    this.classList.add('flag');
+
+                                    if (this.classList.contains('mine')) {
                                         exposedMines++;
-                                    } else {
-                                        exposedMines--;
                                     }
+                                } else if (this.classList.contains('flag')) {
+                                    this.classList.remove('flag');
+                                    this.classList.contains('mine') && exposedMines--;
+                                    this.classList.add('question-flag');
+                                } else if (this.classList.contains('question-flag')) {
+                                    this.classList.remove('question-flag');
                                 }
+
+                                console.log(exposedMines);
 
                                 setMinesCounter();
 
                                 checkFlaggedMines();
                             }
-                        } else if (event.button === 0 && !this.classList.contains('flag') && !event.shiftKey) {
+                        } else if (event.button === 0 && !this.classList.contains('flag') && !this.classList.contains('question-flag') && !event.shiftKey) {
                             //LMB
                             if (this.classList.contains('mine') && !this.classList.contains('flag')) {
                                 gameOver();
