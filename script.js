@@ -167,6 +167,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         try {
             if (document.cookie.split('skin=')[1].split(';')[0] === 'golden') {
                 currentSkin = goldenSkin;
+                windowObject.querySelector('#goldenskin').textContent = 'Toggle';
             }
         } catch(err) {
             null;
@@ -575,6 +576,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     currentSkin = goldenSkin;
                     setSkin();
                     setCookie('skin', 'golden', 100);
+                    windowObject.querySelector('#goldenskin').textContent = 'Toggle';
                 }
             }
         });
