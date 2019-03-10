@@ -6,6 +6,11 @@ $footer-height: 30px;
 $start-menu-button-width-height: 48px;
 $tiles-container-height: 128px;
 
+@font-face {
+  font-family: 'Pixel';
+  src: url('fonts/arcadeclassic.regular.ttf');
+}
+
 :root {
   --theme-color: #4DACCF;
   --theme-color-lighten: hsl(196, 58%, 64%);
@@ -357,6 +362,7 @@ ul {
 
   .window-body {
     background: #000;
+    font-family: 'Pixel';
 
     .field-dot {
       width: 10px;
@@ -509,6 +515,25 @@ ul {
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    input[type="color"] {
+      appearance: none;
+      padding: 0;
+      border: 0;
+      outline: none;
+      box-shadow: 0 0 12px 2px var(--theme-color);
+      border-radius: 4px;
+      width: 100px;
+      height: 50px;
+
+      &::-webkit-color-swatch-wrapper {
+        padding: 0;
+      }
+
+      &::-webkit-color-swatch {
+        border: 0;
+      }
+    }
   }
 }
 
