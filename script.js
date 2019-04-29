@@ -436,8 +436,6 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                                     this.classList.remove('question-flag');
                                 }
 
-                                console.log(exposedMines);
-
                                 setMinesCounter();
 
                                 checkFlaggedMines();
