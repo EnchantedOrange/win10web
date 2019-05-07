@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="artyom.js"></script>
     <meta charset="UTF-8">
     <title>Windows 10 web</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,9 +26,13 @@
 <footer>
     <div class="start-button hover" onclick="openStartMenu()"></div>
     <div class="taskbar-apps">
-        <div class="taskbar-app hover">
+        <div class="taskbar-app hover" data-class="explorer-window">
             <img src="images/explorer-taskbar.png">
             <p>Проводник</p>
+        </div>
+        <div class="taskbar-app hover" data-class="voiceinput-window">
+            <img src="images/microphone.svg">
+            <p>Голосовой ввод</p>
         </div>
     </div>
     <div class="taskbar-buttons">

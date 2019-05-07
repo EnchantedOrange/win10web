@@ -7,8 +7,8 @@ $start-menu-button-width-height: 48px;
 $tiles-container-height: 128px;
 
 @font-face {
-  font-family: 'Pixel';
-  src: url('fonts/arcadeclassic.regular.ttf');
+  font-family: "Pixel";
+  src: url("fonts/arcadeclassic.regular.ttf");
 }
 
 :root {
@@ -20,7 +20,7 @@ $tiles-container-height: 128px;
 body {
   background-color: #6F9799;
   color: #fff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   overflow: hidden;
   width: 100%;
   height: 100%;
@@ -362,7 +362,7 @@ ul {
 
   .window-body {
     background: #000;
-    font-family: 'Pixel';
+    font-family: "Pixel";
 
     .field-dot {
       width: 10px;
@@ -537,6 +537,33 @@ ul {
   }
 }
 
+.voiceinput-window .window-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  div {
+    width: 25vmin;
+    height: 25vmin;
+    box-shadow: 0 0 20px 3px var(--theme-color);
+    background: var(--theme-color) url("images/microphone.svg") no-repeat center;
+    background-size: 50%;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+
+  input {
+    border-radius: 5px;
+    border: 1px solid #333;
+    padding: 0.5rem 1rem;
+    cursor: default;
+    background: white;
+  }
+}
+
 footer {
   width: 100%;
   height: $footer-height;
@@ -577,7 +604,7 @@ footer {
       align-items: center;
       box-sizing: border-box;
       overflow: hidden;
-      transition: width 0.3s;
+      transition: width 0.2s;
 
       img {
         max-width: 16px;
@@ -589,6 +616,7 @@ footer {
         line-height: $footer-height;
         font-size: 13px;
         margin: 0;
+        width: 0;
       }
 
       &-open {
@@ -597,6 +625,10 @@ footer {
   
         img {
           margin: 0 4px 0 8px !important;
+        }
+
+        p {
+          width: 100%;
         }
       }
     }

@@ -25,34 +25,26 @@ function setCookie(name, value, exdays) {
     document.cookie = `${name}=${value};${expires};path=/`;
 }
 
-function openDesktopApp() {
-    openApp(false);
-}
-
-document.querySelectorAll('.desktop-icon').forEach(function(e) {
-    e.addEventListener('click', openDesktopApp);
-});
-
 document.querySelectorAll('.taskbar-app').forEach(function(e) {
-    e.addEventListener('click', openApp);
+    e.addEventListener('click', function() {
+        openApp(true, this.dataset.class);
+    });
 });
 
 const minesweeper = document.querySelector('.minesweeper');
 
-minesweeper.removeEventListener('click', openDesktopApp);
 minesweeper.addEventListener('click', function() {
     openApp(false, 'minesweeper-window');
 });
 
 const snake = document.querySelector('.snake');
 
-snake.removeEventListener('click', openDesktopApp);
 snake.addEventListener('click', function() {
     openApp(false, 'snake-window');
 });
 
 const esoDesktopIcon = document.getElementsByClassName('eso')[0];
-esoDesktopIcon.removeEventListener('click', openDesktopApp);
+
 esoDesktopIcon.addEventListener('click', function() {
     openApp(false, 'eso-window');
 });
@@ -875,6 +867,62 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             document.documentElement.style.setProperty('--theme-color', this.value);
             document.documentElement.style.setProperty('--theme-color-lighten', lightenDarken(this.value, 18));
             document.documentElement.style.setProperty('--theme-color-darken', lightenDarken(this.value, -20));
+        });
+    } else if (windowClass === 'voiceinput-window') {
+        windowObject.innerHTML = 
+        `
+        <div class="window-header">
+            <div class="window-header-container">
+                <div class="window-header-logo">
+                    <img src="${appIco}">
+                </div>
+                <p>${appName}</p>
+            </div>
+            <div class="window-control-buttons">
+                <div class="window-roll-button hover-colored"></div>
+                <div class="window-expand-button hover-colored"></div>
+                <div class="window-close-button"></div>
+            </div>
+        </div>
+        <div class="window-body">
+            <div>
+            </div>
+            <input type=text" disabled>
+        </div>
+        `;
+
+        const artyom = new Artyom();
+
+        artyom.addCommands({
+            indexes: ['пуск', 'start'],
+            action: function() {
+                openStartMenu();
+                artyom.fatality();
+            }
+        });
+
+        function startOneCommandArtyom() {
+            artyom.initialize({
+                lang: "ru-RU",
+                continuous: false,
+                listen: true,
+                debug: true,
+                speed: 1
+            }).then(function() {
+                console.log("Ready to work!");
+            });
+
+            artyom.redirectRecognizedTextOutput(function(recognized,isFinal) {
+                windowObject.getElementsByClassName('window-body')[0].children[1].value = recognized;
+            });
+        };
+
+        windowObject.getElementsByClassName('window-body')[0].children[0].addEventListener('click', function() {
+            startOneCommandArtyom();
+        });
+
+        windowObject.getElementsByClassName('window-close-button')[0].addEventListener('click', function() {
+            artyom.fatality();
         });
     } else {
         windowObject.innerHTML =
