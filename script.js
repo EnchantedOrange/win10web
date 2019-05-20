@@ -1116,18 +1116,18 @@ function getMonthName(i) {
 }
 
 let now = new Date();
-document.querySelector('#insert-time').innerHTML = now.toLocaleTimeString();
-document.querySelector('#insert-date').innerHTML = String(now.getDate()) + ' ' + getMonthName(now.getMonth()) + ' ' + now.getFullYear() + ' г.';
-document.querySelector('#taskbar-time').innerHTML = String(now.getHours()) + ':' + String(addZero(now.getMinutes()));
+updateTime();
+
+setInterval(() => {
+    now.setSeconds(now.getSeconds() + 1);
+    updateTime();
+}, 1000);
 
 function updateTime() {
-    let now = new Date();
     document.querySelector('#insert-time').innerHTML = now.toLocaleTimeString();
     document.querySelector('#insert-date').innerHTML = String(now.getDate()) + ' ' + getMonthName(now.getMonth()) + ' ' + now.getFullYear() + ' г.';
     document.querySelector('#taskbar-time').innerHTML = String(now.getHours()) + ':' + String(addZero(now.getMinutes()));
 }
-
-setInterval(updateTime, 1000);
 
 function openSideButtonsContainer() {
     for (let i = 0; i < widthChange.length; i++) {

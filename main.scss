@@ -557,10 +557,14 @@ ul {
 
   input {
     border-radius: 5px;
-    border: 1px solid #333;
+    border: 1px solid #4e4e4e;
     padding: 0.5rem 1rem;
     cursor: default;
     background: white;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    font-size: 1rem;
   }
 }
 
