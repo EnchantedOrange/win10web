@@ -18,7 +18,9 @@ $tiles-container-height: 128px;
 }
 
 body {
-  background-color: #6F9799;
+  background-image: url('images/wallpaper.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
   color: #fff;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   overflow: hidden;
