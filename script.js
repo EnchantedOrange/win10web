@@ -406,6 +406,30 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         }
 
         function setEventListenersForDots() {
+            function RMBevent(sq) {
+                if (!sq.classList.contains('exposed-dot')) {
+                    if (!sq.classList.contains('flag') && !sq.classList.contains('question-flag')) {
+                        sq.classList.add('flag');
+
+                        if (sq.classList.contains('mine')) {
+                            exposedMines++;
+                        }
+                    } else if (sq.classList.contains('flag')) {
+                        sq.classList.remove('flag');
+                        sq.classList.contains('mine') && exposedMines--;
+                        sq.classList.add('question-flag');
+                    } else if (sq.classList.contains('question-flag')) {
+                        sq.classList.remove('question-flag');
+                    }
+
+                    setMinesCounter();
+
+                    checkFlaggedMines();
+                }
+            }
+
+            let touchTimer;
+
             dots.forEach(function(d) {
                 d.addEventListener('mousedown', function(event) {
                     if (!isGameOver) {
@@ -413,25 +437,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                             exposeDotsAround(this);
                         } else if (event.button === 2 && !event.shiftKey) {
                             //RMB
-                            if (!this.classList.contains('exposed-dot')) {
-                                if (!this.classList.contains('flag') && !this.classList.contains('question-flag')) {
-                                    this.classList.add('flag');
-
-                                    if (this.classList.contains('mine')) {
-                                        exposedMines++;
-                                    }
-                                } else if (this.classList.contains('flag')) {
-                                    this.classList.remove('flag');
-                                    this.classList.contains('mine') && exposedMines--;
-                                    this.classList.add('question-flag');
-                                } else if (this.classList.contains('question-flag')) {
-                                    this.classList.remove('question-flag');
-                                }
-
-                                setMinesCounter();
-
-                                checkFlaggedMines();
-                            }
+                            RMBevent(this);
                         } else if (event.button === 0 && !this.classList.contains('flag') && !this.classList.contains('question-flag') && !event.shiftKey) {
                             //LMB
                             if (this.classList.contains('mine') && !this.classList.contains('flag')) {
@@ -442,13 +448,23 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                         }
                     }
                 });
+
                 d.addEventListener('mouseup', function(event) {
                     dots.forEach(function(dot) {
                         dot.style.backgroundImage = '';
                     });
                 });
+
                 d.addEventListener('dblclick', function(event) {
                     exposeDotsAround(this);
+                });
+
+                d.addEventListener('touchstart', function() {
+                    touchTimer = setTimeout(RMBevent, 300, this);
+                });
+
+                d.addEventListener('touchend', function() {
+                    clearTimeout(touchTimer);
                 });
             });
         }
