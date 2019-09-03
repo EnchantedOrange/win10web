@@ -17,6 +17,10 @@ $tiles-container-height: 128px;
   --theme-color-darken: hsl(196, 58%, 36%);
 }
 
+html, body {
+  height: 100vh;
+}
+
 body {
   background-image: url('images/wallpaper.jpg');
   background-size: cover;
@@ -169,6 +173,10 @@ ul {
       }
     }
   }
+
+  .window-body {
+    overflow: auto;
+  }
 }
 
 .window-opened {
@@ -245,6 +253,7 @@ ul {
               box-shadow: 0 0 8px 2px rgba(108, 108, 108, 0.71);
               border-radius: 3px;
               cursor: pointer;
+              z-index: 10;
   
               li {
                 text-align: center;
@@ -583,6 +592,7 @@ footer {
   z-index: 50;
   cursor: default;
   box-sizing: border-box;
+  overflow: auto;
 
   * {
     height: 100%;
@@ -592,6 +602,7 @@ footer {
     width: 36px;
     background: url("images/start-button.png") no-repeat center;
     margin-right: 3px;
+    flex-shrink: 0;
 
     &:hover {
       background: url("images/start-button-hover.png") no-repeat center;
@@ -611,7 +622,6 @@ footer {
       align-items: center;
       box-sizing: border-box;
       overflow: hidden;
-      transition: width 0.2s;
 
       img {
         max-width: 16px;
@@ -713,7 +723,6 @@ footer {
   overflow: hidden;
   display: flex;
   flex-direction: row;
-  transition: 0.2s;
   box-sizing: border-box;
 
   .changeable-width {
@@ -732,7 +741,6 @@ footer {
     overflow: hidden;
     height: 0;
     opacity: 0;
-    transition: 0.2s;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -868,7 +876,6 @@ footer {
 
     .hidden-dir {
       overflow: hidden;
-      transition: height 0.2s;
 
       li {
         padding-left: 24px;
@@ -940,7 +947,6 @@ footer {
   right: 0;
   width: 0;
   opacity: 0;
-  transition: all 0.3s;
   box-sizing: border-box;
 
   #notification-center {
@@ -990,7 +996,6 @@ footer {
       margin: 2px;
       overflow: hidden;
       height: $tiles-container-height;
-      transition: height 0.2s;
       white-space: normal;
 
       div {
@@ -1064,7 +1069,6 @@ footer {
   border-width: 0;
   cursor: default;
   box-sizing: border-box;
-  transition: 0.2s;
   opacity: 0;
 
   h1 {
@@ -1100,7 +1104,6 @@ footer {
   padding: 0;
   box-sizing: border-box;
   background-color: rgba(40, 40, 40, 0.87);
-  transition: 0.2s;
 
   & > div {
     width: 100%;
@@ -1138,7 +1141,6 @@ footer {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  transition: 0.2s;
 
   & > p {
     flex-basis: 50%;
@@ -1197,7 +1199,6 @@ footer {
   border-left: 1px solid fade_out($gray, 0.4);
   border-width: 0;
   background: rgba(40, 40, 40, 0.87);
-  transition: 0.2s;
   box-sizing: border-box;
 
   #current-network {
@@ -1280,9 +1281,10 @@ footer {
   to {transform: rotate(360deg)}
 }
 
-@media all and (max-width: 800px) {
+@media all and (max-width: 1000px) {
   #start-menu, .app-list, .notification-bar-open, #calendar, #volume-menu, #lang-selector, #network-menu, .window {
     width: 100% !important;
+    max-height: calc(100vh - 30px);
   }
 
   #start-menu-tiles {
@@ -1290,9 +1292,17 @@ footer {
   }
 
   .window {
-    height: 100%;
+    height: 100vh;
     left: 0;
     top: 0;
     border: 0;
+
+    .window-body {
+      max-height: calc(100vh - 30px);
+    }
+
+    .window-expand-button {
+      display: none;
+    }
   }
 }

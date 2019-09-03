@@ -28,7 +28,7 @@ function setCookie(name, value, exdays) {
 document.querySelectorAll('.taskbar-app').forEach(function(e) {
     e.addEventListener('click', function() {
         openApp(true, this.dataset.class);
-    });
+    }, {once: true});
 });
 
 document.getElementsByClassName('minesweeper')[0].addEventListener('click', function() {
@@ -1038,10 +1038,6 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
     }
 
     footerAppBar.addEventListener('click', toggleWindow);
-
-    if (isTaskbar) {
-        footerAppBar.removeEventListener('click', openApp);
-    }
 
     document.querySelector('body').appendChild(windowObject);
 
