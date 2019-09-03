@@ -469,6 +469,10 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 d.addEventListener('touchend', function() {
                     clearTimeout(touchTimer);
                 });
+
+                d.addEventListener('touchmove', function() {
+                    clearTimeout(touchTimer);
+                });
             });
         }
 
