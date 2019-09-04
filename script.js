@@ -458,9 +458,14 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 });
 
                 d.addEventListener('touchstart', function() {
-                    let funcToExec = RMBevent;
-                    if (this.classList.contains('exposed-dot')) {
-                        funcToExec = exposeDotsAround;
+                    function funcToExec(sq) {
+                    	if (sq.classList.contains('exposed-dot')) {
+                    		exposeDotsAround(sq);
+                    	} else {
+                    		RMBevent(sq);
+                    	}
+
+                    	window.navigator.vibrate(50);
                     }
 
                     touchTimer = setTimeout(funcToExec, 300, this);
