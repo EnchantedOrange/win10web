@@ -718,12 +718,16 @@ footer {
   border-right: 1px solid fade_out($gray, 0.5);
   left: 0;
   bottom: $footer-height;
-  opacity: 0;
-  height: 0;
+  height: 589px;
   overflow: hidden;
-  display: flex;
+  display: none;
   flex-direction: row;
   box-sizing: border-box;
+  z-index: 50;
+
+  &.start-menu-open {
+    display: flex;
+  }
 
   .changeable-width {
     transition: width 0.2s, background-color 0.2s !important;
@@ -925,29 +929,26 @@ footer {
   }
 }
 
-.notification-bar-open {
-  opacity: 1 !important;
-  width: 361px !important;
-  border-width: 1px !important;
-}
-
 #notification-bar {
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: space-between;
   height: calc(100% - 30px);
   background-color: fade_out($background, 0.1);
   border-left: 1px solid fade_out($gray, 0.4);
-  border-width: 0;
   cursor: default;
   overflow: hidden;
   white-space: nowrap;
   position: absolute;
   top: 0;
   right: 0;
-  width: 0;
-  opacity: 0;
+  width: 361px;
   box-sizing: border-box;
+  z-index: 50;
+
+  &.notification-bar-open {
+    display: flex;
+  }
 
   #notification-center {
     margin: 20px 12px;
@@ -1058,18 +1059,22 @@ footer {
 }
 
 #calendar {
+  display: none;
   position: absolute;
   bottom: $footer-height;
   right: 0;
   width: 361px;
-  height: 0;
+  height: 113px;
   background-color: rgba(40, 40, 40, 0.8);
   border-left: 1px solid fade_out($gray, 0.4);
   border-top: 1px solid fade_out($gray, 0.4);
-  border-width: 0;
   cursor: default;
   box-sizing: border-box;
-  opacity: 0;
+  z-index: 50;
+
+  &.calendar-open {
+    display: block;
+  }
 
   h1 {
     margin: 15px 0 0 15px;
@@ -1094,16 +1099,19 @@ footer {
   right: 0;
   bottom: $footer-height;
   width: 301px;
-  height: 0;
-  opacity: 0;
+  height: 131px;
   border-top: 1px solid fade_out($gray, 0.4);
   border-left: 1px solid fade_out($gray, 0.4);
-  border-width: 0;
-  display: flex;
+  display: none;
   flex-direction: column;
-  padding: 0;
+  padding: 5px 0;
   box-sizing: border-box;
   background-color: rgba(40, 40, 40, 0.87);
+  z-index: 50;
+
+  &.lang-selector-open {
+    display: flex;
+  }
 
   & > div {
     width: 100%;
@@ -1131,16 +1139,19 @@ footer {
   bottom: $footer-height;
   right: 0;
   width: 361px;
-  height: 0;
-  opacity: 0;
+  height: 101px;
   background-color: rgba(40, 40, 40, 0.87);
   border-top: 1px solid fade_out($gray, 0.4);
   border-left: 1px solid fade_out($gray, 0.4);
-  border-width: 0;
-  padding: 0;
-  display: flex;
+  padding: 12px;
+  display: none;
   flex-direction: column;
   justify-content: space-around;
+  z-index: 50;
+
+  &.volume-menu-open {
+    display: flex;
+  }
 
   & > p {
     flex-basis: 50%;
@@ -1188,18 +1199,22 @@ footer {
 }
 
 #network-menu {
+  display: none;
   position: absolute;
   bottom: $footer-height;
   right: 0;
   width: 360px;
-  height: 0;
-  opacity: 0;
-  padding: 0;
+  height: 80px;
+  padding: 12px 0;
   border-top: 1px solid fade_out($gray, 0.4);
   border-left: 1px solid fade_out($gray, 0.4);
-  border-width: 0;
   background: rgba(40, 40, 40, 0.87);
   box-sizing: border-box;
+  z-index: 50;
+
+  &.network-menu-open {
+    display: block;
+  }
 
   #current-network {
     width: 100%;
@@ -1229,51 +1244,6 @@ footer {
       }
     }
   }
-}
-
-.start-menu-open {
-  height: 589px !important;
-  opacity: 1 !important;
-  border-width: 1px !important;
-  z-index: 50;
-}
-
-.notification-bar-open {
-  opacity: 1 !important;
-  width: 361px !important;
-  border-width: 1px !important;
-  z-index: 50;
-}
-
-.calendar-open {
-  height: 113px !important;
-  opacity: 1 !important;
-  border-width: 1px !important;
-  z-index: 50;
-}
-
-.volume-menu-open {
-  height: 101px !important;
-  opacity: 1 !important;
-  border-width: 1px !important;
-  padding: 12px !important;
-  z-index: 50;
-}
-
-.lang-selector-open {
-  height: 131px !important;
-  opacity: 1 !important;
-  padding: 5px 0 !important;
-  border-width: 1px !important;
-  z-index: 50;
-}
-
-.network-menu-open {
-  height: 80px !important;
-  opacity: 1 !important;
-  border-width: 1px !important;
-  padding: 12px 0 !important;
-  z-index: 50;
 }
 
 @keyframes eso-loading {
