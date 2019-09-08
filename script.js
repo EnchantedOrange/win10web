@@ -7,12 +7,12 @@ const dirImgs = document.querySelectorAll('.dir-img');
 const notificationBar = document.getElementById('notification-bar');
 const notificationTilesContainer = document.getElementById('notification-bar-tiles-container');
 const calendar = document.getElementById('calendar');
-const langIndicator = document.getElementById('lang-indicator');
-const langSelectorBars = document.querySelectorAll('.lang-selector-bar');
+const volumeMenu = document.getElementById('volume-menu');
+const networkMenu = document.getElementById('network-menu');
+const langSelector = document.getElementById('lang-selector');
 const volumeSlider = document.getElementById('volume-slider');
 const volumeBig = document.getElementById('volume-big');
-const volumeSliderOutput = document.getElementById('volume-slider-output');
-const rollAllWindows = document.getElementsByClassName('roll-all-windows')[0];
+const shellExperience = document.querySelectorAll('[tabindex]');
 
 
 
@@ -896,62 +896,6 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             document.documentElement.style.setProperty('--theme-color-lighten', lightenDarken(this.value, 18));
             document.documentElement.style.setProperty('--theme-color-darken', lightenDarken(this.value, -20));
         });
-    } else if (windowClass === 'voiceinput-window') {
-        windowObject.innerHTML = 
-        `
-        <div class="window-header">
-            <div class="window-header-container">
-                <div class="window-header-logo">
-                    <img src="${appIco}">
-                </div>
-                <p>${appName}</p>
-            </div>
-            <div class="window-control-buttons">
-                <div class="window-roll-button hover-colored"></div>
-                <div class="window-expand-button hover-colored"></div>
-                <div class="window-close-button"></div>
-            </div>
-        </div>
-        <div class="window-body">
-            <div>
-            </div>
-            <input type=text" disabled>
-        </div>
-        `;
-
-        const artyom = new Artyom();
-
-        artyom.addCommands({
-            indexes: ['пуск', 'start'],
-            action: function() {
-                openStartMenu();
-                artyom.fatality();
-            }
-        });
-
-        function startOneCommandArtyom() {
-            artyom.initialize({
-                lang: "ru-RU",
-                continuous: false,
-                listen: true,
-                debug: true,
-                speed: 1
-            }).then(function() {
-                console.log("Ready to work!");
-            });
-
-            artyom.redirectRecognizedTextOutput(function(recognized,isFinal) {
-                windowObject.getElementsByClassName('window-body')[0].children[1].value = recognized;
-            });
-        };
-
-        windowObject.getElementsByClassName('window-body')[0].children[0].addEventListener('click', function() {
-            startOneCommandArtyom();
-        });
-
-        windowObject.getElementsByClassName('window-close-button')[0].addEventListener('click', function() {
-            artyom.fatality();
-        });
     } else {
         windowObject.innerHTML =
             `
@@ -984,6 +928,10 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         }
         windowObject.classList.toggle('window-opened');
     }
+
+    winHeader.addEventListener('dblclick', function() {
+        rollOrExpandWindow(windowObject);
+    });
     
     function getCoords(elem) {
         let box = elem.getBoundingClientRect();
@@ -992,11 +940,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             left: box.left + pageXOffset
         };
     }
-    
-    winHeader.addEventListener('dblclick', function() {
-        rollOrExpandWindow(windowObject);
-    });
-    
+
     winHeader.addEventListener('mousedown', function(e) {
         let coords = getCoords(winHeader);
         let shiftX = e.pageX - coords.left;
@@ -1033,7 +977,9 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             document.querySelector('.taskbar-apps').removeChild(footerAppBar);
         } else {
             footerAppBar.classList.remove('taskbar-app-open');
-            footerAppBar.addEventListener('click', openApp);
+            footerAppBar.addEventListener('click', () => {
+                openApp(isTaskbar, windowClass);
+            }, {once: true});
         }
         document.querySelector('body').removeChild(windowObject);
     });
@@ -1050,7 +996,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
     document.querySelector('body').appendChild(windowObject);
 
-    startMenu.classList.remove('start-menu-open');
+    startMenu.classList.remove('in-focus');
 
     for (let i = 0; i < widthChange.length; i++) {
         widthChange[i].classList.remove('side-buttons-container-open');
@@ -1072,10 +1018,96 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         popupMenus[i].classList.remove('popup-menu-open');
     }
 
-    notificationBar.classList.remove('notification-bar-open');
+    notificationBar.classList.remove('in-focus');
 }
 
 
+
+document.getElementsByClassName('volume')[0].addEventListener('click', () => {
+    volumeMenu.classList.toggle('in-focus');
+    volumeMenu.focus();
+});
+
+document.getElementsByClassName('internet')[0].addEventListener('click', () => {
+    networkMenu.classList.toggle('in-focus');
+    networkMenu.focus();
+});
+
+document.getElementsByClassName('lang')[0].addEventListener('click', () => {
+    langSelector.classList.toggle('in-focus');
+    langSelector.focus();
+});
+
+document.getElementsByClassName('time')[0].addEventListener('click', () => {
+    calendar.classList.toggle('in-focus');
+    calendar.focus();
+});
+
+document.getElementsByClassName('notification-bar-open-button')[0].addEventListener('click', () => {
+    notificationBar.classList.toggle('in-focus');
+    notificationBar.focus();
+});
+
+shellExperience.forEach(e => {
+    e.addEventListener('blur', function() {
+        this.classList.remove('in-focus');
+    });
+});
+
+document.getElementsByClassName('start-button')[0].addEventListener('click', () => {
+    startMenu.classList.toggle('in-focus');
+    if (!startMenu.classList.contains('in-focus')) {
+        for (let i = 0; i < widthChange.length; i++) {
+            widthChange[i].classList.remove('side-buttons-container-open');
+        }
+        for (let i = 0; i < dirs.length; i++) {
+            dirs[i].style.height = '0px';
+        }
+        for (let i = 0; i < dirArrows.length; i++) {
+            dirArrows[i].src = 'images/roll-down-arrow.png';
+        }
+        for (let i = 0; i < dirImgs.length; i++) {
+            dirImgs[i].src = 'images/start-menu-dir-closed.png';
+        }
+        for (let i = 0; i < popupMenus.length; i++) {
+            popupMenus[i].classList.remove('popup-menu-open');
+        }
+    }
+    notificationBar.classList.remove('in-focus');
+});
+
+document.getElementById('open-tooltips').addEventListener('click', () => {
+    for (let i = 0; i < widthChange.length; i++) {
+        widthChange[i].classList.toggle('side-buttons-container-open');
+    }
+});
+
+Array.from(document.getElementsByClassName('start-menu-dir')).forEach((dir) => {
+    dir.addEventListener('click', () => {
+        let hiddenDir = event.currentTarget.nextElementSibling;
+        let dirImg = event.currentTarget.firstElementChild.firstElementChild;
+        let arrowImg = event.currentTarget.children[1];
+
+        if (hiddenDir.style.height === '0px') {
+            hiddenDir.style.height = (hiddenDir.children.length * 36).toString() + 'px';
+            dirImg.src = 'images/start-menu-dir-open.png';
+            arrowImg.src = 'images/roll-up-arrow.png'
+        } else {
+            hiddenDir.style.height = '0';
+            dirImg.src = 'images/start-menu-dir-closed.png';
+            arrowImg.src = 'images/roll-down-arrow.png'
+        }
+    });
+});
+
+document.getElementById('toggle-notification-tiles').addEventListener('click', () => {
+    notificationTilesContainer.classList.toggle('container-small');
+    if (notificationTilesContainer.classList.contains('container-small')) {
+        event.currentTarget.innerHTML = 'Развернуть';
+    } else {
+        event.currentTarget.innerHTML = 'Свернуть';
+    }
+});
 
 volumeSlider.addEventListener('change', function(event) {
     changeVolume(parseInt(event.currentTarget.value));
@@ -1099,7 +1131,7 @@ volumeBig.addEventListener('click', function() {
 });
 
 function changeVolume(value) {
-    volumeSliderOutput.innerHTML = value;
+    document.getElementById('volume-slider-output').innerHTML = value;
 
     if (value === 0) {
         volumeBig.src = 'images/volume-big-0.png';
@@ -1112,14 +1144,10 @@ function changeVolume(value) {
     }
 }
 
-document.getElementById('taskbar-internet').addEventListener('click', function() {
-    document.getElementById('network-menu').classList.toggle('network-menu-open');
-});
-
 function selectLang(lang) {
-    langIndicator.innerHTML = lang;
+    document.getElementById('lang-indicator').innerHTML = lang;
 
-    langSelectorBars.forEach(function(bar) {
+    document.querySelectorAll('.lang-selector-bar').forEach(function(bar) {
         bar.classList.remove('lang-selector-bar-active');
     });
     
@@ -1153,54 +1181,6 @@ function updateTime() {
     document.querySelector('#taskbar-time').innerHTML = String(now.getHours()) + ':' + String(addZero(now.getMinutes()));
 }
 
-function openSideButtonsContainer() {
-    for (let i = 0; i < widthChange.length; i++) {
-        widthChange[i].classList.toggle('side-buttons-container-open');
-    }
-}
-
-function openStartMenu() {
-    startMenu.classList.toggle('start-menu-open');
-    if (!startMenu.classList.contains('start-menu-open')) {
-        for (let i = 0; i < widthChange.length; i++) {
-            widthChange[i].classList.remove('side-buttons-container-open');
-        }
-        for (let i = 0; i < dirs.length; i++) {
-            dirs[i].style.height = '0px';
-        }
-        for (let i = 0; i < dirArrows.length; i++) {
-            dirArrows[i].src = 'images/roll-down-arrow.png';
-        }
-        for (let i = 0; i < dirImgs.length; i++) {
-            dirImgs[i].src = 'images/start-menu-dir-closed.png';
-        }
-        for (let i = 0; i < popupMenus.length; i++) {
-            popupMenus[i].classList.remove('popup-menu-open');
-        }
-    }
-    notificationBar.classList.remove('notification-bar-open');
-}
-
-function toggleCalendar() {
-    calendar.classList.toggle('calendar-open');
-}
-
-function toggleDir() {
-    let hiddenDir = event.currentTarget.nextElementSibling;
-    let dirImg = event.currentTarget.firstElementChild.firstElementChild;
-    let arrowImg = event.currentTarget.children[1];
-
-    if (hiddenDir.style.height === '0px') {
-        hiddenDir.style.height = (hiddenDir.children.length * 36).toString() + 'px';
-        dirImg.src = 'images/start-menu-dir-open.png';
-        arrowImg.src = 'images/roll-up-arrow.png'
-    } else {
-        hiddenDir.style.height = '0';
-        dirImg.src = 'images/start-menu-dir-closed.png';
-        arrowImg.src = 'images/roll-down-arrow.png'
-    }
-}
-
 document.querySelectorAll('.toggle-popup')[0].addEventListener('click', function() {
     document.querySelector('.user-popup').classList.toggle('popup-menu-open');
 });
@@ -1209,28 +1189,7 @@ document.querySelectorAll('.toggle-popup')[1].addEventListener('click', function
     document.querySelector('.power-popup').classList.toggle('popup-menu-open');
 });
 
-function toggleNotificationBar() {
-    notificationBar.classList.toggle('notification-bar-open');
-}
-
-function notificationTilesToggle() {
-    notificationTilesContainer.classList.toggle('container-small');
-    if (notificationTilesContainer.classList.contains('container-small')) {
-        event.currentTarget.innerHTML = 'Развернуть';
-    } else {
-        event.currentTarget.innerHTML = 'Свернуть';
-    }
-}
-
-function toggleLangSelector() {
-    document.querySelector('#lang-selector').classList.toggle('lang-selector-open');
-}
-
-function toggleVolumeMenu() {
-    document.querySelector('#volume-menu').classList.toggle('volume-menu-open');
-}
-
-rollAllWindows.addEventListener('click', function() {
+document.getElementsByClassName('roll-all-windows')[0].addEventListener('click', function() {
     const windows = document.querySelectorAll('.window');
     
     let openWindowsCount = 0;

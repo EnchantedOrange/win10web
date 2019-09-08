@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="artyom.js"></script>
     <meta charset="UTF-8">
     <title>Windows 10 web</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,27 +28,23 @@
     </div>
 </div>
 <footer>
-    <div class="start-button hover" onclick="openStartMenu()"></div>
+    <div class="start-button hover"></div>
     <div class="taskbar-apps">
         <div class="taskbar-app hover" data-class="explorer-window">
             <img src="images/explorer-taskbar.png">
             <p>Проводник</p>
         </div>
-        <div class="taskbar-app hover" data-class="voiceinput-window">
-            <img src="images/microphone.svg">
-            <p>Голосовой ввод</p>
-        </div>
     </div>
     <div class="taskbar-buttons">
-        <div id="taskbar-internet" class="internet hover"></div>
-        <div class="volume hover" onclick="toggleVolumeMenu()"></div>
-        <div class="lang hover" onclick="toggleLangSelector()"><p id="lang-indicator">ENG</p></div>
-        <div class="time hover" onclick="toggleCalendar()"><p id="taskbar-time"></p></div>
-        <div class="notification-bar-open-button hover" onclick="toggleNotificationBar()"></div>
+        <div class="internet hover"></div>
+        <div class="volume hover"></div>
+        <div class="lang hover"><p id="lang-indicator">ENG</p></div>
+        <div class="time hover"><p id="taskbar-time"></p></div>
+        <div class="notification-bar-open-button hover"></div>
     </div>
     <div class="roll-all-windows hover"></div>
 </footer>
-<div id="start-menu">
+<div id="start-menu" tabindex="0">
     <div class="popup-menu user-popup">
         <div class="hover"><p>Изменить параметры учетной записи</p></div>
         <div class="hover"><p>Заблокировать</p></div>
@@ -61,7 +56,7 @@
         <div class="hover"><p>Перезагрузка</p></div>
     </div>
     <div class="changeable-width" id="side-buttons-container">
-        <div class="start-menu-button changeable-width hover" onclick="openSideButtonsContainer()"><p>ПУСК</p></div>
+        <div id="open-tooltips" class="start-menu-button changeable-width hover"><p>ПУСК</p></div>
         <div id="start-menu-buttons-container">
             <div class="start-menu-button changeable-width hover toggle-popup"><p>Пользователь</p></div>
             <div class="start-menu-button changeable-width hover" id="parameters"><p>Параметры</p></div>
@@ -88,7 +83,7 @@
         </ul>
         <h4 class="hover">M</h4>
         <ul>
-            <li class="start-menu-dir hover" onclick="toggleDir()">
+            <li class="start-menu-dir hover">
                 <div>
                     <img src="images/start-menu-dir-closed.png" class="dir-img ico">
                     Microsoft Office 2016
@@ -145,14 +140,14 @@
         </div>
     </div>
 </div>
-<div id="notification-bar">
+<div id="notification-bar" tabindex="0">
     <div id="notification-center">
         <h2>ЦЕНТР УВЕДОМЛЕНИЙ</h2>
         <p>Новых уведомлений нет</p>
     </div>
     <div id="notification-tiles">
         <div id="toggle-tiles">
-            <p onclick="notificationTilesToggle()">Свернуть</p>
+            <p id="toggle-notification-tiles">Свернуть</p>
         </div>
         <div id="notification-bar-tiles-container" class="container">
             <div id="tablet-mode"><p>Режим планшета</p></div>
@@ -165,11 +160,11 @@
         </div>
     </div>
 </div>
-<div id="calendar">
+<div id="calendar" tabindex="0">
     <h1 id="insert-time"></h1>
     <p id="insert-date"></p>
 </div>
-<div id="lang-selector">
+<div id="lang-selector" tabindex="0">
     <div class="lang-selector-bar hover" onclick="selectLang('РУС')">
         <div class="lang-label">РУС<br>RU</div>
         <div>Русский<br>Русская клавиатура</div>
@@ -179,7 +174,7 @@
         <div>Английский (США)<br>США клавиатура</div>
     </div>
 </div>
-<div id="volume-menu">
+<div id="volume-menu" tabindex="0">
     <p>Динамики</p>
     <div>
         <img id="volume-big" src="images/volume-big.png">
@@ -187,7 +182,7 @@
         <p id="volume-slider-output">100</p>
     </div>
 </div>
-<div id="network-menu">
+<div id="network-menu" tabindex="0">
     <div id="current-network" class="hover">
         <img src="images/network-big.png">
         <div>

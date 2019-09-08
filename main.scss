@@ -52,6 +52,13 @@ ul {
   }
 }
 
+.in-focus {
+  transform: scale(1) !important;
+  &:focus {
+    outline: none;
+  }
+}
+
 .start-menu-button {
   width: $start-menu-button-width-height;
   height: $start-menu-button-width-height;
@@ -549,37 +556,6 @@ ul {
   }
 }
 
-.voiceinput-window .window-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-
-  div {
-    width: 25vmin;
-    height: 25vmin;
-    box-shadow: 0 0 20px 3px var(--theme-color);
-    background: var(--theme-color) url("images/microphone.svg") no-repeat center;
-    background-size: 50%;
-    border-radius: 50%;
-    cursor: pointer;
-    margin-bottom: 1rem;
-  }
-
-  input {
-    border-radius: 5px;
-    border: 1px solid #4e4e4e;
-    padding: 0.5rem 1rem;
-    cursor: default;
-    background: white;
-    text-align: center;
-    font-weight: bold;
-    color: #333;
-    font-size: 1rem;
-  }
-}
-
 footer {
   width: 100%;
   height: $footer-height;
@@ -720,14 +696,11 @@ footer {
   bottom: $footer-height;
   height: 589px;
   overflow: hidden;
-  display: none;
+  display: flex;
   flex-direction: row;
   box-sizing: border-box;
   z-index: 50;
-
-  &.start-menu-open {
-    display: flex;
-  }
+  transform: scale(0);
 
   .changeable-width {
     transition: width 0.2s, background-color 0.2s !important;
@@ -930,7 +903,7 @@ footer {
 }
 
 #notification-bar {
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: calc(100% - 30px);
@@ -945,10 +918,7 @@ footer {
   width: 361px;
   box-sizing: border-box;
   z-index: 50;
-
-  &.notification-bar-open {
-    display: flex;
-  }
+  transform: scale(0);
 
   #notification-center {
     margin: 20px 12px;
@@ -1059,7 +1029,7 @@ footer {
 }
 
 #calendar {
-  display: none;
+  display: block;
   position: absolute;
   bottom: $footer-height;
   right: 0;
@@ -1071,10 +1041,7 @@ footer {
   cursor: default;
   box-sizing: border-box;
   z-index: 50;
-
-  &.calendar-open {
-    display: block;
-  }
+  transform: scale(0);
 
   h1 {
     margin: 15px 0 0 15px;
@@ -1102,16 +1069,13 @@ footer {
   height: 131px;
   border-top: 1px solid fade_out($gray, 0.4);
   border-left: 1px solid fade_out($gray, 0.4);
-  display: none;
+  display: flex;
   flex-direction: column;
   padding: 5px 0;
   box-sizing: border-box;
   background-color: rgba(40, 40, 40, 0.87);
   z-index: 50;
-
-  &.lang-selector-open {
-    display: flex;
-  }
+  transform: scale(0);
 
   & > div {
     width: 100%;
@@ -1144,13 +1108,14 @@ footer {
   border-top: 1px solid fade_out($gray, 0.4);
   border-left: 1px solid fade_out($gray, 0.4);
   padding: 12px;
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: space-around;
   z-index: 50;
+  transform: scale(0);
 
-  &.volume-menu-open {
-    display: flex;
+  &:focus-within {
+    transform: scale(1);
   }
 
   & > p {
@@ -1199,7 +1164,7 @@ footer {
 }
 
 #network-menu {
-  display: none;
+  display: block;
   position: absolute;
   bottom: $footer-height;
   right: 0;
@@ -1211,10 +1176,7 @@ footer {
   background: rgba(40, 40, 40, 0.87);
   box-sizing: border-box;
   z-index: 50;
-
-  &.network-menu-open {
-    display: block;
-  }
+  transform: scale(0);
 
   #current-network {
     width: 100%;
