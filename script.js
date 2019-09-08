@@ -1024,56 +1024,56 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
 
 document.getElementsByClassName('volume')[0].addEventListener('click', () => {
-    volumeMenu.classList.toggle('in-focus');
+    volumeMenu.classList.add('in-focus');
     volumeMenu.focus();
 });
 
 document.getElementsByClassName('internet')[0].addEventListener('click', () => {
-    networkMenu.classList.toggle('in-focus');
+    networkMenu.classList.add('in-focus');
     networkMenu.focus();
 });
 
 document.getElementsByClassName('lang')[0].addEventListener('click', () => {
-    langSelector.classList.toggle('in-focus');
+    langSelector.classList.add('in-focus');
     langSelector.focus();
 });
 
 document.getElementsByClassName('time')[0].addEventListener('click', () => {
-    calendar.classList.toggle('in-focus');
+    calendar.classList.add('in-focus');
     calendar.focus();
 });
 
 document.getElementsByClassName('notification-bar-open-button')[0].addEventListener('click', () => {
-    notificationBar.classList.toggle('in-focus');
+    notificationBar.classList.add('in-focus');
     notificationBar.focus();
+});
+
+document.getElementsByClassName('start-button')[0].addEventListener('click', () => {
+    startMenu.classList.add('in-focus');
+    startMenu.focus();
 });
 
 shellExperience.forEach(e => {
     e.addEventListener('blur', function() {
         this.classList.remove('in-focus');
+        if (e === startMenu) {
+            for (let i = 0; i < widthChange.length; i++) {
+                widthChange[i].classList.remove('side-buttons-container-open');
+            }
+            for (let i = 0; i < dirs.length; i++) {
+                dirs[i].style.height = '0px';
+            }
+            for (let i = 0; i < dirArrows.length; i++) {
+                dirArrows[i].src = 'images/roll-down-arrow.png';
+            }
+            for (let i = 0; i < dirImgs.length; i++) {
+                dirImgs[i].src = 'images/start-menu-dir-closed.png';
+            }
+            for (let i = 0; i < popupMenus.length; i++) {
+                popupMenus[i].classList.remove('popup-menu-open');
+            }
+        }
     });
-});
-
-document.getElementsByClassName('start-button')[0].addEventListener('click', () => {
-    startMenu.classList.toggle('in-focus');
-    if (!startMenu.classList.contains('in-focus')) {
-        for (let i = 0; i < widthChange.length; i++) {
-            widthChange[i].classList.remove('side-buttons-container-open');
-        }
-        for (let i = 0; i < dirs.length; i++) {
-            dirs[i].style.height = '0px';
-        }
-        for (let i = 0; i < dirArrows.length; i++) {
-            dirArrows[i].src = 'images/roll-down-arrow.png';
-        }
-        for (let i = 0; i < dirImgs.length; i++) {
-            dirImgs[i].src = 'images/start-menu-dir-closed.png';
-        }
-        for (let i = 0; i < popupMenus.length; i++) {
-            popupMenus[i].classList.remove('popup-menu-open');
-        }
-    }
-    notificationBar.classList.remove('in-focus');
 });
 
 document.getElementById('open-tooltips').addEventListener('click', () => {
