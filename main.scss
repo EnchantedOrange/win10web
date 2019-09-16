@@ -318,8 +318,9 @@ ul {
         }
 
         .mine-blown {
-          background-image: url("images/minesweeper.png") !important;
+          background-image: url("images/minesweeper.svg") !important;
           background-color: rgba(191, 63, 74, 0.69);
+          background-size: 85%;
         }
 
         .exposed-dot {
