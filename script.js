@@ -149,8 +149,8 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             points = 0;
         }
 
-        const defaultSkin = '#4983aa, #005e93';
-        const goldenSkin = 'rgb(235,203,27), rgb(167,144,20)';
+        const defaultSkin = '#1ab96a';
+        const goldenSkin = '#e2c417';
 
         let currentSkin = defaultSkin;
 
@@ -594,7 +594,6 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     currentSkin = goldenSkin;
                     setSkin();
                     setCookie('skin', 'golden', 100);
-                    windowObject.querySelector('#goldenskin').textContent = 'Toggle';
                 }
             }
         });
