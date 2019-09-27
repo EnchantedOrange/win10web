@@ -203,6 +203,7 @@ ul {
 .minesweeper-window {
   width: auto;
   height: auto;
+  font-family: Helvetica;
 
   .window-body {
     display: flex;
@@ -215,6 +216,7 @@ ul {
       background: var(--theme-color);
       cursor: pointer;
       transition: .3s;
+      max-height: 21px;
 
       &:hover {
         background-color: var(--theme-color-darken);
@@ -226,20 +228,24 @@ ul {
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 5px 0 10px -5px rgba(0, 0, 0, 0.25);
 
       .control {
         display: flex;
         flex-direction: column;
         width: 100%;
-        box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 0.25);
+        padding: 0 10px;
+        box-sizing: border-box;
 
         .wrapper {
           display: flex;
-          justify-content: space-around;
+          justify-content: center;
           align-items: center;
           width: 100%;
           height: 35px;
+
+          & > * {
+            margin: 0 10px;
+          }
 
           .container {
   
@@ -351,6 +357,7 @@ ul {
       .store-item {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         padding: 10px 0;
 
         p {

@@ -90,6 +90,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 <div class="first-column">
                     <div class="control">
                         <div class="wrapper">
+                            <div class="new-game button">New game</div>
                             <div class="container">
                                 <div class="current-difficulty button"></div>
                                 <ul class="choose-minesweeper-size">
@@ -98,7 +99,6 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                                     <li id="hard">Hard</li>
                                 </ul>
                             </div>
-                            <div class="new-game button">New game</div>
                         </div>
                         <div class="mines-counter"></div>
                     </div>
