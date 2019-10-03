@@ -170,7 +170,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             totalMines: 10
         };
         const mediumDifficulty = {
-            name: 'Normal',
+            name: 'Medium',
             y: 16,
             x: 16,
             totalMines: 40
