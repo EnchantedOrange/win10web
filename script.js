@@ -1,4 +1,5 @@
 const widthChange = document.getElementsByClassName('changeable-width');
+const startButton = document.getElementsByClassName('start-button')[0];
 const startMenu = document.getElementById('start-menu');
 const dirs = document.getElementsByClassName('hidden-dir');
 const popupMenus = document.getElementsByClassName('popup-menu');
@@ -58,7 +59,7 @@ function openApp(isTaskbar, windowClass) {
         const footerAppBar = document.createElement('div');
         footerAppBar.classList.add('taskbar-app', 'taskbar-app-open', 'hover');
         footerAppBar.innerHTML = `<img src="${appIco}"><p>${appName}</p>`;
-        document.querySelector('.taskbar-apps').appendChild(footerAppBar);
+        document.querySelector('.taskbar-apps').append(footerAppBar);
         openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass);
     } else {
         event.currentTarget.classList.add('taskbar-app-open');
@@ -136,6 +137,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
         const minesCounter = windowObject.getElementsByClassName('mines-counter')[0];
         const pointsCounter = windowObject.getElementsByClassName('points')[0];
+        const field = windowObject.querySelector('.field');
         
         let isGameOver = false;
         let mineList = [];
@@ -203,15 +205,15 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         });
 
         function generateField() {
-            windowObject.querySelector('.field').style.gridTemplateRows = `repeat(${currentDifficulty.y}, 1fr)`;
-            windowObject.querySelector('.field').style.gridTemplateColumns = `repeat(${currentDifficulty.x}, 1fr)`;
+            field.style.gridTemplateRows = `repeat(${currentDifficulty.y}, 1fr)`;
+            field.style.gridTemplateColumns = `repeat(${currentDifficulty.x}, 1fr)`;
             for (let y = 1; y <= currentDifficulty.y; y++) {
                 for (let x = 1; x <= currentDifficulty.x; x++) {
                     let f = document.createElement('div');
                     const coords = `n${y}_${x}`;
                     f.classList.add('field-dot');
                     f.id = coords;
-                    windowObject.querySelector('.field').appendChild(f);
+                    field.append(f);
                 }
             }
             dots = windowObject.querySelectorAll('.field-dot');
@@ -357,48 +359,39 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         }
 
         function startNewGame() {
-            windowObject.querySelector('.field').innerHTML = '';
+            field.innerHTML = '';
             mineList = [];
             alreadyWorked = [];
             exposedMines = 0;
             isGameOver = false;
             generateField();
             placeMines();
-            setEventListenersForDots();
             setMinesCounter();
             windowObject.querySelector('.current-difficulty').innerHTML = currentDifficulty.name;
         }
         
         function exposeDotsAround(dot) {
-            dot.style.backgroundImage = `linear-gradient(to top left, ${currentSkin})`;
-            if (!dot.classList.contains('exposed-dot')) {
-                getSquaresAround(dot).forEach(function(sq) {
-                    sq.style.backgroundImage = `linear-gradient(to top left, ${currentSkin})`;
-                });
-            } else {
-                let flagged = 0;
-                let mined = 0;
-                const tit = dot;
+            let flagged = 0;
+            let mined = 0;
+            const tit = dot;
+            getSquaresAround(tit).forEach(function(sq) {
+                if (sq.classList.contains('flag')) {
+                    flagged++;
+                }
+                if (sq.classList.contains('mine')) {
+                    mined++;
+                }
+            });
+            if (flagged === mined) {
+                let expose = true;
                 getSquaresAround(tit).forEach(function(sq) {
-                    sq.style.backgroundImage = `linear-gradient(to top left, ${currentSkin})`;
-                    if (sq.classList.contains('flag')) {
-                        flagged++;
-                    }
-                    if (sq.classList.contains('mine')) {
-                        mined++;
+                    if ((sq.classList.contains('mine') && !sq.classList.contains('flag')) || (!sq.classList.contains('mine') && sq.classList.contains('flag'))) {
+                        expose = false;
+                        gameOver();
                     }
                 });
-                if (flagged === mined) {
-                    let expose = true;
-                    getSquaresAround(tit).forEach(function(sq) {
-                        if ((sq.classList.contains('mine') && !sq.classList.contains('flag')) || (!sq.classList.contains('mine') && sq.classList.contains('flag'))) {
-                            expose = false;
-                            gameOver();
-                        }
-                    });
-                    if (expose) {
-                        exposeSquare(tit, true);
-                    }
+                if (expose) {
+                    exposeSquare(tit, true);
                 }
             }
         }
@@ -428,36 +421,31 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
             let touchTimer;
 
-            dots.forEach(function(d) {
-                d.addEventListener('mousedown', function(event) {
+            {
+                field.addEventListener('mousedown', event => {
+                    target = event.target;
                     if (!isGameOver) {
-                        if (event.shiftKey && event.button === 0 && !this.classList.contains('flag')) {
-                            exposeDotsAround(this);
+                        if (event.shiftKey && event.button === 0 && !target.classList.contains('flag')) {
+                            exposeDotsAround(target);
                         } else if (event.button === 2 && !event.shiftKey) {
                             //RMB
-                            RMBevent(this);
-                        } else if (event.button === 0 && !this.classList.contains('flag') && !this.classList.contains('question-flag') && !event.shiftKey) {
+                            RMBevent(target);
+                        } else if (event.button === 0 && !target.classList.contains('flag') && !target.classList.contains('question-flag') && !event.shiftKey) {
                             //LMB
-                            if (this.classList.contains('mine') && !this.classList.contains('flag')) {
+                            if (target.classList.contains('mine') && !target.classList.contains('flag')) {
                                 gameOver();
                             } else {
-                                exposeSquare(this);
+                                exposeSquare(target);
                             }
                         }
                     }
                 });
 
-                d.addEventListener('mouseup', function(event) {
-                    dots.forEach(function(dot) {
-                        dot.style.backgroundImage = '';
-                    });
+                field.addEventListener('dblclick', event => {
+                    exposeDotsAround(event.target);
                 });
 
-                d.addEventListener('dblclick', function(event) {
-                    exposeDotsAround(this);
-                });
-
-                d.addEventListener('touchstart', function() {
+                field.addEventListener('touchstart', event => {
                     function funcToExec(sq) {
                     	if (sq.classList.contains('exposed-dot')) {
                     		exposeDotsAround(sq);
@@ -468,17 +456,17 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     	window.navigator.vibrate(50);
                     }
 
-                    touchTimer = setTimeout(funcToExec, 300, this);
+                    touchTimer = setTimeout(funcToExec, 300, event.target);
                 });
 
-                d.addEventListener('touchend', function() {
+                field.addEventListener('touchend', () => {
                     clearTimeout(touchTimer);
                 });
 
-                d.addEventListener('touchmove', function() {
+                field.addEventListener('touchmove', () => {
                     clearTimeout(touchTimer);
                 });
-            });
+            }
         }
 
         function setInitialBackground() {
@@ -537,7 +525,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         function setSkin() {
             dots.forEach((d) => {
                 document.documentElement.style.setProperty('--minesweeper-skin', currentSkin);
-                d.style.backgroundImage = `linear-gradient(to bottom right, ${currentSkin})`;
+                d.style.backgroundColor = currentSkin;
             });
         }
 
@@ -635,7 +623,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 const coords = `n${y}_${x}`;
                 f.classList.add('field-dot');
                 f.id = coords;
-                windowObject.querySelector('.field').appendChild(f);
+                windowObject.querySelector('.field').append(f);
             }
         }
 
@@ -993,7 +981,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
     footerAppBar.addEventListener('click', toggleWindow);
 
-    document.querySelector('body').appendChild(windowObject);
+    document.querySelector('body').append(windowObject);
 
     startMenu.classList.remove('in-focus');
 
@@ -1047,10 +1035,20 @@ document.getElementsByClassName('notification-bar-open-button')[0].addEventListe
     notificationBar.focus();
 });
 
-document.getElementsByClassName('start-button')[0].addEventListener('click', () => {
-    startMenu.classList.add('in-focus');
-    startMenu.focus();
-});
+function startButtonClickHandler() {
+    if (startMenu.className === 'in-focus') {
+        startMenu.className = '';
+    } else {
+        startMenu.className = 'in-focus';
+        startMenu.focus();
+        startButton.addEventListener('click', () => {
+            startMenu.className = '';
+            startButton.addEventListener('click', startButtonClickHandler, {once: true});
+        }, {once: true});
+    }
+}
+
+startButton.addEventListener('click', startButtonClickHandler, {once: true});
 
 shellExperience.forEach(e => {
     e.addEventListener('blur', function() {
@@ -1071,6 +1069,8 @@ shellExperience.forEach(e => {
             for (let i = 0; i < popupMenus.length; i++) {
                 popupMenus[i].classList.remove('popup-menu-open');
             }
+
+
         }
     });
 });
