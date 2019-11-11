@@ -1153,31 +1153,87 @@ function selectLang(lang) {
     event.currentTarget.classList.add('lang-selector-bar-active');
 }
 
-function addZero(i) {
-    if (i < 10) {
-        i = '0' + i;
+{
+    function addZero(i) {
+        if (i < 10) {
+            i = '0' + i;
+        }
+        return i;
     }
-    return i;
-}
 
-const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-function getMonthName(i) {
-    i = monthNames[i];
-    return i;
-}
+    const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+    const monthNamesGenitive = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    function getMonthName(month, genitive) {
+        month = genitive ? monthNamesGenitive[month] : monthNames[month];
+        return month;
+    }
 
-let now = new Date();
-updateTime();
-
-setInterval(() => {
-    now.setSeconds(now.getSeconds() + 1);
+    let now = new Date();
+    let calendarTime = new Date();
     updateTime();
-}, 1000);
 
-function updateTime() {
-    document.querySelector('#insert-time').innerHTML = now.toLocaleTimeString();
-    document.querySelector('#insert-date').innerHTML = String(now.getDate()) + ' ' + getMonthName(now.getMonth()) + ' ' + now.getFullYear() + ' г.';
-    document.querySelector('#taskbar-time').innerHTML = String(now.getHours()) + ':' + String(addZero(now.getMinutes()));
+    setInterval(() => {
+        now.setSeconds(now.getSeconds() + 1);
+        updateTime();
+    }, 1000);
+
+    function updateTime() {
+        document.querySelector('#insert-time').innerHTML = now.toLocaleTimeString();
+        document.querySelector('#insert-date').innerHTML = String(now.getDate()) + ' ' + getMonthName(now.getMonth(), true) + ' ' + now.getFullYear() + ' г.';
+        document.querySelector('#taskbar-time').innerHTML = String(now.getHours()) + ':' + String(addZero(now.getMinutes()));
+    }
+
+    function updateCalendar(year, month) {
+        month = month - 1;
+        let d = new Date(year, month);
+
+        let table = '<tr>';
+
+        for (let i = 0; i < getDay(d); i++) {
+            table += '<td></td>';
+        }
+
+        while (d.getMonth() === month) {
+            table += `<td>${d.getDate()}</td>`;
+            if (getDay(d) % 7 === 6) {
+                table += '</tr><tr>';
+            }
+            d.setDate(d.getDate() + 1);
+        }
+
+        if (getDay(d) !== 0) {
+            for (let i = getDay(d); i < 7; i++) {
+                table += '<td></td>';
+            }
+        }
+
+        table += '</tr>';
+        document.getElementById('calendar-table').tBodies[1].innerHTML = table;
+
+        document.getElementsByClassName('current-month')[0].innerText = `${getMonthName(month, false)} ${d.getFullYear()}`;
+    }
+
+    function getDay(date) {
+        let day = date.getDay();
+        if (day === 0) day = 7;
+        return day - 1;
+    }
+
+    updateCalendar(now.getFullYear(), now.getMonth() + 1);
+
+    document.getElementById('btn-container').addEventListener('click', event => {
+        if (event.target.classList.contains('prev')) {
+            calendarTime.setMonth(calendarTime.getMonth() - 1);
+        } else if (event.target.classList.contains('next')) {
+            calendarTime.setMonth(calendarTime.getMonth() + 1);
+        }
+        updateCalendar(calendarTime.getFullYear(), calendarTime.getMonth() + 1);
+    });
+
+    document.getElementById('insert-date').addEventListener('click', () => {
+        calendarTime = new Date();
+        updateCalendar(calendarTime.getFullYear(), calendarTime.getMonth() + 1);
+    });
 }
 
 document.querySelectorAll('.toggle-popup')[0].addEventListener('click', function() {

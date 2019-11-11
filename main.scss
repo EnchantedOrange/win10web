@@ -1035,7 +1035,7 @@ footer {
   bottom: $footer-height;
   right: 0;
   width: 361px;
-  height: 113px;
+  // height: 113px;
   background-color: rgba(40, 40, 40, 0.8);
   border-left: 1px solid fade_out($gray, 0.4);
   border-top: 1px solid fade_out($gray, 0.4);
@@ -1045,19 +1045,59 @@ footer {
   transform: scale(0);
 
   h1 {
-    margin: 15px 0 0 15px;
+    margin: 15px 15px 0;
     font-size: 45px;
     font-weight: 100;
   }
 
   p {
-    margin: 0 0 15px 15px;
+    margin: 0 15px 15px;
     font-weight: 100;
     color: var(--theme-color);
     font-size: 15px;
 
     &:hover {
       color: #a3a2a0;
+    }
+  }
+
+  .calendar-container {
+    padding: 15px;
+    border-top: 1px solid fade_out($gray, 0.4);
+
+    td, .btn {
+      width: 46px;
+      height: 40px;
+    }
+
+    #month-switch {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .current-month {
+        margin-left: 9px;
+      }
+
+      .btn {
+        display: inline-block;
+        background-repeat: no-repeat;
+        background-position: center;
+        cursor: pointer;
+      }
+
+      .prev {
+        background-image: url('images/month-switch-previous.png');
+      }
+
+      .next {
+        background-image: url('images/month-switch-next.png');
+      }
+    }
+
+    table {
+      width: 100%;
+      text-align: center;
     }
   }
 }
