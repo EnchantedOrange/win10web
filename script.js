@@ -1168,23 +1168,21 @@ function selectLang(lang) {
         return month;
     }
 
-    let now = new Date();
-    let calendarTime = new Date();
-    updateTime();
+    let now = new Date(), calendarTime = new Date(now.getFullYear(), now.getMonth());
+    updateTime(now);
 
     setInterval(() => {
         now.setSeconds(now.getSeconds() + 1);
-        updateTime();
+        updateTime(now);
     }, 1000);
 
-    function updateTime() {
+    function updateTime(now) {
         document.querySelector('#insert-time').innerHTML = now.toLocaleTimeString();
         document.querySelector('#insert-date').innerHTML = String(now.getDate()) + ' ' + getMonthName(now.getMonth(), true) + ' ' + now.getFullYear() + ' г.';
         document.querySelector('#taskbar-time').innerHTML = String(now.getHours()) + ':' + String(addZero(now.getMinutes()));
     }
 
     function updateCalendar(year, month) {
-        month = month - 1;
         let d = new Date(year, month);
 
         let table = '<tr>';
@@ -1195,9 +1193,7 @@ function selectLang(lang) {
 
         while (d.getMonth() === month) {
             table += `<td>${d.getDate()}</td>`;
-            if (getDay(d) % 7 === 6) {
-                table += '</tr><tr>';
-            }
+            if (getDay(d) === 6) table += '</tr><tr>';
             d.setDate(d.getDate() + 1);
         }
 
@@ -1210,16 +1206,18 @@ function selectLang(lang) {
         table += '</tr>';
         document.getElementById('calendar-table').tBodies[1].innerHTML = table;
 
+        d.setDate(d.getDate() - 1);
+
         document.getElementsByClassName('current-month')[0].innerText = `${getMonthName(month, false)} ${d.getFullYear()}`;
     }
 
-    function getDay(date) {
+    function getDay(date) { // Monday = 0, Sunday = 6
         let day = date.getDay();
         if (day === 0) day = 7;
         return day - 1;
     }
 
-    updateCalendar(now.getFullYear(), now.getMonth() + 1);
+    updateCalendar(now.getFullYear(), now.getMonth());
 
     document.getElementById('btn-container').addEventListener('click', event => {
         if (event.target.classList.contains('prev')) {
@@ -1227,12 +1225,12 @@ function selectLang(lang) {
         } else if (event.target.classList.contains('next')) {
             calendarTime.setMonth(calendarTime.getMonth() + 1);
         }
-        updateCalendar(calendarTime.getFullYear(), calendarTime.getMonth() + 1);
+        updateCalendar(calendarTime.getFullYear(), calendarTime.getMonth());
     });
 
     document.getElementById('insert-date').addEventListener('click', () => {
-        calendarTime = new Date();
-        updateCalendar(calendarTime.getFullYear(), calendarTime.getMonth() + 1);
+        calendarTime = new Date(now.getFullYear(), now.getMonth());
+        updateCalendar(calendarTime.getFullYear(), calendarTime.getMonth());
     });
 }
 
