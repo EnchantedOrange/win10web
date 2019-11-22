@@ -44,10 +44,6 @@ document.getElementsByClassName('eso')[0].addEventListener('click', function() {
     openApp(false, 'eso-window');
 });
 
-document.getElementsByClassName('gitlab')[0].addEventListener('click', () => {
-    location.href = 'https://gitlab.com/enchantedorange/Windows10Web';
-});
-
 document.getElementById('parameters').addEventListener('click', function() {
     openApp(false, 'parameters-window');
 });

@@ -22,7 +22,7 @@ html, body {
 }
 
 body {
-  background-image: url('images/wallpaper.jpg');
+  background-image: url('https://ksassets.timeincuk.net/wp/uploads/sites/55/2019/10/Coldplay-new.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   color: #fff;
@@ -89,6 +89,8 @@ ul {
     padding: 2px;
     margin-top: 5px;
     cursor: pointer;
+    text-decoration: none;
+    color: inherit;
 
     img {
       width: 48px;
