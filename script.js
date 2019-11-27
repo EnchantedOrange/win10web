@@ -318,11 +318,11 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 
                 isGameOver = true;
                 
-                if (currentDifficulty.name === 'Easy') {
+                if (currentDifficulty === easyDifficulty) {
                     addPoints(50);
-                } else if (currentDifficulty.name === 'Normal') {
+                } else if (currentDifficulty === mediumDifficulty) {
                     addPoints(125);
-                } else if (currentDifficulty.name === 'Hard') {
+                } else if (currentDifficulty === hardDifficulty) {
                     addPoints(300);
                 }
                 
