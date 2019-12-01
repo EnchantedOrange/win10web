@@ -99,8 +99,8 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                         </div>
                         <div class="mines-counter"></div>
                     </div>
-                    <div class="field">
-                    </div>
+                    <ul class="field">
+                    </ul>
                 </div>
                 <div class="store">
                     <div class="store-header">
@@ -205,7 +205,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             field.style.gridTemplateColumns = `repeat(${currentDifficulty.x}, 1fr)`;
             for (let y = 1; y <= currentDifficulty.y; y++) {
                 for (let x = 1; x <= currentDifficulty.x; x++) {
-                    let f = document.createElement('div');
+                    let f = document.createElement('li');
                     const coords = `n${y}_${x}`;
                     f.classList.add('field-dot');
                     f.id = coords;
@@ -419,7 +419,9 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
             {
                 field.addEventListener('mousedown', event => {
-                    target = event.target;
+                    target = event.target.closest('li');
+                    if (!target) return;
+                    if (!field.contains(target)) return;
                     if (!isGameOver) {
                         if (event.shiftKey && event.button === 0 && !target.classList.contains('flag')) {
                             exposeDotsAround(target);
