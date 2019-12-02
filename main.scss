@@ -72,14 +72,14 @@ ul {
 
 .desktop {
   display: grid;
-  grid-template-columns: repeat(17, 1fr);
-  grid-template-rows: repeat(8, 1fr);
   grid-gap: 30px 1px;
   grid-auto-flow: column;
   justify-items: center;
   align-items: center;
   justify-content: stretch;
   align-content: stretch;
+  height: calc(100% - 30px);
+  width: 100%;
 
   .desktop-icon {
     width: 75px;

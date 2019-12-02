@@ -14,6 +14,7 @@ const langSelector = document.getElementById('lang-selector');
 const volumeSlider = document.getElementById('volume-slider');
 const volumeBig = document.getElementById('volume-big');
 const shellExperience = document.querySelectorAll('[tabindex]');
+const desktop = document.querySelector('.desktop');
 
 
 
@@ -25,6 +26,9 @@ function setCookie(name, value, exdays) {
     const expires = `expires=${d.toUTCString()}`;
     document.cookie = `${name}=${value};${expires};path=/`;
 }
+
+desktop.style.gridTemplateColumns = `repeat(${Math.floor(+getComputedStyle(desktop).height.split('px')[0] / 100)}, 1fr)`;
+desktop.style.gridTemplateRows = `repeat(${Math.floor(+getComputedStyle(desktop).width.split('px')[0] / 100)}, 1fr)`;
 
 document.querySelectorAll('.taskbar-app').forEach(function(e) {
     e.addEventListener('click', function() {
