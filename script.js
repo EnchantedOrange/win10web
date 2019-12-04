@@ -584,6 +584,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     currentSkin = goldenSkin;
                     setSkin();
                     setCookie('skin', 'golden', 100);
+                    windowObject.querySelector('#goldenskin').textContent = 'Toggle';
                 }
             }
         });
