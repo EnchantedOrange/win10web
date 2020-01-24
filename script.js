@@ -910,11 +910,13 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
     
     function rollOrExpandWindow(windowObject) {
         if (windowObject.classList.contains('window-opened')) {
-            windowObject.style.left = '100px';
-            windowObject.style.top = '50px';
+            windowObject.style.transform = 'translate(100px, 50px)';
+            // windowObject.style.left = '100px';
+            // windowObject.style.top = '50px';
         } else {
-            windowObject.style.left = '0px';
-            windowObject.style.top = '0px';
+            windowObject.style.transform = 'translate(0, 0)';
+            // windowObject.style.left = '0px';
+            // windowObject.style.top = '0px';
         }
         windowObject.classList.toggle('window-opened');
     }
