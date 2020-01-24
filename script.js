@@ -937,13 +937,12 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         let shiftY = e.pageY - coords.top;
 
         function moveAt(e) {
-            windowObject.style.left = e.pageX - shiftX + 'px';
-            windowObject.style.top = e.pageY - shiftY + 'px';
+            windowObject.style.transform = `translate(${e.pageX - shiftX}px, ${e.pageY - shiftY}px)`;
         }
 
         document.onmousemove = function(e) {
             windowObject.classList.contains('window-opened') &&
-            windowObject.classList.remove('window-opened');
+                windowObject.classList.remove('window-opened');
             
             moveAt(e);
         };
