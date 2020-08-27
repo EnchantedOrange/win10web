@@ -1,25 +1,26 @@
 $background: rgba(3, 4, 5, 0.85);
-$hover: rgba(87, 87, 86, 0.70);
-$gray: #7C7B79;
+$hover: rgba(87, 87, 86, 0.7);
+$gray: #7c7b79;
 $border-color: rgb(153, 153, 153);
 $footer-height: 30px;
 $start-menu-button-width-height: 48px;
 $tiles-container-height: 128px;
 
 @font-face {
-  font-family: "Pixel";
-  src: url("fonts/arcadeclassic.regular.ttf");
+  font-family: 'Pixel';
+  src: url('fonts/arcadeclassic.regular.ttf');
 }
 
 :root {
-  --theme-color: #4DACCF;
+  --theme-color: #4daccf;
   --theme-color-lighten: hsl(196, 58%, 64%);
   --theme-color-darken: hsl(196, 58%, 36%);
 
   --blur: 20px;
 }
 
-html, body {
+html,
+body {
   height: 100vh;
 }
 
@@ -29,7 +30,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   color: #fff;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   overflow: hidden;
   width: 100%;
   height: 100%;
@@ -109,8 +110,8 @@ ul {
     }
 
     &:hover {
-      background-color: fade-out(#4DACCF, 0.7);
-      outline: 1px solid #4DACCF;
+      background-color: fade-out(#4daccf, 0.7);
+      outline: 1px solid #4daccf;
     }
   }
 }
@@ -165,19 +166,19 @@ ul {
       .window-roll-button {
         width: 45px;
         height: 100%;
-        background: url("images/window-roll-button.png") no-repeat center;
+        background: url('images/window-roll-button.png') no-repeat center;
       }
 
       .window-expand-button {
         width: 45px;
         height: 100%;
-        background: url("images/window-expand-button.png") no-repeat center;
+        background: url('images/window-expand-button.png') no-repeat center;
       }
 
       .window-close-button {
         width: 45px;
         height: 100%;
-        background: url("images/window-close-button.png") no-repeat center;
+        background: url('images/window-close-button.png') no-repeat center;
         transition: background-color 0.2s;
 
         &:hover {
@@ -197,7 +198,7 @@ ul {
   height: 100%;
 
   .window-expand-button {
-    background: url("images/window-turn-button.png") no-repeat center !important;
+    background: url('images/window-turn-button.png') no-repeat center !important;
 
     &:hover {
       background-color: var(--theme-color-lighten) !important;
@@ -221,7 +222,7 @@ ul {
       padding: 2px 5px;
       background: var(--theme-color);
       cursor: pointer;
-      transition: .3s;
+      transition: 0.3s;
       max-height: 21px;
 
       &:hover {
@@ -254,11 +255,11 @@ ul {
           }
 
           .container {
-  
-            .current-difficulty:hover ~ .choose-minesweeper-size, .choose-minesweeper-size:hover {
+            .current-difficulty:hover ~ .choose-minesweeper-size,
+            .choose-minesweeper-size:hover {
               display: block;
             }
-  
+
             .choose-minesweeper-size {
               display: none;
               list-style: none;
@@ -269,12 +270,12 @@ ul {
               border-radius: 3px;
               cursor: pointer;
               z-index: 10;
-  
+
               li {
                 text-align: center;
                 padding: 2px;
-                transition: background .2s;
-  
+                transition: background 0.2s;
+
                 &:hover {
                   background: var(--theme-color-darken);
                 }
@@ -318,16 +319,16 @@ ul {
         }
 
         .flag {
-          background-image: url("images/minesweeper-flag.svg");
+          background-image: url('images/minesweeper-flag.svg');
         }
 
         .question-flag {
-          background-image: url("images/question-mark.svg");
+          background-image: url('images/question-mark.svg');
         }
 
         .mine-blown {
-          background-image: url("images/minesweeper.svg") !important;
-          background-color: rgba(191, 63, 74, .7);
+          background-image: url('images/minesweeper.svg') !important;
+          background-color: rgba(191, 63, 74, 0.7);
         }
 
         .exposed-dot {
@@ -356,7 +357,7 @@ ul {
           border-radius: 5px;
           margin: 0;
           padding: 3px 20px;
-          transition: .3s;
+          transition: 0.3s;
           font-weight: bold;
         }
       }
@@ -389,7 +390,7 @@ ul {
 
   .window-body {
     background: #000;
-    font-family: "Pixel";
+    font-family: 'Pixel';
 
     .field-dot {
       width: 10px;
@@ -423,13 +424,16 @@ ul {
       justify-content: space-around;
       align-items: center;
 
-      .score, .new-game, .help {
+      .score,
+      .new-game,
+      .help {
         border: 1px solid #90d445;
         padding: 2px 20px;
         box-sizing: border-box;
       }
 
-      .new-game, .help {
+      .new-game,
+      .help {
         cursor: pointer;
       }
 
@@ -446,7 +450,7 @@ ul {
         z-index: 10;
 
         &::before {
-          content: "";
+          content: '';
           width: 1rem;
           height: 1rem;
           background-color: #fff;
@@ -495,7 +499,7 @@ ul {
       left: 0;
       width: 100%;
       height: calc(100% - 30px - 2.3rem);
-      background: rgba(0, 0, 0, .6);
+      background: rgba(0, 0, 0, 0.6);
       display: none;
       z-index: 15;
 
@@ -519,10 +523,10 @@ ul {
   background-color: #000;
 
   &::after {
-    content: "";
+    content: '';
     width: 50px;
     height: 50px;
-    background-image: url("images/eso-loading.png");
+    background-image: url('images/eso-loading.png');
     background-size: 50px;
     position: absolute;
     bottom: 2vw;
@@ -543,7 +547,7 @@ ul {
     flex-direction: column;
     align-items: center;
 
-    input[type="color"] {
+    input[type='color'] {
       appearance: none;
       padding: 0;
       border: 0;
@@ -585,12 +589,12 @@ footer {
 
   .start-button {
     width: 36px;
-    background: url("images/start-button.png") no-repeat center;
+    background: url('images/start-button.png') no-repeat center;
     margin-right: 3px;
     flex-shrink: 0;
 
     &:hover {
-      background: url("images/start-button-hover.png") no-repeat center;
+      background: url('images/start-button-hover.png') no-repeat center;
     }
   }
 
@@ -604,6 +608,7 @@ footer {
       margin-right: 1px;
       display: flex;
       flex-direction: row;
+      justify-content: center;
       align-items: center;
       box-sizing: border-box;
       overflow: hidden;
@@ -622,9 +627,16 @@ footer {
       }
 
       &-open {
-        width: 160px !important;
+        width: 150px !important;
         border-bottom: 2px solid var(--theme-color);
-  
+        margin: 0 3px;
+
+        &:hover {
+          width: 156px !important;
+          margin: 0;
+          padding: 0 3px;
+        }
+
         img {
           margin: 0 4px 0 8px !important;
         }
@@ -642,12 +654,12 @@ footer {
     justify-content: space-between;
 
     .internet {
-      background: url("images/internet.png") no-repeat center;
+      background: url('images/internet.png') no-repeat center;
       width: 24px;
     }
 
     .volume {
-      background: url("images/volume.png") no-repeat center;
+      background: url('images/volume.png') no-repeat center;
       width: 24px;
     }
 
@@ -685,7 +697,7 @@ footer {
 
     .notification-bar-open-button {
       width: 40px;
-      background: url("images/notification.png") no-repeat center;
+      background: url('images/notification.png') no-repeat center;
     }
   }
 
@@ -779,29 +791,28 @@ footer {
     z-index: 9;
     width: $start-menu-button-width-height;
 
-
     & > div:first-child {
-      background: url("images/open-desc.png") no-repeat 16px;
+      background: url('images/open-desc.png') no-repeat 16px;
       font-weight: 900 !important;
       margin-top: 4px;
     }
 
     #start-menu-buttons-container div:first-child {
-      background: url("images/user-icon.png") no-repeat 14px;
+      background: url('images/user-icon.png') no-repeat 14px;
     }
 
     #start-menu-buttons-container div:nth-child(2) {
-      background: url("images/settings-icon.png") no-repeat 16px;
+      background: url('images/settings-icon.png') no-repeat 16px;
     }
 
     #start-menu-buttons-container div:last-child {
-      background: url("images/power-icon.png") no-repeat 17px;
+      background: url('images/power-icon.png') no-repeat 17px;
     }
   }
 
   .side-buttons-container-open {
     width: 256px !important;
-    background-color: #1F1F1F;
+    background-color: #1f1f1f;
   }
 
   .app-list {
@@ -815,7 +826,8 @@ footer {
       margin-top: 7px !important;
     }
 
-    h4, li {
+    h4,
+    li {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -856,9 +868,9 @@ footer {
     }
 
     .roll-down-arrow {
-        width: 8px;
-        height: 4px;
-        margin-right: 20px;
+      width: 8px;
+      height: 4px;
+      margin-right: 20px;
     }
 
     .hidden-dir {
@@ -884,7 +896,7 @@ footer {
       align-items: center;
 
       &:hover {
-        background: url("images/tiles-title-move.png") no-repeat right;
+        background: url('images/tiles-title-move.png') no-repeat right;
       }
     }
 
@@ -1005,31 +1017,31 @@ footer {
       }
 
       #tablet-mode {
-        background: url("images/tablet-mode.png") no-repeat;
+        background: url('images/tablet-mode.png') no-repeat;
       }
 
       #network {
-        background: url("images/network.png") no-repeat;
+        background: url('images/network.png') no-repeat;
       }
 
       #all-settings {
-        background: url("images/settings-icon.png") no-repeat;
+        background: url('images/settings-icon.png') no-repeat;
       }
 
       #do-not-disturb {
-        background: url("images/do-not-disturb.png") no-repeat;
+        background: url('images/do-not-disturb.png') no-repeat;
       }
 
       #vpn {
-        background: url("images/vpn.png") no-repeat;
+        background: url('images/vpn.png') no-repeat;
       }
 
       #project-screen {
-        background: url("images/project.png") no-repeat;
+        background: url('images/project.png') no-repeat;
       }
 
       #connect {
-        background: url("images/connect.png") no-repeat;
+        background: url('images/connect.png') no-repeat;
       }
     }
 
@@ -1075,7 +1087,8 @@ footer {
     padding: 15px;
     border-top: 1px solid fade_out($gray, 0.4);
 
-    td, .btn {
+    td,
+    .btn {
       width: 46px;
       height: 40px;
     }
@@ -1263,12 +1276,23 @@ footer {
 }
 
 @keyframes eso-loading {
-  from {transform: rotate(0)}
-  to {transform: rotate(360deg)}
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media all and (max-width: 1000px) {
-  #start-menu, .app-list, .notification-bar-open, #calendar, #volume-menu, #lang-selector, #network-menu, .window {
+  #start-menu,
+  .app-list,
+  .notification-bar-open,
+  #calendar,
+  #volume-menu,
+  #lang-selector,
+  #network-menu,
+  .window {
     width: 100% !important;
     max-height: calc(100vh - 30px);
   }
