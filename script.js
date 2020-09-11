@@ -373,8 +373,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         function exposeDotsAround(dot) {
             let flagged = 0;
             let mined = 0;
-            const tit = dot;
-            getSquaresAround(tit).forEach(function(sq) {
+            getSquaresAround(dot).forEach(function(sq) {
                 if (sq.classList.contains('flag')) {
                     flagged++;
                 }
@@ -384,14 +383,14 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
             });
             if (flagged === mined) {
                 let expose = true;
-                getSquaresAround(tit).forEach(function(sq) {
+                getSquaresAround(dot).forEach(function(sq) {
                     if ((sq.classList.contains('mine') && !sq.classList.contains('flag')) || (!sq.classList.contains('mine') && sq.classList.contains('flag'))) {
                         expose = false;
                         gameOver();
                     }
                 });
                 if (expose) {
-                    exposeSquare(tit, true);
+                    exposeSquare(dot, true);
                 }
             }
         }
@@ -427,7 +426,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                     if (!target) return;
                     if (!field.contains(target)) return;
                     if (!isGameOver) {
-                        if (event.shiftKey && event.button === 0 && !target.classList.contains('flag')) {
+                        if (target.classList.contains('exposed-dot') && event.shiftKey && event.button === 0 && !target.classList.contains('flag')) {
                             exposeDotsAround(target);
                         } else if (event.button === 2 && !event.shiftKey) {
                             //RMB
