@@ -27,13 +27,34 @@ module.exports = {
         },
       },
       {
-        test: /\.(ttf|png|ico|svg|jpg)$/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            outputPath: 'assets',
+        test: /\.ttf$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              outputPath: 'assets',
+            },
           },
-        },
+        ],
+      },
+      {
+        test: /\.(gif|png|ico|svg|jpe?g)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              outputPath: 'assets',
+            },
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              webp: {
+                enabled: true,
+              },
+            },
+          },
+        ],
       },
     ],
   },
