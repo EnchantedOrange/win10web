@@ -3,6 +3,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 module.exports = {
+  devServer: {
+    contentBase: './dist',
+  },
   module: {
     rules: [
       {
@@ -25,7 +28,12 @@ module.exports = {
       },
       {
         test: /\.(ttf|png|ico|svg|jpg)$/,
-        use: ['file-loader'],
+        use: {
+          loader: 'file-loader',
+          options: {
+            outputPath: 'assets',
+          },
+        },
       },
     ],
   },

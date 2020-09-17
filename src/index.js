@@ -10,6 +10,7 @@ import VolumeBig0 from './images/volume-big-0.png';
 import VolumeBig1_32 from './images/volume-big-1-32.png';
 import VolumeBig33_65 from './images/volume-big-33-65.png';
 import VolumeBig from './images/volume-big.png';
+import ExplorerTaskbar from './images/explorer-taskbar.png';
 
 const widthChange = document.getElementsByClassName('changeable-width');
 const startButton = document.getElementsByClassName('start-button')[0];
@@ -83,11 +84,14 @@ document.getElementById('parameters').addEventListener('click', function () {
 });
 
 function openApp(isTaskbar, windowClass) {
-  const appIco = event.currentTarget.firstElementChild.getAttribute('src');
   const appName = event.currentTarget.lastElementChild.innerHTML;
+  let appIco = event.currentTarget.firstElementChild.getAttribute('src');
   if (!isTaskbar) {
     const footerAppBar = document.createElement('div');
     footerAppBar.classList.add('taskbar-app', 'taskbar-app-open', 'hover');
+    if (!appIco) {
+      appIco = ExplorerTaskbar;
+    }
     footerAppBar.innerHTML = `<img src="${appIco}"><p>${appName}</p>`;
     document.querySelector('.taskbar-apps').append(footerAppBar);
     openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass);
