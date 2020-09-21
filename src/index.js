@@ -492,8 +492,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
       {
         field.addEventListener('mousedown', (event) => {
           let target = event.target.closest('li');
-          if (!target) return;
-          if (!field.contains(target)) return;
+          if (target == null) return;
           if (!isGameOver) {
             if (
               target.classList.contains('exposed-dot') &&
@@ -525,10 +524,14 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         });
 
         field.addEventListener('dblclick', (event) => {
+          let target = event.target.closest('li');
+          if (target == null) return;
           exposeDotsAround(event.target);
         });
 
         field.addEventListener('touchstart', (event) => {
+          let target = event.target.closest('li');
+          if (target == null) return;
           function funcToExec(sq) {
             if (sq.classList.contains('exposed-dot')) {
               exposeDotsAround(sq);
