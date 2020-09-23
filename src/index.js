@@ -174,12 +174,12 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
     const pointsCounter = windowObject.getElementsByClassName('points')[0];
     const field = windowObject.querySelector('.field');
 
-    let isGameOver = false;
-    let mineList = [];
-    let alreadyWorked = [];
-    let exposedMines = 0;
-    let dots;
-    let points;
+    let isGameOver = false,
+      mineList = [],
+      alreadyWorked = [],
+      exposedMines = 0,
+      dots,
+      points;
     try {
       points = parseInt(document.cookie.split('points=')[1].split(';')[0], 10);
     } catch (err) {
@@ -202,8 +202,8 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
     const easyDifficulty = {
       name: 'Easy',
-      y: 8,
-      x: 8,
+      y: 9,
+      x: 9,
       totalMines: 10,
     };
     const mediumDifficulty = {
@@ -370,7 +370,6 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
 
     function checkFlaggedMines() {
       //Checks if winning conditions are fulfilled
-
       if (
         exposedMines === currentDifficulty.totalMines &&
         windowObject.getElementsByClassName('flag').length ===
@@ -562,22 +561,23 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
     }
 
     function markMines(minesNumber, price) {
-      if (removePoints(price)) {
-        for (let x = 0; x < minesNumber; x++) {
-          let mines = [];
-          windowObject.querySelectorAll('.mine').forEach((e) => {
-            if (!e.classList.contains('flag')) {
-              mines.push(e);
-            }
-          });
-          if (mines.length > 0) {
-            mines[Math.floor(Math.random() * mines.length)].classList.add(
-              'flag'
-            );
+      let mines = [];
+      windowObject.querySelectorAll('.mine').forEach((e) => {
+        if (!e.classList.contains('flag')) {
+          mines.push(e);
+        }
+      });
+      if (mines.length >= minesNumber) {
+        if (removePoints(price)) {
+          for (let x = 0; x < minesNumber; x++) {
+            let randomMine = Math.floor(Math.random() * mines.length);
+            mines[randomMine].classList.add('flag');
+            mines.splice(randomMine, 1);
             exposedMines++;
           }
+          setMinesCounter();
+          checkFlaggedMines();
         }
-        checkFlaggedMines();
       }
     }
 
@@ -655,18 +655,18 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
     });
 
     windowObject.querySelector('#openfield').addEventListener('click', () => {
-      if (removePoints(250)) {
-        let freeDots = [];
-        dots.forEach((e) => {
-          if (
-            e.innerHTML === '' &&
-            !alreadyWorked.includes(e) &&
-            !e.classList.contains('mine') &&
-            !e.classList.contains('flag')
-          ) {
-            freeDots.push(e);
-          }
-        });
+      let freeDots = [];
+      dots.forEach((dot) => {
+        if (
+          dot.innerHTML === '' &&
+          !alreadyWorked.includes(dot) &&
+          !dot.classList.contains('mine') &&
+          !dot.classList.contains('flag')
+        ) {
+          freeDots.push(dot);
+        }
+      });
+      if (freeDots.length > 0 && removePoints(250)) {
         exposeSquare(freeDots[Math.floor(Math.random() * freeDots.length)]);
       }
     });
