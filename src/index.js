@@ -309,8 +309,8 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
           }
         });
       }
-      mineList.forEach(function (t) {
-        dots[t].innerHTML = '';
+      mineList.forEach(function (mine) {
+        dots[mine].innerHTML = '';
       });
     }
 
@@ -375,11 +375,14 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         windowObject.getElementsByClassName('flag').length ===
           currentDifficulty.totalMines
       ) {
-        dots.forEach(function (d) {
-          if (!d.classList.contains('mine')) {
-            d.classList.add('exposed-dot');
+        const closedDots = windowObject.querySelectorAll(
+          '.field-dot:not(.exposed-dot)'
+        );
+        for (let i = 0; i < closedDots.length; i++) {
+          if (!closedDots[i].classList.contains('mine')) {
+            return;
           }
-        });
+        }
 
         isGameOver = true;
 
@@ -388,7 +391,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
         } else if (currentDifficulty === mediumDifficulty) {
           addPoints(125);
         } else if (currentDifficulty === hardDifficulty) {
-          addPoints(300);
+          addPoints(500);
         }
 
         alert('You win!');
@@ -398,25 +401,27 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
     function gameOver() {
       isGameOver = true;
 
-      windowObject.querySelectorAll('.mine').forEach(function (d) {
-        d.classList.add('mine-blown');
+      windowObject.querySelectorAll('.mine').forEach(function (mine) {
+        mine.classList.add('mine-blown');
       });
 
-      windowObject.querySelectorAll('.flag').forEach(function (f) {
-        if (!f.classList.contains('mine')) {
-          f.innerHTML = '&#10006;';
-          f.style.fontSize = '30px';
-          f.style.color = '#c60000';
+      windowObject.querySelectorAll('.flag').forEach(function (flag) {
+        if (!flag.classList.contains('mine')) {
+          flag.innerHTML = '&#10006;';
+          flag.style.fontSize = '30px';
+          flag.style.color = '#c60000';
         }
       });
 
-      windowObject.querySelectorAll('.question-flag').forEach(function (q) {
-        if (!q.classList.contains('mine')) {
-          q.innerHTML = '&#10006;';
-          q.style.fontSize = '30px';
-          q.style.color = '#c60000';
-        }
-      });
+      windowObject
+        .querySelectorAll('.question-flag')
+        .forEach(function (questionFlag) {
+          if (!questionFlag.classList.contains('mine')) {
+            questionFlag.innerHTML = '&#10006;';
+            questionFlag.style.fontSize = '30px';
+            questionFlag.style.color = '#c60000';
+          }
+        });
     }
 
     function startNewGame() {
@@ -500,6 +505,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
               !target.classList.contains('flag')
             ) {
               exposeDotsAround(target);
+              checkFlaggedMines();
             } else if (event.button === 2 && !event.shiftKey) {
               //RMB
               RMBevent(target);
@@ -517,6 +523,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
                 gameOver();
               } else {
                 exposeSquare(target);
+                checkFlaggedMines();
               }
             }
           }
@@ -611,12 +618,12 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
     }
 
     function setSkin() {
-      dots.forEach((d) => {
+      dots.forEach((dot) => {
         document.documentElement.style.setProperty(
           '--minesweeper-skin',
           currentSkin
         );
-        d.style.backgroundColor = currentSkin;
+        dot.style.backgroundColor = currentSkin;
       });
     }
 
