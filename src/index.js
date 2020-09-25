@@ -484,9 +484,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
           } else if (sq.classList.contains('question-flag')) {
             sq.classList.remove('question-flag');
           }
-
           setMinesCounter();
-
           checkFlaggedMines();
         }
       }
@@ -533,6 +531,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
           let target = event.target.closest('li');
           if (target == null) return;
           exposeDotsAround(event.target);
+          checkFlaggedMines();
         });
 
         field.addEventListener('touchstart', (event) => {
@@ -541,6 +540,7 @@ function openWindow(appIco, appName, footerAppBar, isTaskbar, windowClass) {
           function funcToExec(sq) {
             if (sq.classList.contains('exposed-dot')) {
               exposeDotsAround(sq);
+              checkFlaggedMines();
             } else {
               RMBevent(sq);
             }
